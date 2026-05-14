@@ -1,24 +1,87 @@
 import "./home.css";
 
+import {
+  BrowserRouter as Router,
+  Link
+} from "react-router-dom";
+
+/* ================= HOME ================= */
+
 function Home() {
   return (
     <div className="container">
 
       <header className="topbar">
-        <h1>SECRETARIA DO MEIO AMBIENTE</h1>
+        <div className="header">
+
+          <div className="header-logos">
+            <div className="logo">
+              <img src="logotupa.png" className="logo-img" />
+              <img src="/secre.png" className="logos" />
+            </div>
+          </div>
+
+          <div className="actions">
+            <Link to="/login">Entrar</Link>
+            <button className="btn-outline">Criar uma conta</button>
+          </div>
+
+        </div>
       </header>
 
       <main className="main">
 
-        <h2>Crie sua conta</h2>
+        <h1>CRIE SUA CONTA NA</h1>
+        <h2>SECRETARIA DO MEIO AMBIENTE</h2>
 
-        <p>
-          Registre-se e conecte-se ao portal
+        <p className="sub">
+          Registre-se e conecte-se ao portal para solicitar serviços ambientais
         </p>
 
-        <button>
-          Criar conta
+        <button className="btn-primary">
+          Criar minha conta
         </button>
+
+        <p className="login">
+          Já possui conta? <Link to="/login">Entrar</Link>
+        </p>
+
+        <div className="cards-wrapper">
+
+          <p className="perfil-title">
+            SELECIONE SEU PERFIL:
+          </p>
+
+          <div className="cards">
+
+            <div className="card">
+              <img src="/equipe.png" className="card-img" alt="Equipe" />
+              <h3>Equipe</h3>
+              <span>Membros das equipes</span>
+              <button>Selecionar</button>
+            </div>
+
+            <div className="card">
+              <img src="/cidadao.png" className="card-img" alt="Cidadão" />
+              <h3>Cidadão</h3>
+              <span>Solicitação de serviços</span>
+
+              <Link to="/cadastro-cidadao">
+                <button>Selecionar</button>
+              </Link>
+
+            </div>
+
+            <div className="card">
+              <img src="/gestao.png" className="card-img" alt="Gestão" />
+              <h3>Gestão</h3>
+              <span>Coordenação</span>
+              <button>Selecionar</button>
+            </div>
+
+          </div>
+
+        </div>
 
       </main>
 
