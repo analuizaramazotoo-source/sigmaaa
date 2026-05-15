@@ -1,7 +1,5 @@
 import "./home.module.css";
-
-//import img from '../../assets/secre.png'
-/* ================= HOME ================= */
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -53,25 +51,41 @@ function Home() {
 
             <div className="card">
               <img src="/img equipe.png" className="card-img" alt="Equipe" />
+
               <h3>Equipe</h3>
+
               <span>Membros das equipes</span>
+
               <button>Selecionar</button>
-             
+
             </div>
 
             <div className="card">
-              <img src="/img cidadão.png" className="card-img" alt="Cidadão" />
-              <h3>Cidadão</h3>
-              <span>Solicitação de serviços</span>
-              <button>Selecionar</button>
+              <img
+                src="/img cidadão.png"
+                className="card-img"
+                alt="Cidadão"
+              />
 
+              <h3>Cidadão</h3>
+
+              <span>Solicitação de serviços</span>
+
+              <button>
+                Selecionar
+                </button>
+            
             </div>
 
             <div className="card">
               <img src="/img gestao.png" className="card-img" alt="Gestão" />
+
               <h3>Gestão</h3>
+
               <span>Coordenação</span>
+
               <button>Selecionar</button>
+
             </div>
 
           </div>

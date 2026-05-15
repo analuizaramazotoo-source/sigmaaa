@@ -1,13 +1,6 @@
 import "./cadastrocidadao.module.css";
-import { useNavigate } from "react-router-dom";
 
 function CadastroCidadao() {
-
-  const navigate = useNavigate();
-
-  function voltarPagina() {
-    navigate("/");
-  }
 
   return (
 
@@ -32,7 +25,7 @@ function CadastroCidadao() {
         {/* BOTÃO VOLTAR */}
         <button
           className="btn-voltar"
-          onClick={voltarPagina}
+          onClick={() => window.history.back()}
         >
           Voltar
         </button>
