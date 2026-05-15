@@ -56,7 +56,7 @@ function Home() {
               <h3>Equipe</h3>
               <span>Membros das equipes</span>
               <button>Selecionar</button>
-              <h1>apagar</h1>
+             
             </div>
 
             <div className="card">
