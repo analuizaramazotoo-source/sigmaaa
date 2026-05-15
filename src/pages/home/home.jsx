@@ -1,10 +1,5 @@
 import "./home.css";
 
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
-
 /* ================= HOME ================= */
 
 function Home() {
@@ -22,7 +17,7 @@ function Home() {
           </div>
 
           <div className="actions">
-            <Link to="/login">Entrar</Link>
+            <a href="#">Entrar</a>
             <button className="btn-outline">Criar uma conta</button>
           </div>
 
@@ -43,7 +38,7 @@ function Home() {
         </button>
 
         <p className="login">
-          Já possui conta? <Link to="/login">Entrar</Link>
+          Já possui conta? <a href="#">Entrar</a>
         </p>
 
         <div className="cards-wrapper">
@@ -66,9 +61,7 @@ function Home() {
               <h3>Cidadão</h3>
               <span>Solicitação de serviços</span>
 
-              <Link to="/cadastro-cidadao">
-                <button>Selecionar</button>
-              </Link>
+              <button>Selecionar</button>
 
             </div>
 

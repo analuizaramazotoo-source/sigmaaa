@@ -12,7 +12,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        <h1>kk</h1>
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
