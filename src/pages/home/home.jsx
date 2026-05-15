@@ -1,5 +1,6 @@
 import "./home.module.css";
 
+//import img from '../../assets/secre.png'
 /* ================= HOME ================= */
 
 function Home() {
@@ -12,7 +13,8 @@ function Home() {
           <div className="header-logos">
             <div className="logo">
               <img src="logotupa.png" className="logo-img" />
-              <img src="/secre.png" className="logos" />
+              <img src="secretaria meio ambiente.png" className="logos" />
+              {/*<img src={img} className="logos" />*/}
             </div>
           </div>
 
@@ -50,7 +52,7 @@ function Home() {
           <div className="cards">
 
             <div className="card">
-              <img src="/equipe.png" className="card-img" alt="Equipe" />
+              <img src="/img equipe.png" className="card-img" alt="Equipe" />
               <h3>Equipe</h3>
               <span>Membros das equipes</span>
               <button>Selecionar</button>
@@ -58,7 +60,7 @@ function Home() {
             </div>
 
             <div className="card">
-              <img src="/cidadao.png" className="card-img" alt="Cidadão" />
+              <img src="/img cidadão.png" className="card-img" alt="Cidadão" />
               <h3>Cidadão</h3>
               <span>Solicitação de serviços</span>
               <button>Selecionar</button>
@@ -66,7 +68,7 @@ function Home() {
             </div>
 
             <div className="card">
-              <img src="/gestao.png" className="card-img" alt="Gestão" />
+              <img src="/img gestao.png" className="card-img" alt="Gestão" />
               <h3>Gestão</h3>
               <span>Coordenação</span>
               <button>Selecionar</button>
