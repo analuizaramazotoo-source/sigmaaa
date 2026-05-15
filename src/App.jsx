@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import "./App.css";
 
 import {
@@ -8,12 +10,28 @@ import {
 
 import Home from "./pages/home/home";
 
+import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
+
 function App() {
   return (
     <Router>
+
       <Routes>
-        <Route path="/" element={<Home />} />
+
+        {/* HOME */}
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        {/* RELATAR PROBLEMA */}
+        <Route
+          path="/relatar-problema"
+          element={<RelatarProblema />}
+        />
+
       </Routes>
+
     </Router>
   );
 }
