@@ -1,4 +1,4 @@
-import "./logincidadao.css";
+import "./logincidadao.module.css";
 
 function LoginCidadao() {
   return (

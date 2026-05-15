@@ -1,4 +1,4 @@
-import "./home.css";
+import "./home.module.css";
 
 /* ================= HOME ================= */
 

@@ -1,4 +1,4 @@
-import "./cadastrocidadao.css";
+import "./cadastrocidadao.module.css";
 import { useNavigate } from "react-router-dom";
 
 function CadastroCidadao() {
