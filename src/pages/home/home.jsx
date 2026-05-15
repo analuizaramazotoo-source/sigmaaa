@@ -54,13 +54,13 @@ function Home() {
               <h3>Equipe</h3>
               <span>Membros das equipes</span>
               <button>Selecionar</button>
+              <h1>apagar</h1>
             </div>
 
             <div className="card">
               <img src="/cidadao.png" className="card-img" alt="Cidadão" />
               <h3>Cidadão</h3>
               <span>Solicitação de serviços</span>
-
               <button>Selecionar</button>
 
             </div>
