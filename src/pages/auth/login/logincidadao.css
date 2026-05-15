@@ -1,0 +1,136 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* LADO ESQUERDO */
+.left {
+  width: 30%;
+  background: #2f7d4a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px;
+}
+
+.logo-prefeitura {
+  width: 180px;
+}
+
+.linha {
+  height: 2px;
+  background: white;
+  margin: 20px 0;
+}
+
+.footer-left {
+  text-align: center;
+}
+
+.logo-arvore {
+  width: 60px;
+}
+
+.footer-left span {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* LADO DIREITO */
+.right {
+  width: 70%;
+  background: #dfe8d7;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: #2f7d4a;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar img {
+  width: 40px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  width: 400px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.card h2 {
+  color: #2f7d4a;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* ESQUECEU SENHA */
+.esqueceu {
+  font-size: 12px;
+  display: block;
+  text-align: right;
+  margin-bottom: 15px;
+  color: #2f7d4a;
+  cursor: pointer;
+}
+
+/* BOTÃO */
+.card button {
+  width: 100%;
+  padding: 12px;
+  background: #3fa55b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card button:hover {
+  background: #2f7d4a;
+}
+
+/* LINKS */
+.links {
+  margin-top: 15px;
+  font-size: 12px;
+}
+
+.links a {
+  margin-left: 5px;
+  color: #2f7d4a;
+  font-weight: bold;
+  text-decoration: none;
+}
