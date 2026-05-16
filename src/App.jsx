@@ -19,7 +19,7 @@ function App() {
     <Router>
 
       <Routes>
-<<<<<<< HEAD
+
 
         {/* HOME */}
         <Route
@@ -32,10 +32,7 @@ function App() {
           path="/relatar-problema"
           element={<RelatarProblema />}
         />
-=======
-        <Route path="/" element={<Home />} />
-        <Route path="/CadastroCidadao" element={<CadastroCidadao />} />
->>>>>>> 1cef8574c29861c7cf5675f8e8dffd2d1987abc5
+
 
       </Routes>
 
