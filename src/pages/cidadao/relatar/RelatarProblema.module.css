@@ -76,8 +76,6 @@
 .banner {
   width: 100%;
   height: 200px;
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0)), 
-                    url("https://img.freepik.com/free-vector/green-city-landscape_1308-114661.jpg");
   background-size: cover;
   background-position: center 35%;
   display: flex;
