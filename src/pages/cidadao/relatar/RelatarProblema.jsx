@@ -2,8 +2,11 @@ import { useState } from "react";
 import styles from "./RelatarProblema.module.css";
 
 export default function RelatarProblema() {
-  // Estado para controlar se a lista de problemas está expandida ou não
+  // Estado da lista expandida
   const [expandido, setExpandido] = useState(false);
+
+  // Estado do menu lateral
+  const [menuAberto, setMenuAberto] = useState(false);
 
   return (
     <div className={styles["container-relatar"]}>
@@ -14,6 +17,7 @@ export default function RelatarProblema() {
             src="https://cdn-icons-png.flaticon.com/512/427/427735.png"
             alt="logo"
           />
+
           <div>
             <p>SECRETARIA DO</p>
             <h2>MEIO AMBIENTE</h2>
@@ -22,9 +26,60 @@ export default function RelatarProblema() {
 
         <div className={styles["header-buttons"]}>
           <button className={styles["btn-voltar"]}>Voltar</button>
-          <span className={styles["menu-icon"]}>⋮</span>
+
+          {/* BOTÃO MENU */}
+          <button
+            className={styles["menu-icon"]}
+            onClick={() => setMenuAberto(!menuAberto)}
+          >
+            ⋮
+          </button>
         </div>
       </header>
+
+      {/* MENU LATERAL */}
+     <div
+  className={`${styles.menuLateral} ${
+    menuAberto ? styles.menuAberto : ""
+  }`}
+>
+  {/* BOTÃO FECHAR */}
+  <div className={styles.topoMenu}>
+    <button
+      className={styles.btnFechar}
+      onClick={() => setMenuAberto(false)}
+    >
+      ✕
+    </button>
+  </div>
+
+  {/* HOME DESTACADO */}
+  <button
+    className={`${styles.menuItem} ${styles.menuHome}`}
+  >
+    🏠 Home
+  </button>
+
+  <button className={styles.menuItem}>
+    📄 Relatar
+  </button>
+
+  <button className={styles.menuItem}>
+    Solicitar
+  </button>
+
+  <button className={styles.menuItem}>
+    Status
+  </button>
+
+  <button className={styles.menuItem}>
+    Chat com Gestão
+  </button>
+
+  <button className={styles.menuItem}>
+    Perfil
+  </button>
+</div>
 
       {/* BANNER */}
       <section className={styles.banner}>
@@ -36,29 +91,48 @@ export default function RelatarProblema() {
         <h3>Informe o Problema Ambiental:</h3>
 
         <div className={styles.problemas}>
-          {/* Sempre mostra os 4 primeiros */}
-          <button className={styles.btnProblema}>Lixo irregular</button>
-          <button className={styles.btnProblema}>Queimada</button>
-          <button className={styles.btnProblema}>Poluição da água</button>
-          <button className={styles.btnProblema}>Desmatamento</button>
+          <button className={styles.btnProblema}>
+            Lixo irregular
+          </button>
 
-          {/* Só mostra os 4 últimos se 'expandido' for true */}
+          <button className={styles.btnProblema}>
+            Queimada
+          </button>
+
+          <button className={styles.btnProblema}>
+            Poluição da água
+          </button>
+
+          <button className={styles.btnProblema}>
+            Desmatamento
+          </button>
+
           {expandido && (
             <>
-              <button className={styles.btnProblema}>Maus-tratos ou Abandono de animais</button>
-              <button className={styles.btnProblema}>Contaminação do solo</button>
-              <button className={styles.btnProblema}>Desperdício ou Vazamento de água</button>
-              <button className={styles.btnProblema}>Poluição do Ar</button>
+              <button className={styles.btnProblema}>
+                Maus-tratos ou Abandono de animais
+              </button>
+
+              <button className={styles.btnProblema}>
+                Contaminação do solo
+              </button>
+
+              <button className={styles.btnProblema}>
+                Desperdício ou Vazamento de água
+              </button>
+
+              <button className={styles.btnProblema}>
+                Poluição do Ar
+              </button>
             </>
           )}
         </div>
 
-        {/* Se NÃO estiver expandido, mostra os inputs e a seta para BAIXO */}
         {!expandido ? (
           <>
             <div className={styles.setaContainer}>
-              <button 
-                className={styles.setaBtn} 
+              <button
+                className={styles.setaBtn}
                 onClick={() => setExpandido(true)}
                 title="Ver mais opções"
               >
@@ -68,21 +142,30 @@ export default function RelatarProblema() {
 
             <div className={styles.formGroup}>
               <label>Outro:</label>
-              <input type="text" className={styles.inputEstilizado} />
+
+              <input
+                type="text"
+                className={styles.inputEstilizado}
+              />
 
               <label>Endereço do problema</label>
-              <input type="text" className={styles.inputEstilizado} />
+
+              <input
+                type="text"
+                className={styles.inputEstilizado}
+              />
             </div>
 
             <div className={styles["btn-area"]}>
-              <button className={styles["btn-enviar"]}>Enviar</button>
+              <button className={styles["btn-enviar"]}>
+                Enviar
+              </button>
             </div>
           </>
         ) : (
-          /* Se ESTIVER expandido, mostra apenas a seta para CIMA na parte inferior */
           <div className={styles.setaContainerApenas}>
-            <button 
-              className={styles.setaBtn} 
+            <button
+              className={styles.setaBtn}
               onClick={() => setExpandido(false)}
               title="Ver menos opções"
             >
