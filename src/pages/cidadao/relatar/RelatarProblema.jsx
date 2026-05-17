@@ -1,5 +1,8 @@
 import { useState } from "react";
 import styles from "./RelatarProblema.module.css";
+import bannerFundo from "../../../assets/banner.png";
+import arvoreLogo from "../../../assets/arvore.png";
+import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 
 export default function RelatarProblema() {
   // Estado da lista expandida
@@ -8,13 +11,16 @@ export default function RelatarProblema() {
   // Estado do menu lateral
   const [menuAberto, setMenuAberto] = useState(false);
 
+  // Problema selecionado
+  const [problemaSelecionado, setProblemaSelecionado] = useState("");
+
   return (
     <div className={styles["container-relatar"]}>
       {/* HEADER */}
       <header className={styles["header-relatar"]}>
         <div className={styles["logo-area"]}>
           <img
-            src="https://cdn-icons-png.flaticon.com/512/427/427735.png"
+            src={arvoreLogo}
             alt="logo"
           />
 
@@ -25,7 +31,9 @@ export default function RelatarProblema() {
         </div>
 
         <div className={styles["header-buttons"]}>
-          <button className={styles["btn-voltar"]}>Voltar</button>
+          <button className={styles["btn-voltar"]}>
+            Voltar
+          </button>
 
           {/* BOTÃO MENU */}
           <button
@@ -38,51 +46,56 @@ export default function RelatarProblema() {
       </header>
 
       {/* MENU LATERAL */}
-     <div
-  className={`${styles.menuLateral} ${
-    menuAberto ? styles.menuAberto : ""
-  }`}
->
-  {/* BOTÃO FECHAR */}
-  <div className={styles.topoMenu}>
-    <button
-      className={styles.btnFechar}
-      onClick={() => setMenuAberto(false)}
-    >
-      ✕
-    </button>
-  </div>
+      <div
+        className={`${styles.menuLateral} ${
+          menuAberto ? styles.menuAberto : ""
+        }`}
+      >
+        {/* BOTÃO FECHAR */}
+        <div className={styles.topoMenu}>
+          <button
+            className={styles.btnFechar}
+            onClick={() => setMenuAberto(false)}
+          >
+            ✕
+          </button>
+        </div>
 
-  {/* HOME DESTACADO */}
-  <button
-    className={`${styles.menuItem} ${styles.menuHome}`}
-  >
-    🏠 Home
-  </button>
+        {/* HOME DESTACADO */}
+        <button
+          className={`${styles.menuItem} ${styles.menuHome}`}
+        >
+          🏠 Home
+        </button>
 
-  <button className={styles.menuItem}>
-    📄 Relatar
-  </button>
+        <button className={styles.menuItem}>
+          📄 Relatar
+        </button>
 
-  <button className={styles.menuItem}>
-    Solicitar
-  </button>
+        <button className={styles.menuItem}>
+          Solicitar
+        </button>
 
-  <button className={styles.menuItem}>
-    Status
-  </button>
+        <button className={styles.menuItem}>
+          Status
+        </button>
 
-  <button className={styles.menuItem}>
-    Chat com Gestão
-  </button>
+        <button className={styles.menuItem}>
+          Chat com Gestão
+        </button>
 
-  <button className={styles.menuItem}>
-    Perfil
-  </button>
-</div>
+        <button className={styles.menuItem}>
+          Perfil
+        </button>
+      </div>
 
       {/* BANNER */}
-      <section className={styles.banner}>
+      <section
+        className={styles.banner}
+        style={{
+          backgroundImage: `url(${bannerFundo})`,
+        }}
+      >
         <h1>Relatar Problema Ambiental</h1>
       </section>
 
@@ -91,88 +104,94 @@ export default function RelatarProblema() {
         <h3>Informe o Problema Ambiental:</h3>
 
         <div className={styles.problemas}>
-          <button className={styles.btnProblema}>
-            Lixo irregular
-          </button>
+  {[
+    "Lixo irregular",
+    "Queimada",
+    "Poluição da água",
+    "Desmatamento",
+    ...(expandido || problemaSelecionado
+  ? [
+      "Maus-tratos ou Abandono de animais",
+      "Contaminação do solo",
+      "Desperdício ou Vazamento de água",
+      "Poluição do Ar",
+    ]
+  : []),
+  ]
+    .filter(
+      (problema) =>
+        !problemaSelecionado ||
+        problemaSelecionado === problema
+    )
+    .map((problema) => (
+      <button
+        key={problema}
+        className={`${styles.btnProblema} ${
+          problemaSelecionado === problema
+            ? styles.problemaAtivo
+            : ""
+        }`}
+        onClick={() => {
+  if (problemaSelecionado === problema) {
+    setProblemaSelecionado("");
+  } else {
+    setProblemaSelecionado(problema);
 
-          <button className={styles.btnProblema}>
-            Queimada
-          </button>
+    setExpandido(false);
+  }
+}}
+      >
+        {problema}
+      </button>
+    ))}
+</div>
+        {!problemaSelecionado && (
+  <div className={styles.setaContainer}>
+    {!expandido ? (
+      <button
+        className={styles.setaBtn}
+        onClick={() => setExpandido(true)}
+        title="Ver mais opções"
+      >
+        <IoChevronDown />
+      </button>
+    ) : (
+      <button
+        className={styles.setaBtn}
+        onClick={() => setExpandido(false)}
+        title="Ver menos opções"
+      >
+        <IoChevronUp />
+      </button>
+    )}
+  </div>
+)}
 
-          <button className={styles.btnProblema}>
-            Poluição da água
-          </button>
+{!expandido && (
+  <>
+    <div className={styles.formGroup}>
+      <label>Outro:</label>
 
-          <button className={styles.btnProblema}>
-            Desmatamento
-          </button>
+      <input
+        type="text"
+        className={styles.inputEstilizado}
+      />
 
-          {expandido && (
-            <>
-              <button className={styles.btnProblema}>
-                Maus-tratos ou Abandono de animais
-              </button>
+      <label>Endereço do problema</label>
 
-              <button className={styles.btnProblema}>
-                Contaminação do solo
-              </button>
+      <input
+        type="text"
+        className={styles.inputEstilizado}
+      />
+    </div>
 
-              <button className={styles.btnProblema}>
-                Desperdício ou Vazamento de água
-              </button>
-
-              <button className={styles.btnProblema}>
-                Poluição do Ar
-              </button>
-            </>
-          )}
-        </div>
-
-        {!expandido ? (
-          <>
-            <div className={styles.setaContainer}>
-              <button
-                className={styles.setaBtn}
-                onClick={() => setExpandido(true)}
-                title="Ver mais opções"
-              >
-                ⬇
-              </button>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label>Outro:</label>
-
-              <input
-                type="text"
-                className={styles.inputEstilizado}
-              />
-
-              <label>Endereço do problema</label>
-
-              <input
-                type="text"
-                className={styles.inputEstilizado}
-              />
-            </div>
-
-            <div className={styles["btn-area"]}>
-              <button className={styles["btn-enviar"]}>
-                Enviar
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className={styles.setaContainerApenas}>
-            <button
-              className={styles.setaBtn}
-              onClick={() => setExpandido(false)}
-              title="Ver menos opções"
-            >
-              ⬆
-            </button>
-          </div>
-        )}
+    <div className={styles["btn-area"]}>
+      <button className={styles["btn-enviar"]}>
+        Enviar
+      </button>
+    </div>
+  </>
+)}
       </section>
 
       {/* FOOTER */}
