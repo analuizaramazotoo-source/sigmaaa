@@ -10,6 +10,7 @@ import Home from "./pages/home/home";
 import CadastroCidadao from "./pages/auth/cadastrocidadao/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Homec from "./pages/cidadao/homec/homec";
+import HB from "./pages/cidadao/HB/HB";
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
 
         {/* CADASTRO */}
         <Route path="/cadastro" element={<CadastroCidadao />} />
+
+        {/* HB */}
+        <Route path="/hb" element={<HB />}  />
 
       </Routes>
     </Router>

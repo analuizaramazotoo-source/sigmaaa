@@ -13,6 +13,7 @@ const problemas = [
   "Contaminação do solo",
   "Desperdício ou Vazamento de água",
   "Poluição do Ar",
+  "Outro",
 ];
 
 export default function RelatarProblema() {
@@ -122,9 +123,9 @@ export default function RelatarProblema() {
           )}
         </div>
 
-        {/* OUTRO */}
+        {/* descriçao */}
         <div className={styles.formGroup}>
-          <label>Outro:</label>
+          <label>Descrição:</label>
           <input
             type="text"
             className={styles.inputEstilizado}
@@ -135,7 +136,7 @@ export default function RelatarProblema() {
 
         {/* ENDEREÇO */}
         <div className={styles.formGroup}>
-          <label>Endereço do problema</label>
+          <label>Endereço do problema:</label>
           <input
             type="text"
             className={styles.inputEstilizado}
