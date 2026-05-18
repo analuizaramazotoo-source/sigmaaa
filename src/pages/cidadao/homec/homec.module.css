@@ -1,0 +1,485 @@
+/* ═══════════════════════════════════════════
+   homec.module.css — Secretaria do Meio Ambiente
+═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ══════════ PÁGINA ══════════ */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  background: #5a9e2f;          /* borda verde externa */
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ══════════ HEADER ══════════ */
+.header {
+  width: 100%;
+  height: 60px;
+  background: #1b6b3a;
+  border-bottom: 3px solid #2e8049;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoImgBox {
+  width: 42px;
+  height: 42px;
+  background: #2e8049;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.logoTexts p {
+  color: rgba(255,255,255,0.72);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.logoTexts h2 {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.15;
+  letter-spacing: 0.3px;
+}
+
+.breadcrumb {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.menuBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 300;
+  cursor: pointer;
+  padding: 2px 8px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.menuBtn:hover { background: rgba(255,255,255,0.1); }
+
+/* ══════════ OVERLAY ══════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.overlay.visible { opacity: 1; pointer-events: all; }
+
+/* ══════════ MENU LATERAL ══════════ */
+.menuLateral {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: 200px;
+  background: #1b6b3a;
+  border-radius: 20px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px 16px;
+  gap: 7px;
+  box-shadow: -6px 0 24px rgba(0,0,0,0.4);
+  transform: translateX(calc(100% + 24px));
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.menuLateral.aberto { transform: translateX(0); }
+
+.menuTopo {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2px;
+}
+
+.btnFechar {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: background 0.2s;
+}
+.btnFechar:hover { background: rgba(255,255,255,0.1); }
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #2e8049;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 12px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background 0.18s;
+}
+.menuItem:hover { background: #39955a; }
+
+.menuItemHome {
+  background: #e8961a;
+}
+.menuItemHome:hover { background: #d4861a; }
+
+.menuItemIcon { font-size: 14px; line-height: 1; }
+
+.menuItemLabel {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* prefeitura no rodapé do menu */
+.menuFooter {
+  margin-top: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.menuFooterIcon { font-size: 24px; }
+
+.menuFooterTexts p {
+  color: #333;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+}
+
+.menuFooterTexts strong {
+  color: #1b6b3a;
+  font-size: 10px;
+  font-weight: 900;
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.menuPrefBadge {
+  font-size: 8px;
+  color: #555;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ══════════ INNER WRAPPER (borda verde lateral) ══════════ */
+.inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 0 8px 8px 8px;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ══════════ BANNER ══════════ */
+.banner {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  overflow: hidden;
+  background: #87ceeb;
+}
+
+/* céu */
+.sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #6ab8d8 0%, #a8dcef 60%, #8cc8a0 60%, #5aaa72 100%);
+}
+
+/* sol */
+.sun {
+  position: absolute;
+  top: 18px;
+  right: 44px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffe84d;
+  box-shadow: 0 0 0 10px rgba(255,232,77,0.2), 0 0 0 22px rgba(255,232,77,0.08);
+}
+
+/* nuvens */
+.cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.9);
+  border-radius: 24px;
+  height: 22px;
+}
+.cloud::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+}
+.cloud::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+}
+
+.cloud1 { width: 70px; top: 24px; left: 5%; }
+.cloud2 { width: 50px; top: 14px; left: 36%; }
+.cloud3 { width: 58px; top: 28px; right: 12%; }
+
+/* pássaros (curvas) */
+.birds {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+.bird {
+  width: 14px;
+  height: 6px;
+  border-top: 2px solid rgba(60,110,80,0.55);
+  border-radius: 50% 50% 0 0;
+}
+
+/* colinas verdes */
+.hillBack {
+  position: absolute;
+  bottom: 36px;
+  left: -2%;
+  width: 104%;
+  height: 88px;
+  background: #4aab62;
+  border-radius: 55% 60% 0 0;
+}
+.hillMid {
+  position: absolute;
+  bottom: 18px;
+  left: -3%;
+  width: 106%;
+  height: 68px;
+  background: #3a9452;
+  border-radius: 50% 55% 0 0;
+}
+.hillFront {
+  position: absolute;
+  bottom: 0;
+  left: -2%;
+  width: 104%;
+  height: 50px;
+  background: #2e7d46;
+  border-radius: 45% 50% 0 0;
+}
+
+/* decorações: árvores, prédios, moinho */
+.deco {
+  position: absolute;
+  font-size: 32px;
+  line-height: 1;
+  z-index: 2;
+}
+.decoSm { font-size: 22px; }
+.decoLg { font-size: 40px; }
+
+/* texto central do banner */
+.bannerContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 24px;
+  z-index: 3;
+}
+
+.bannerTitle {
+  font-size: 36px;
+  font-weight: 900;
+  font-style: italic;
+  color: #1a5230;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.5), 0 3px 8px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.bannerSub {
+  font-size: 14px;
+  color: #1e5c38;
+  font-weight: 700;
+  margin-top: 4px;
+  text-shadow: 0 1px 3px rgba(255,255,255,0.3);
+}
+
+.bannerDots {
+  display: flex;
+  gap: 7px;
+  margin-top: 10px;
+}
+.bannerDot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(30,92,56,0.28);
+}
+.bannerDot.active { background: #1e5c38; }
+
+/* ══════════ CARDS ══════════ */
+.cardsSection {
+  background: #c8ddb8;
+  padding: 20px 16px 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  flex: 1;
+}
+
+.card {
+  border-radius: 12px;
+  padding: 18px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.22), 0 6px 16px rgba(0,0,0,0.18);
+  transition: transform 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 0 rgba(0,0,0,0.2), 0 12px 24px rgba(0,0,0,0.2);
+}
+
+.cardRelatar   { background: #1e50a0; }
+.cardSolicitar { background: #1b6b3a; }
+.cardStatus    { background: #c47a00; }
+
+.cardIcon { font-size: 26px; line-height: 1; }
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fff;
+}
+
+.cardDesc {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.83);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.cardBtn {
+  display: block;
+  width: 100%;
+  background: rgba(255,255,255,0.14);
+  border: 1.5px solid rgba(255,255,255,0.36);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  letter-spacing: 0.5px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+.cardBtn:hover { background: rgba(255,255,255,0.24); }
+
+/* ══════════ FOOTER ══════════ */
+.footer {
+  width: 100%;
+  background: #1b6b3a;
+  border-top: 3px solid #2e8049;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footerLogo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.footerIcon { font-size: 22px; }
+.footerTexts p {
+  color: rgba(255,255,255,0.6);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.footerTexts strong {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  display: block;
+  text-transform: uppercase;
+}
+
+.footerBadge {
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 7px;
+  padding: 4px 12px;
+  color: rgba(255,255,255,0.78);
+  font-size: 11px;
+  font-weight: 700;
+}
