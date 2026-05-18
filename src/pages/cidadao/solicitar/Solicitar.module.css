@@ -167,12 +167,9 @@
 /* BANNER */
 .banner {
   width: 100%;
-  height: 220px;
+  height: 235px;
   background-size: cover;
-  background-position: center 35%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-position: center;
 }
 
 .bannerTexto {
