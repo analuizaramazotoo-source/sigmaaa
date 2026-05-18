@@ -13,6 +13,7 @@ import Homec from "./pages/cidadao/homec/homec";
 import HB from "./pages/cidadao/HB/HB";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Chat from "./pages/cidadao/chat/chat";
+import Perfil from "./pages/cidadao/perfil/perfil";
 
 function App() {
   return (
@@ -39,6 +40,9 @@ function App() {
 
         {/* Chat */}
         <Route path="/chat" element={<Chat />}  />
+
+        {/* Perfil */}
+        <Route path="/perfil" element={<Perfil />}  />
 
       </Routes>
     </Router>
