@@ -11,6 +11,7 @@ import CadastroCidadao from "./pages/auth/cadastrocidadao/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Homec from "./pages/cidadao/homec/homec";
 import HB from "./pages/cidadao/HB/HB";
+import Solicitar from "./pages/cidadao/solicitar/solicitar";
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
 
         {/* HB */}
         <Route path="/hb" element={<HB />}  />
+
+         {/* Solicitar */}
+        <Route path="/solicitar" element={<Solicitar />}  />
 
       </Routes>
     </Router>
