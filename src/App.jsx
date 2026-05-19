@@ -14,6 +14,9 @@ import HB from "./pages/cidadao/HB/HB";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
+import Status from "./pages/cidadao/status/status";
+import Alterar from "./pages/cidadao/alterar/alterar";
+
 
 function App() {
   return (
@@ -33,16 +36,22 @@ function App() {
         <Route path="/cadastro" element={<CadastroCidadao />} />
 
         {/* HB */}
-        <Route path="/hb" element={<HB />}  />
+        <Route path="/hb" element={<HB />} />
 
-         {/* Solicitar */}
-        <Route path="/solicitar" element={<Solicitar />}  />
+        {/* SOLICITAR */}
+        <Route path="/solicitar" element={<Solicitar />} />
 
-        {/* Chat */}
-        <Route path="/chat" element={<Chat />}  />
+        {/* CHAT */}
+        <Route path="/chat" element={<Chat />} />
 
-        {/* Perfil */}
-        <Route path="/perfil" element={<Perfil />}  />
+        {/* PERFIL */}
+        <Route path="/perfil" element={<Perfil />} />
+
+        {/* STATUS */}
+        <Route path="/status" element={<Status />} /> 
+        
+        {/* ALTERAR */}
+        <Route path="/alterar" element={<Alterar />} />
 
       </Routes>
     </Router>
