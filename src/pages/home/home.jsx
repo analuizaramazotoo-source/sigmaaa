@@ -64,7 +64,7 @@ function Home() {
               <img src="/img cidadão.png" className="card-img" alt="Cidadão" />
               <h3>Cidadão</h3>
               <span>Solicitação de serviços</span>
-              <Link to= "/CadastroCidadao"><button>Selecionar</button></Link>
+              <Link to= "/cadastro"><button>Selecionar</button></Link>
 
             </div>
 

@@ -1,15 +1,15 @@
-import "./cadastrocidadao.module.css";
+import styles from "./cadastrocidadao.module.css";
 
 function CadastroCidadao() {
 
   return (
 
-    <div className="cadastro-page">
+    <div className={styles["cadastro-page"]}>
 
       {/* TOPO */}
-      <div className="topo">
+      <div className={styles.topo}>
 
-        <div className="topo-esquerda">
+        <div className={styles["topo-esquerda"]}>
 
           <img
             src="/secre.png"
@@ -24,7 +24,7 @@ function CadastroCidadao() {
 
         {/* BOTÃO VOLTAR */}
         <button
-          className="btn-voltar"
+          className={styles["btn-voltar"]}
           onClick={() => window.history.back()}
         >
           Voltar
@@ -33,17 +33,17 @@ function CadastroCidadao() {
       </div>
 
       {/* CONTEÚDO */}
-      <div className="conteudo">
+      <div className={styles.conteudo}>
 
         {/* LATERAL */}
-        <div className="lateral">
+        <div className={styles.lateral}>
 
           <img
             src="/prefeitura.png"
-            className="logo-prefeitura"
+            className={styles["logo-prefeitura"]}
           />
 
-          <div className="logo-inferior">
+          <div className={styles["logo-inferior"]}>
 
             <img src="/meio-ambiente.png" />
 
@@ -58,23 +58,23 @@ function CadastroCidadao() {
         </div>
 
         {/* CENTRO */}
-        <div className="centro">
+        <div className={styles.centro}>
 
-          <div className="card">
+          <div className={styles.card}>
 
             <h2>
               Cadastro do Cidadão
             </h2>
 
-            <p className="sub">
+            <p className={styles.sub}>
               Crie sua conta para relatar problemas ou solicitar serviços
               de meio ambiente na sua cidade.
             </p>
 
-            <div className="form-area">
+            <div className={styles["form-area"]}>
 
               {/* INPUTS */}
-              <div className="inputs">
+              <div className={styles.inputs}>
 
                 <input placeholder="Nome Completo" />
 
@@ -84,7 +84,7 @@ function CadastroCidadao() {
 
                 <input placeholder="CPF" />
 
-                <div className="senha">
+                <div className={styles.senha}>
 
                   <input
                     placeholder="Senha"
@@ -98,14 +98,14 @@ function CadastroCidadao() {
 
                 </div>
 
-                <button className="btn-cadastrar">
+                <button className={styles["btn-cadastrar"]}>
                   CADASTRAR
                 </button>
 
               </div>
 
               {/* IMAGEM */}
-              <div className="imagem">
+              <div className={styles.imagem}>
 
                 <img
                   src="/seguranca.png"
