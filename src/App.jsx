@@ -7,19 +7,43 @@ import {
 } from "react-router-dom";
 
 import Home from "./pages/home/home";
-
+import CadastroCidadao from "./pages/auth/cadastrocidadao/cadastrocidadao";
+import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
+import Homec from "./pages/cidadao/homec/homec";
+import HB from "./pages/cidadao/HB/HB";
+import Solicitar from "./pages/cidadao/solicitar/solicitar";
+import Chat from "./pages/cidadao/chat/chat";
+import Perfil from "./pages/cidadao/perfil/perfil";
 
 function App() {
   return (
     <Router>
       <Routes>
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        {/* HOME */}
+        <Route path="/" element={<Home />} />
 
-  
+        {/* HOME CIDADÃO */}
+        <Route path="/cidadao" element={<Homec />} />
+
+        {/* RELATAR PROBLEMA */}
+        <Route path="/relatar-problema" element={<RelatarProblema />} />
+
+        {/* CADASTRO */}
+        <Route path="/cadastro" element={<CadastroCidadao />} />
+
+        {/* HB */}
+        <Route path="/hb" element={<HB />}  />
+
+         {/* Solicitar */}
+        <Route path="/solicitar" element={<Solicitar />}  />
+
+        {/* Chat */}
+        <Route path="/chat" element={<Chat />}  />
+
+        {/* Perfil */}
+        <Route path="/perfil" element={<Perfil />}  />
+
       </Routes>
     </Router>
   );
