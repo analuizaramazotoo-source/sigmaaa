@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import Home from "./pages/home/home";
-import CadastroCidadao from "./pages/auth/cadastrocidadao/cadastrocidadao";
+import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Homec from "./pages/cidadao/homec/homec";
 import HB from "./pages/cidadao/HB/HB";
