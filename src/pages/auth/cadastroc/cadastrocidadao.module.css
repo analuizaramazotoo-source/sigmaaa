@@ -158,5 +158,8 @@
 /* IMAGEM */
 
 .imagem img {
-  width: 180px;
+  width: 450px;
+  position: absolute;
+  top: 21rem;
+  left: 64rem;
 }

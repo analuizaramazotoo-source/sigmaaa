@@ -101,21 +101,21 @@ function CadastroCidadao() {
                 <button className={styles["btn-cadastrar"]}>
                   CADASTRAR
                 </button>
+{/* IMAGEM */}
+              
 
               </div>
 
-              {/* IMAGEM */}
-              <div className={styles.imagem}>
+              
+            </div>
+<div className={styles.imagem}>
 
                 <img
-                  src="/seguranca.png"
+                  src="/cadastrocidadao.png"
                   alt="segurança"
                 />
 
               </div>
-
-            </div>
-
           </div>
 
         </div>
