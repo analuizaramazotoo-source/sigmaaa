@@ -108,7 +108,7 @@ function CadastroCidadao() {
 
               
             </div>
-<div className={styles.imagem}>
+            <div className={styles.imagem}>
 
                 <img
                   src="/cadastrocidadao.png"
