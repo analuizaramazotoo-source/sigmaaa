@@ -7,8 +7,8 @@
 .container-relatar {
   width: 100%;
   min-height: 100vh;
-  background-color: #529e24;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #dbe7cd;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
 }
@@ -17,21 +17,30 @@
 .header-relatar {
   width: 100%;
   background: #196f3d;
+  border-top: 4px solid #15522e;
+  border-bottom: 3px solid #2e7d4e;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 30px;
+  padding: 10px 30px;
+  height: 78px;
+  overflow: visible;
 }
 
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .logo-area img {
-  width: 45px;
-  height: 45px;
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
+  margin-top: -22px;
+  margin-bottom: -22px;
+  z-index: 2;
+  position: relative;
 }
 
 .logo-area p {
@@ -63,109 +72,223 @@
   font-weight: bold;
   color: #333;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .menu-icon {
+  background: none;
+  border: none;
   color: white;
-  font-size: 26px;
+  font-size: 28px;
   cursor: pointer;
+}
+
+/* MENU LATERAL */
+.menuLateral {
+  position: fixed;
+  top: 15px;
+  right: -290px;
+  width: 260px;
+  height: calc(100vh - 30px);
+  background: #196f3d;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: right 0.35s ease;
+  z-index: 999;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+}
+
+.menuAberto {
+  right: 15px;
+}
+
+.topoMenu {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.btnFechar {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btnFechar:hover {
+  opacity: 0.7;
+}
+
+.menuDivisor {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 4px 0 8px 0;
+  border: none;
+}
+
+.menuItem {
+  background: #2e7d4e;
+  color: white;
+  border: none;
+  padding: 13px 16px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.menuItem:hover {
+  background: #37965d;
+  transform: translateX(-3px);
+}
+
+.menuHome {
+  background: #f0a529;
+  color: white;
+  font-weight: 700;
+}
+
+.menuHome:hover {
+  background: #e09420;
+  transform: translateX(-3px);
 }
 
 /* BANNER */
 .banner {
   width: 100%;
-  height: 200px;
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0)), 
-                    url("https://img.freepik.com/free-vector/green-city-landscape_1308-114661.jpg");
+  height: 320px;
   background-size: cover;
   background-position: center 35%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 20px;
+  align-items: center;
+  padding-bottom: 80px;
+  position: relative;
 }
 
-.banner h1 {
-  color: #1e5335;
-  font-size: 32px;
-  font-weight: bold;
-  text-shadow: 0px 1px 2px rgba(255, 255, 255, 0.8);
+.bannerTitulo {
+  color: #2b5f42;
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.7),
+    0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* CARD */
 .card-relatar {
   width: 90%;
-  max-width: 680px;
-  background: #ffffff;
-  margin: -60px auto 30px auto;
-  border-radius: 16px;
-  padding: 25px 30px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  flex-grow: 1;
+  max-width: 620px;
+  background: #f5f5f5;
+  margin: -95px auto 40px auto;
+  border-radius: 14px;
+  padding: 25px 30px 30px 30px;
+  box-shadow:
+    0 3px 0 rgba(0, 0, 0, 0.12),
+    0 8px 18px rgba(0, 0, 0, 0.18);
+  position: relative;
+  z-index: 2;
 }
 
-.card-relatar h3 {
-  color: #444;
-  margin-bottom: 20px;
-  font-size: 16px;
-  font-weight: 500;
+/* DROPDOWN */
+.dropdownWrapper {
+  position: relative;
+  width: 100%;
 }
 
-.problemas {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.dropdownLabel {
+  display: block;
+  margin-bottom: 6px;
+  color: #777;
+  font-size: 14px;
 }
 
-.btnProblema {
+.dropdownBtn {
+  width: 100%;
   background: #2e7d4e;
-  color: white;
-  border: none;
-  padding: 12px 18px;
+  color: #fff;
+  border: 1px solid #2e7d4e;
+  padding: 0 14px;
+  height: 40px;
   border-radius: 8px;
   font-size: 14px;
   text-align: left;
   cursor: pointer;
-  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 6px rgba(0,0,0,0.16);
-  transition: transform 0.1s;
-}
-
-.btnProblema:active {
-  transform: translateY(1px);
-}
-
-/* SETAS E CONTROLES */
-.setaContainer {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
-  margin-bottom: -15px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background 0.2s;
 }
 
-.setaContainerApenas {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
+.dropdownBtn:hover {
+  background: #266940;
 }
 
-.setaBtn {
-  background: none;
+.dropdownTexto {
+  flex: 1;
+}
+
+.dropdownIcone {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.dropdownLista {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #2e7d4e;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.dropdownItem {
+  width: 100%;
+  background: #fff;
+  color: #2e7d4e;
   border: none;
-  font-size: 24px; /* Ajustado para o novo caractere que é naturalmente maior e mais grosso */
-  color: #102f1d;
+  border-bottom: 1px solid rgba(46, 125, 78, 0.12);
+  padding: 11px 14px;
+  font-size: 14px;
+  text-align: left;
   cursor: pointer;
-  padding: 5px;
-  transition: transform 0.2s ease;
+  transition: background 0.15s;
 }
 
-.setaBtn:hover {
-  transform: scale(1.2);
+.dropdownItem:last-child {
+  border-bottom: none;
 }
 
-/* FORMULÁRIO */
+.dropdownItem:hover {
+  background: #f0f7f3;
+}
+
+.dropdownItemAtivo {
+  background: #e6f2ec !important;
+  color: #2e7d4e;
+  font-weight: 600;
+}
+
+/* FORM */
 .formGroup {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .card-relatar label {
@@ -183,7 +306,9 @@
   border: 1px solid #ccc;
   padding: 10px;
   background-color: #fff;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.05);
   outline: none;
 }
 
@@ -206,13 +331,16 @@
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* FOOTER */
 .footer-relatar {
   width: 100%;
-  height: 50px;
+  height: 40px;
   background: #196f3d;
   margin-top: auto;
+  border-top: 3px solid #2e7d4e;
 }

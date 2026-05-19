@@ -1,0 +1,419 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+
+  background: #dbe7cd;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.header {
+  width: 100%;
+  background: #196f3d;
+  border-top: 4px solid #15522e;
+  border-bottom: 3px solid #2e7d4e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  height: 78px;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoArea img {
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
+  margin-top: -22px;
+  margin-bottom: -22px;
+  position: relative;
+}
+
+.logoArea p {
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.logoArea h2 {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.menuIcon {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* MENU */
+.menuLateral {
+  position: fixed;
+  top: 15px;
+  right: -290px;
+  width: 260px;
+  height: calc(100vh - 30px);
+  background: #196f3d;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: right 0.35s ease;
+  z-index: 999;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+}
+
+.menuAberto {
+  right: 15px;
+}
+
+.topoMenu {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btnFechar {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.menuDivisor {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 6px 0 10px;
+  border: none;
+}
+
+.menuItem {
+  background: #2e7d4e;
+  color: white;
+  border: none;
+  padding: 13px 16px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menuItem:hover {
+  background: #37965d;
+  transform: translateX(-3px);
+}
+
+.menuHome {
+  background: #f0a529;
+  font-weight: 700;
+}
+
+/* BANNER */
+.banner {
+  width: 100%;
+  height: 340px;
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* MAIN */
+.main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 40px;
+
+  padding: 0 20px 0px;
+
+  flex-wrap: wrap;
+
+  margin-top: -95px;
+
+  position: relative;
+  z-index: 5;
+
+  flex: 1;
+}
+
+/* CARD URGENTE */
+.cardUrgente {
+  width: 500px;
+  height: 330px;
+
+  background: #efefef;
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12),
+    0 8px 22px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+}
+.cardUrgenteHeader {
+  background: #f75b17;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.iconAlert {
+  font-size: 42px;
+}
+
+.cardUrgenteTitulo {
+  color: white;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.cardUrgenteTexto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding: 18px 24px 12px;
+
+  color: #4d4d4d;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.btnEmergencia {
+  width: 210px;
+  margin: 18px auto 26px;
+
+  background: #f75b17;
+  color: white;
+  border: none;
+  border-radius: 10px;
+
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  transition: 0.2s;
+}
+
+.btnEmergencia:hover {
+  background: #e14f10;
+  transform: translateY(-2px);
+}
+
+/* CARD DÚVIDAS */
+.cardDuvidas {
+  width: 500px;
+  height: 330px;
+
+  background: #efefef;
+  border-radius: 18px;
+
+  padding: 26px;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12),
+    0 8px 22px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.cardDuvidasTitulo {
+  text-align: center;
+  color: #2d5f48;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.listaDuvidas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemDuvida {
+  background: white;
+  border: none;
+  border-radius: 10px;
+
+  padding: 10px 14px;
+
+  text-align: left;
+  font-size: 15px;
+  color: #333;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  transition: 0.2s;
+}
+
+.itemDuvida:hover {
+  background: #f0f7f3;
+  transform: translateY(-1px);
+}
+
+.btnVerTodas {
+  margin-top: auto;
+  padding-top: 22px;
+
+  background: none;
+  border: none;
+
+  color: #2e7d4e;
+  font-size: 15px;
+
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* FOOTER */
+.footer {
+  background: #196f3d;
+  border-top: 4px solid #14552f;
+
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+
+  flex-wrap: wrap;
+
+  padding: 22px 30px;
+
+  margin-top: -5px;
+}
+
+.footerColuna {
+  min-width: 220px;
+}
+
+.footerColuna h4 {
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.footerColuna p {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.footerLink {
+  display: block;
+  background: none;
+  border: none;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  font-size: 15px;
+  text-align: left;
+
+  margin-bottom: 8px;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.footerLink:hover {
+  color: white;
+}
+
+.redesSociais {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.btnRede {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnRede:hover {
+  transform: translateY(-2px);
+}
+
+.facebook {
+  background: #1877f2;
+}
+
+.instagram {
+  background: linear-gradient(
+    45deg,
+    #f58529,
+    #dd2a7b,
+    #8134af,
+    #515bd4
+  );
+}
+
+.whatsapp {
+  background: #25d366;
+}
+
+/* RESPONSIVO */
+@media (max-width: 950px) {
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cardUrgente,
+  .cardDuvidas {
+    width: 100%;
+    max-width: 450px;
+  }
+
+  .footer {
+    gap: 40px;
+    justify-content: flex-start;
+  }
+}
