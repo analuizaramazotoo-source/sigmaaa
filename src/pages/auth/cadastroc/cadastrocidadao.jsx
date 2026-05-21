@@ -1,4 +1,5 @@
 import styles from "./cadastrocidadao.module.css";
+import { Link } from "react-router-dom";
 
 function CadastroCidadao() {
 
@@ -98,9 +99,10 @@ function CadastroCidadao() {
 
                 </div>
 
-                <button className={styles["btn-cadastrar"]}>
+              <Link to = "/cidadao">  <button className={styles["btn-cadastrar"]}>
                   CADASTRAR
                 </button>
+                </Link>
 {/* IMAGEM */}
               
 
