@@ -15,7 +15,7 @@ import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
-import Alterar from "./pages/cidadao/alterar/alterar";
+
 
 
 function App() {
@@ -50,8 +50,7 @@ function App() {
         {/* STATUS */}
         <Route path="/status" element={<Status />} /> 
         
-        {/* ALTERAR */}
-        <Route path="/alterar" element={<Alterar />} />
+      
 
       </Routes>
     </Router>
