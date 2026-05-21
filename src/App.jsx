@@ -9,15 +9,12 @@ import {
 import Home from "./pages/home/home";
 import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
-import Homec from "./pages/cidadao/homec/homec";
-import HB from "./pages/cidadao/HB/HB";
+import Homec from "./pages/cidadao/homec/Homec";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
-
-
 
 function App() {
   return (
@@ -31,30 +28,46 @@ function App() {
         <Route path="/cidadao" element={<Homec />} />
 
         {/* RELATAR PROBLEMA */}
-        <Route path="/relatar-problema" element={<RelatarProblema />} />
+        <Route
+          path="/relatar-problema"
+          element={<RelatarProblema />}
+        />
 
         {/* CADASTRO */}
-        <Route path="/cadastro" element={<CadastroCidadao />} />
-
-        {/* HB */}
-        <Route path="/hb" element={<HB />} />
+        <Route
+          path="/cadastro"
+          element={<CadastroCidadao />}
+        />
 
         {/* SOLICITAR */}
-        <Route path="/solicitar" element={<Solicitar />} />
+        <Route
+          path="/solicitar"
+          element={<Solicitar />}
+        />
 
         {/* CHAT */}
-        <Route path="/chat" element={<Chat />} />
+        <Route
+          path="/chat"
+          element={<Chat />}
+        />
 
         {/* PERFIL */}
-        <Route path="/perfil" element={<Perfil />} />
+        <Route
+          path="/perfil"
+          element={<Perfil />}
+        />
 
         {/* STATUS */}
-        <Route path="/status" element={<Status />} /> 
+        <Route
+          path="/status"
+          element={<Status />}
+        />
 
         {/* ALTERAR */}
-        <Route path="/alterar" element={<Alterar />} />
-        
-      
+        <Route
+          path="/alterar"
+          element={<Alterar />}
+        />
 
       </Routes>
     </Router>
