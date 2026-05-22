@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import styles from "./homec.module.css";
 import hbStyles from "./HB.module.css";
@@ -98,7 +99,7 @@ export default function Homec() {
               encontrado.
             </p>
 
-            <button>ENVIAR RELATO</button>
+           <Link to ="/relatar-problema"> <button>ENVIAR RELATO</button></Link>
           </div>
 
           <div className={`${styles.card} ${styles.cardVerde}`}>
@@ -110,7 +111,7 @@ export default function Homec() {
               Faça solicitações ambientais e acompanhe todo o andamento.
             </p>
 
-            <button>PREENCHER SOLICITAÇÃO</button>
+            <Link to ="/solicitar"> <button>PREENCHER SOLICITAÇÃO</button></Link>
           </div>
 
           <div className={`${styles.card} ${styles.cardLaranja}`}>
@@ -122,7 +123,7 @@ export default function Homec() {
               Consulte o andamento das suas solicitações em tempo real.
             </p>
 
-            <button>MINHAS SOLICITAÇÕES</button>
+            <Link to =""> <button>MINHAS SOLICITAÇÕES</button></Link>
           </div>
         </section>
 

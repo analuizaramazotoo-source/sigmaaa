@@ -3,6 +3,7 @@ import styles from "./RelatarProblema.module.css";
 import bannerFundo from "../../../assets/banner.png";
 import arvoreLogo from "../../../assets/arvore.png";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const problemas = [
   "Lixo irregular",
@@ -63,14 +64,19 @@ export default function RelatarProblema() {
 
         <hr className={styles.menuDivisor} />
 
-        <button className={`${styles.menuItem} ${styles.menuHome}`}>
+      <Link to = "/"> <button className={`${styles.menuItem} ${styles.menuHome}`}>
           🏠 Home
-        </button>
-        <button className={styles.menuItem}>📄 Relatar problema</button>
-        <button className={styles.menuItem}>📋 Solicitar serviço</button>
-        <button className={styles.menuItem}>📊 Status</button>
-        <button className={styles.menuItem}>💬 Chat com Gestão</button>
-        <button className={styles.menuItem}>👤 Perfil</button>
+        </button></Link> 
+
+      <Link to = "/">   <button className={styles.menuItem}>📄 Relatar problema</button></Link>
+       
+      <Link to = "/">   <button className={styles.menuItem}>📋 Solicitar serviço</button></Link> 
+      
+      <Link to = "/">   <button className={styles.menuItem}>📊 Status</button></Link> 
+       
+      <Link to = "/">   <button className={styles.menuItem}>💬 Chat com Gestão</button></Link> 
+      
+      <Link to = "/">   <button className={styles.menuItem}>👤 Perfil</button></Link> 
       </div>
 
       {/* BANNER */}

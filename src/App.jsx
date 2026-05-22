@@ -9,12 +9,14 @@ import {
 import Home from "./pages/home/home";
 import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
-import Homec from "./pages/cidadao/homec/Homec";
+import Homec from "./pages/cidadao/homec/homec"
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
+import Login from "./pages/auth/login/login"
+import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao"
 
 function App() {
   return (
@@ -67,6 +69,17 @@ function App() {
         <Route
           path="/alterar"
           element={<Alterar />}
+        />
+
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+          {/* LOGIN CIDADAO */}
+        <Route
+          path="/logincidadao"
+          element={<LoginCidadao />}
         />
 
       </Routes>

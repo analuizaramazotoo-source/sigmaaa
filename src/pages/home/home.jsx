@@ -20,7 +20,7 @@ function Home() {
           </div>
 
           <div className="actions">
-            <a href="#">Entrar</a>
+            <a href="/login">Entrar</a>
             <button className="btn-outline">Criar uma conta</button>
           </div>
 
@@ -41,7 +41,7 @@ function Home() {
         </button>
 
         <p className="login">
-          Já possui conta? <a href="#">Entrar</a>
+          Já possui conta? <a href="/login">Entrar</a>
         </p>
 
         <div className="cards-wrapper">
