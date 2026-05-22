@@ -127,8 +127,7 @@ export default function Homec() {
           </div>
         </section>
 
-        {/* FOOTER */}
-        <footer className={styles.footerHome}></footer>
+        
       </div>
 
       {/* COMPONENTE HB */}
@@ -144,24 +143,7 @@ function HB() {
 
   return (
     <div className={hbStyles.container}>
-      {/* HEADER */}
-      <header className={hbStyles.header}>
-        <div className={hbStyles.logoArea}>
-          <img src={arvoreLogo} alt="logo" />
-
-          <div>
-            <p>SECRETARIA DO</p>
-            <h2>MEIO AMBIENTE</h2>
-          </div>
-        </div>
-
-        <button
-          className={hbStyles.menuIcon}
-          onClick={() => setMenuAberto(!menuAberto)}
-        >
-          ⋮
-        </button>
-      </header>
+      
 
       {/* MENU LATERAL */}
       <div
@@ -204,11 +186,6 @@ function HB() {
         <button className={hbStyles.menuItem}>👤 Perfil</button>
       </div>
 
-      {/* BANNER */}
-      <section
-        className={hbStyles.banner}
-        style={{ backgroundImage: `url(${bannerFundo})` }}
-      />
 
       {/* CONTEÚDO PRINCIPAL */}
       <main className={hbStyles.main}>
