@@ -110,7 +110,7 @@ export default function Alterar() {
                 type={mostrarSenhaAtual ? "text" : "password"}
                 value={senhaAtual}
                 onChange={(e) => setSenhaAtual(e.target.value)}
-                placeholder="••••••••••"
+                placeholder="Inserir Senha..."
               />
               <button
                 className={styles.olhoBtn}
@@ -131,7 +131,7 @@ export default function Alterar() {
                 type={mostrarNovaSenha ? "text" : "password"}
                 value={novaSenha}
                 onChange={(e) => setNovaSenha(e.target.value)}
-                placeholder="••••••••••"
+                placeholder="Inserir Nova Senha..."
               />
               <button
                 className={styles.olhoBtn}
@@ -152,7 +152,7 @@ export default function Alterar() {
                 type={mostrarConfirmar ? "text" : "password"}
                 value={confirmarSenha}
                 onChange={(e) => setConfirmarSenha(e.target.value)}
-                placeholder="••••••••••"
+                placeholder="Confirme a Senha..."
               />
               <button
                 className={styles.olhoBtn}
