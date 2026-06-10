@@ -3,7 +3,7 @@ import styles from "./RelatarProblema.module.css";
 import bannerFundo from "../../../assets/banner.png";
 import arvoreLogo from "../../../assets/arvore.png";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const problemas = [
   "Lixo irregular",
@@ -24,6 +24,29 @@ export default function RelatarProblema() {
   const [outro, setOutro] = useState("");
   const [endereco, setEndereco] = useState("");
 
+  const navigate = useNavigate();
+
+  const handleEnviar = () => {
+    if (!problemaSelecionado) {
+      alert("Selecione um problema.");
+      return;
+    }
+
+    if (!outro.trim()) {
+      alert("Informe uma descrição.");
+      return;
+    }
+
+    if (!endereco.trim()) {
+      alert("Informe o endereço do problema.");
+      return;
+    }
+
+    // Futuramente você salvará os dados no banco aqui
+
+    navigate("/relato-enviado");
+  };
+
   return (
     <div className={styles["container-relatar"]}>
       {/* HEADER */}
@@ -37,7 +60,10 @@ export default function RelatarProblema() {
         </div>
 
         <div className={styles["header-buttons"]}>
-          <button className={styles["btn-voltar"]}>Voltar</button>
+          <Link to="/cidadao">
+            <button className={styles["btn-voltar"]}>Voltar</button>
+          </Link>
+
           <button
             className={styles["menu-icon"]}
             onClick={() => setMenuAberto(!menuAberto)}
@@ -64,19 +90,41 @@ export default function RelatarProblema() {
 
         <hr className={styles.menuDivisor} />
 
-      <Link to = "/"> <button className={`${styles.menuItem} ${styles.menuHome}`}>
-          🏠 Home
-        </button></Link> 
+        <Link to="/">
+          <button className={`${styles.menuItem} ${styles.menuHome}`}>
+            🏠 Home
+          </button>
+        </Link>
 
-      <Link to = "/">   <button className={styles.menuItem}>📄 Relatar problema</button></Link>
-       
-      <Link to = "/">   <button className={styles.menuItem}>📋 Solicitar serviço</button></Link> 
-      
-      <Link to = "/">   <button className={styles.menuItem}>📊 Status</button></Link> 
-       
-      <Link to = "/">   <button className={styles.menuItem}>💬 Chat com Gestão</button></Link> 
-      
-      <Link to = "/">   <button className={styles.menuItem}>👤 Perfil</button></Link> 
+        <Link to="/relatar-problema">
+          <button className={styles.menuItem}>
+            📄 Relatar problema
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📋 Solicitar serviço
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📊 Status
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            💬 Chat com Gestão
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            👤 Perfil
+          </button>
+        </Link>
       </div>
 
       {/* BANNER */}
@@ -84,24 +132,31 @@ export default function RelatarProblema() {
         className={styles.banner}
         style={{ backgroundImage: `url(${bannerFundo})` }}
       >
-        <h1 className={styles.bannerTitulo}>Relatar Problema Ambiental</h1>
+        <h1 className={styles.bannerTitulo}>
+          Relatar Problema Ambiental
+        </h1>
       </section>
 
       {/* CARD */}
       <section className={styles["card-relatar"]}>
-
         {/* DROPDOWN PROBLEMAS */}
         <div className={styles.dropdownWrapper}>
-          <label className={styles.dropdownLabel}>Informe o Problema Ambiental:</label>
+          <label className={styles.dropdownLabel}>
+            Informe o Problema Ambiental:
+          </label>
+
           <button
             className={`${styles.dropdownBtn} ${
-              problemaSelecionado ? styles.dropdownBtnSelecionado : ""
+              problemaSelecionado
+                ? styles.dropdownBtnSelecionado
+                : ""
             }`}
             onClick={() => setDropdownAberto(!dropdownAberto)}
           >
             <span className={styles.dropdownTexto}>
               {problemaSelecionado || "Selecione um problema"}
             </span>
+
             {dropdownAberto ? (
               <IoChevronUp className={styles.dropdownIcone} />
             ) : (
@@ -115,7 +170,9 @@ export default function RelatarProblema() {
                 <button
                   key={problema}
                   className={`${styles.dropdownItem} ${
-                    problemaSelecionado === problema ? styles.dropdownItemAtivo : ""
+                    problemaSelecionado === problema
+                      ? styles.dropdownItemAtivo
+                      : ""
                   }`}
                   onClick={() => {
                     setProblemaSelecionado(problema);
@@ -129,7 +186,7 @@ export default function RelatarProblema() {
           )}
         </div>
 
-        {/* descriçao */}
+        {/* DESCRIÇÃO */}
         <div className={styles.formGroup}>
           <label>Descrição:</label>
           <input
@@ -152,7 +209,12 @@ export default function RelatarProblema() {
         </div>
 
         <div className={styles["btn-area"]}>
-          <button className={styles["btn-enviar"]}>Enviar</button>
+          <button
+            className={styles["btn-enviar"]}
+            onClick={handleEnviar}
+          >
+            Enviar
+          </button>
         </div>
       </section>
 

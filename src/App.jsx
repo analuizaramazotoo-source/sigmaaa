@@ -9,14 +9,15 @@ import {
 import Home from "./pages/home/home";
 import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
-import Homec from "./pages/cidadao/homec/homec"
+import Homec from "./pages/cidadao/homec/homec";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
-import Login from "./pages/auth/login/login"
-import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao"
+import Login from "./pages/auth/login/login";
+import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
+import RelatoEnviado from "./pages/cidadao/relatar/relatoenviado/relatoenviado";
 
 function App() {
   return (
@@ -33,6 +34,12 @@ function App() {
         <Route
           path="/relatar-problema"
           element={<RelatarProblema />}
+        />
+
+        {/* RELATO ENVIADO */}
+        <Route
+          path="/relato-enviado"
+          element={<RelatoEnviado />}
         />
 
         {/* CADASTRO */}
@@ -76,7 +83,8 @@ function App() {
           path="/login"
           element={<Login />}
         />
-          {/* LOGIN CIDADAO */}
+
+        {/* LOGIN CIDADÃO */}
         <Route
           path="/logincidadao"
           element={<LoginCidadao />}

@@ -16,6 +16,21 @@ export default function Solicitar() {
     if (file) setFoto(file.name);
   };
 
+  const handleEnviar = () => {
+    if (!problema.trim()) {
+      alert("Preencha o campo Problema.");
+      return;
+    }
+
+    if (!descricao.trim()) {
+      alert("Preencha o campo Descrição.");
+      return;
+    }
+
+    // Foto continua opcional
+    navigate("/relatoenviado");
+  };
+
   return (
     <div className={styles.container}>
       {/* HEADER */}
@@ -32,6 +47,7 @@ export default function Solicitar() {
           <button className={styles.btnVoltar} onClick={() => navigate(-1)}>
             Voltar
           </button>
+
           <button
             className={styles.menuIcon}
             onClick={() => setMenuAberto(!menuAberto)}
@@ -42,25 +58,60 @@ export default function Solicitar() {
       </header>
 
       {/* MENU LATERAL */}
-      <div className={`${styles.menuLateral} ${menuAberto ? styles.menuAberto : ""}`}>
+      <div
+        className={`${styles.menuLateral} ${
+          menuAberto ? styles.menuAberto : ""
+        }`}
+      >
         <div className={styles.topoMenu}>
-          <button className={styles.btnFechar} onClick={() => setMenuAberto(false)}>
+          <button
+            className={styles.btnFechar}
+            onClick={() => setMenuAberto(false)}
+          >
             ✕
           </button>
         </div>
+
         <hr className={styles.menuDivisor} />
-        <button className={`${styles.menuItem} ${styles.menuHome}`} onClick={() => navigate("/hb")}>
+
+        <button
+          className={`${styles.menuItem} ${styles.menuHome}`}
+          onClick={() => navigate("/cidadao")}
+        >
           🏠 Home
         </button>
-        <button className={styles.menuItem} onClick={() => navigate("/relatar-problema")}>
+
+        <button
+          className={styles.menuItem}
+          onClick={() => navigate("/relatar-problema")}
+        >
           📄 Relatar problema
         </button>
+
         <button className={`${styles.menuItem} ${styles.menuAtivo}`}>
           📋 Solicitar serviço
         </button>
-        <button className={styles.menuItem}>📊 Status</button>
-        <button className={styles.menuItem}>💬 Chat com Gestão</button>
-        <button className={styles.menuItem}>👤 Perfil</button>
+
+        <button
+          className={styles.menuItem}
+          onClick={() => navigate("/status")}
+        >
+          📊 Status
+        </button>
+
+        <button
+          className={styles.menuItem}
+          onClick={() => navigate("/chat")}
+        >
+          💬 Chat com Gestão
+        </button>
+
+        <button
+          className={styles.menuItem}
+          onClick={() => navigate("/perfil")}
+        >
+          👤 Perfil
+        </button>
       </div>
 
       {/* BANNER */}
@@ -70,14 +121,17 @@ export default function Solicitar() {
       >
         <div className={styles.bannerTexto}>
           <h1>Solicitar um serviço</h1>
-          <p>Informe um problema ambiental na sua região para que<br />possamos ajudar a resolver!</p>
+          <p>
+            Informe um problema ambiental na sua região para que
+            <br />
+            possamos ajudar a resolver!
+          </p>
         </div>
       </section>
 
       {/* CARD PRINCIPAL */}
       <main className={styles.main}>
         <div className={styles.card}>
-
           {/* LADO ESQUERDO */}
           <div className={styles.cardEsquerdo}>
             <div className={styles.cardTituloArea}>
@@ -106,12 +160,14 @@ export default function Solicitar() {
             />
 
             <label className={styles.labelCampo}>Foto do Problema:</label>
+
             <div className={styles.fotoArea}>
               <div className={styles.fotoBox}>
                 <span className={styles.fotoTexto}>
                   {foto ? foto : "Anexar foto (opcional)"}
                 </span>
               </div>
+
               <div className={styles.fotoBotoes}>
                 <label className={styles.btnCarregarFoto}>
                   CARREGAR FOTO
@@ -122,7 +178,11 @@ export default function Solicitar() {
                     onChange={handleFoto}
                   />
                 </label>
-                <button className={styles.btnEnviarRelato}>
+
+                <button
+                  className={styles.btnEnviarRelato}
+                  onClick={handleEnviar}
+                >
                   ENVIAR RELATO
                 </button>
               </div>
@@ -132,20 +192,29 @@ export default function Solicitar() {
           {/* LADO DIREITO - MAPA */}
           <div className={styles.cardDireito}>
             <div className={styles.mapaPlaceholder}>
-              <div className={styles.mapaPonto} style={{ top: "30%", left: "65%" }} />
-              <div className={styles.mapaPontoLaranja} style={{ top: "50%", left: "40%" }} />
-              <div className={styles.mapaPontoAmarelo} style={{ top: "68%", left: "52%" }} />
+              <div
+                className={styles.mapaPonto}
+                style={{ top: "30%", left: "65%" }}
+              />
+              <div
+                className={styles.mapaPontoLaranja}
+                style={{ top: "50%", left: "40%" }}
+              />
+              <div
+                className={styles.mapaPontoAmarelo}
+                style={{ top: "68%", left: "52%" }}
+              />
               <div className={styles.mapaLinha} />
             </div>
           </div>
-
         </div>
 
         {/* AVISO */}
         <div className={styles.aviso}>
           <span className={styles.avisoIcone}>🟡</span>
           <span className={styles.avisoTexto}>
-            Esteja localizado corretamente ao selecionar o local no mapa para facilitar o trabalho das equipes.
+            Esteja localizado corretamente ao selecionar o local no mapa para
+            facilitar o trabalho das equipes.
           </span>
         </div>
       </main>
