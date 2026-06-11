@@ -55,31 +55,41 @@ export default function Perfil() {
           </button>
         </div>
 
-        <button className={styles.menuItem}>
-          🏠 Home
-        </button>
+        <Link to="/">
+          <button className={`${styles.menuItem} ${styles.menuHome}`}>
+            🏠 Home
+          </button>
+        </Link>
 
-        <button className={styles.menuItem}>
-          📋 Relatar
-        </button>
+        <Link to="/relatar-problema">
+          <button className={styles.menuItem}>
+            📄 Relatar problema
+          </button>
+        </Link>
 
-        <button className={styles.menuItem}>
-          📌 Solicitar
-        </button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📋 Solicitar serviço
+          </button>
+        </Link>
 
-        <button className={styles.menuItem}>
-          📊 Status
-        </button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📊 Status
+          </button>
+        </Link>
 
-        <button className={styles.menuItem}>
-          💬 Chat com Gestão
-        </button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            💬 Chat com Gestão
+          </button>
+        </Link>
 
-        <button
-          className={`${styles.menuItem} ${styles.menuAtivo}`}
-        >
-          👤 Perfil
-        </button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            👤 Perfil
+          </button>
+        </Link>
 
         <div className={styles.menuFooter}>
           <img src={arvoreLogo} alt="logo" />

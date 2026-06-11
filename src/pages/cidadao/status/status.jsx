@@ -56,12 +56,41 @@ export default function Status() {
           <button className={styles.btnFechar} onClick={() => setMenuAberto(false)}>✕</button>
         </div>
         <hr className={styles.menuDivisor} />
-        <button className={`${styles.menuItem} ${styles.menuHome}`} onClick={() => navigate("/hb")}>🏠 Home</button>
-        <button className={styles.menuItem} onClick={() => navigate("/relatar-problema")}>📄 Relatar problema</button>
-        <button className={styles.menuItem} onClick={() => navigate("/solicitar")}>📋 Solicitar serviço</button>
-        <button className={`${styles.menuItem} ${styles.menuAtivo}`}>📊 Status</button>
-        <button className={styles.menuItem}>💬 Chat com Gestão</button>
-        <button className={styles.menuItem}>👤 Perfil</button>
+        <Link to="/">
+          <button className={`${styles.menuItem} ${styles.menuHome}`}>
+            🏠 Home
+          </button>
+        </Link>
+
+        <Link to="/relatar-problema">
+          <button className={styles.menuItem}>
+            📄 Relatar problema
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📋 Solicitar serviço
+          </button>
+        </Link>
+
+        <Link to="/status">
+          <button className={styles.menuItem}>
+            📊 Status
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            💬 Chat com Gestão
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            👤 Perfil
+          </button>
+        </Link>
       </div>
 
       {/* BANNER */}

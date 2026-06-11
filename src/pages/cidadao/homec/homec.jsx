@@ -160,34 +160,41 @@ function HB() {
         </div>
 
         <hr className={hbStyles.menuDivisor} />
+ <Link to="/">
+          <button className={`${styles.menuItem} ${styles.menuHome}`}>
+            🏠 Home
+          </button>
+        </Link>
 
-        <button className={`${hbStyles.menuItem} ${hbStyles.menuHome}`}>
-          🏠 Home
-        </button>
+        <Link to="/relatar-problema">
+          <button className={styles.menuItem}>
+            📄 Relatar problema
+          </button>
+        </Link>
 
-        <button
-          className={hbStyles.menuItem}
-          onClick={() => navigate("/relatar-problema")}
-        >
-          📄 Relatar problema
-        </button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📋 Solicitar serviço
+          </button>
+        </Link>
 
-        <button
-          className={hbStyles.menuItem}
-          onClick={() => navigate("/solicitar")}
-        >
-          📋 Solicitar serviço
-        </button>
+        <Link to="/Status">
+          <button className={styles.menuItem}>
+            📊 Status
+          </button>
+        </Link>
 
-        <button className={hbStyles.menuItem}>📊 Status</button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            💬 Chat com Gestão
+          </button>
+        </Link>
 
-        <button className={hbStyles.menuItem}>
-          💬 Chat com Gestão
-        </button>
-
-        <button className={hbStyles.menuItem}>
-          👤 Perfil
-        </button>
+        <Link to="/">
+          <button className={styles.menuItem}>
+            👤 Perfil
+          </button>
+        </Link>
       </div>
 
       <main className={hbStyles.main}>

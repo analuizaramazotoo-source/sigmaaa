@@ -74,44 +74,41 @@ export default function Solicitar() {
 
         <hr className={styles.menuDivisor} />
 
-        <button
-          className={`${styles.menuItem} ${styles.menuHome}`}
-          onClick={() => navigate("/cidadao")}
-        >
-          🏠 Home
-        </button>
-
-        <button
-          className={styles.menuItem}
-          onClick={() => navigate("/relatar-problema")}
-        >
-          📄 Relatar problema
-        </button>
-
-        <button className={`${styles.menuItem} ${styles.menuAtivo}`}>
-          📋 Solicitar serviço
-        </button>
-
-        <button
-          className={styles.menuItem}
-          onClick={() => navigate("/status")}
-        >
-          📊 Status
-        </button>
-
-        <button
-          className={styles.menuItem}
-          onClick={() => navigate("/chat")}
-        >
-          💬 Chat com Gestão
-        </button>
-
-        <button
-          className={styles.menuItem}
-          onClick={() => navigate("/perfil")}
-        >
-          👤 Perfil
-        </button>
+        <Link to="/">
+                 <button className={`${styles.menuItem} ${styles.menuHome}`}>
+                   🏠 Home
+                 </button>
+               </Link>
+       
+               <Link to="/relatar-problema">
+                 <button className={styles.menuItem}>
+                   📄 Relatar problema
+                 </button>
+               </Link>
+       
+               <Link to="/">
+                 <button className={styles.menuItem}>
+                   📋 Solicitar serviço
+                 </button>
+               </Link>
+       
+               <Link to="/">
+                 <button className={styles.menuItem}>
+                   📊 Status
+                 </button>
+               </Link>
+       
+               <Link to="/">
+                 <button className={styles.menuItem}>
+                   💬 Chat com Gestão
+                 </button>
+               </Link>
+       
+               <Link to="/">
+                 <button className={styles.menuItem}>
+                   👤 Perfil
+                 </button>
+               </Link>
       </div>
 
       {/* BANNER */}

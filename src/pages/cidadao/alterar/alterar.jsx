@@ -72,14 +72,41 @@ export default function Alterar() {
           </button>
         </div>
 
-        <button className={styles.menuItem}>🏠 Home</button>
-        <button className={styles.menuItem}>📋 Relatar</button>
-        <button className={styles.menuItem}>📌 Solicitar</button>
-        <button className={styles.menuItem}>📊 Status</button>
-        <button className={styles.menuItem}>💬 Chat com Gestão</button>
-        <button className={`${styles.menuItem} ${styles.menuAtivo}`}>
-          👤 Perfil
-        </button>
+         <Link to="/">
+          <button className={`${styles.menuItem} ${styles.menuHome}`}>
+            🏠 Home
+          </button>
+        </Link>
+
+        <Link to="/relatar-problema">
+          <button className={styles.menuItem}>
+            📄 Relatar problema
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📋 Solicitar serviço
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            📊 Status
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            💬 Chat com Gestão
+          </button>
+        </Link>
+
+        <Link to="/">
+          <button className={styles.menuItem}>
+            👤 Perfil
+          </button>
+        </Link>
 
         <div className={styles.menuFooter}>
           <img src={arvoreLogo} alt="logo" />
