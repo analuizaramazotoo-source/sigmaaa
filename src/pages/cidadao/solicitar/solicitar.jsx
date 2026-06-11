@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Solicitar.module.css";
 import bannerFundo from "../../../assets/banner.png";
 import arvoreLogo from "../../../assets/arvore.png";
@@ -28,7 +28,7 @@ export default function Solicitar() {
     }
 
     // Foto continua opcional
-    navigate("/relatoenviado");
+    navigate("/relato-enviado");
   };
 
   return (
@@ -185,6 +185,7 @@ export default function Solicitar() {
                 >
                   ENVIAR RELATO
                 </button>
+                
               </div>
             </div>
           </div>
