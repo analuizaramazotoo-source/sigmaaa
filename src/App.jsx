@@ -18,6 +18,7 @@ import Alterar from "./pages/cidadao/alterar/alterar";
 import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import RelatoEnviado from "./pages/cidadao/relatar/relatoenviado/relatoenviado";
+import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
 
 function App() {
   return (
@@ -89,6 +90,11 @@ function App() {
           path="/logincidadao"
           element={<LoginCidadao />}
         />
+        {/* LOGIN GESTOR */}
+       <Route
+          path="/cadastrog"
+          element={<Cadastrog />}
+/>
 
       </Routes>
     </Router>
