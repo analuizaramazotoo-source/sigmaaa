@@ -180,7 +180,7 @@ function HB() {
 
         <Link to="/Status">
           <button className={styles.menuItem}>
-            📊 Status
+            📊 Statuss
           </button>
         </Link>
 
