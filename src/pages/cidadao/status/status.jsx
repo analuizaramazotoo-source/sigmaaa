@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./Status.module.css";
 import bannerFundo from "../../../assets/banner.png";
 import arvoreLogo from "../../../assets/arvore.png";
