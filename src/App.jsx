@@ -19,6 +19,7 @@ import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import RelatoEnviado from "./pages/cidadao/relatar/relatoenviado/relatoenviado";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
+import Homeg from "./pages/gestao/homeg/homeg";
 
 function App() {
   return (
@@ -94,7 +95,12 @@ function App() {
        <Route
           path="/cadastrog"
           element={<Cadastrog />}
-/>
+       />
+
+      <Route
+     path="/homeg"
+     element={<Homeg />}
+        />
 
       </Routes>
     </Router>
