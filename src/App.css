@@ -45,16 +45,16 @@ html, body, #root {
 }
 
 .logo-img {
-  width: 200px;  
-  height: 65px;
- 
-  
+  width: 200px;
+  height: auto;
+  display: block;
 }
-.logos{
-  width: 220px;  
-  height: 75px;
-  position: relative;
-  right: 45px;
+
+.logos {
+  width: 220px;
+  height: auto;
+  display: block;
+  margin-top: 3px;
 }
 
 .header-logos {
