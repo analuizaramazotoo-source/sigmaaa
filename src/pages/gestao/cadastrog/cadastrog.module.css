@@ -1,113 +1,128 @@
 .container {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  background: #5aa321;
   display: flex;
-  background: #5da221;
+  overflow: hidden;
 }
 
 .sidebar {
   width: 230px;
-  background: #1f7a44;
+  background: #1f7b45;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 25px 15px;
+  box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.logoPrefeitura {
+  display: flex;
+  justify-content: center;
+  margin-top: 35px;
 }
 
 .logoPrefeitura img {
-  width: 180px;
+  width: 220px;
 }
 
 .linha {
-  height: 2px;
-  background: #d8d8d8;
-  margin: 20px 0;
+  display: none;
 }
 
 .logoSecretaria {
   text-align: center;
+  margin-bottom: 40px;
 }
 
 .logoSecretaria img {
-  width: 110px;
+  width: 180px;
+  margin-bottom: 10px;
 }
 
 .logoSecretaria h2 {
-  color: #ffd93d;
-  font-size: 28px;
-  font-weight: bold;
-  margin-top: 15px;
+  color: #ffd63f;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 10px;
 }
 
 .content {
   flex: 1;
-  background: #e5f0d9;
+  background: #dfead3;
   display: flex;
   flex-direction: column;
 }
 
 .header {
-  height: 80px;
-  background: #217b42;
+  height: 95px;
+  background: #238046;
   display: flex;
   align-items: center;
-  padding: 0 25px;
-  gap: 15px;
+  gap: 20px;
+  padding-left: 28px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .header img {
-  width: 50px;
+  width: 100px;
+  height: auto;
 }
 
 .header span {
   color: white;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 
 .header h1 {
   color: white;
-  font-size: 34px;
+  font-size: 32px;
+  font-weight: 700;
   line-height: 1;
 }
 
 .card {
-  width: 460px;
+  width: 620px;
   background: #f2f2f2;
-  margin: auto;
-  padding: 35px;
   border-radius: 18px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  padding: 35px 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin: auto;
 }
 
 .card h2 {
   text-align: center;
-  color: #444;
-  margin-bottom: 30px;
-  font-size: 36px;
+  color: #4d4d4d;
+  font-size: 42px;
   font-weight: 400;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d8d8d8;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .formGroup label {
-  margin-bottom: 8px;
-  color: #444;
+  color: #4d4d4d;
   font-size: 15px;
+  margin-bottom: 8px;
 }
 
 .formGroup input {
-  height: 42px;
+  width: 100%;
+  height: 48px;
   border: none;
   border-radius: 6px;
   padding: 0 15px;
-  font-size: 15px;
   background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.20);
+  font-size: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
 }
 
 .senhaContainer {
@@ -116,43 +131,44 @@
 
 .senhaContainer button {
   position: absolute;
-  right: 15px;
-  top: 10px;
+  right: 12px;
+  top: 8px;
   border: none;
   background: transparent;
+  color: #b5b5b5;
   cursor: pointer;
-  color: #999;
   font-size: 20px;
 }
 
 .botoes {
   display: flex;
   justify-content: space-between;
-  margin-top: 35px;
+  margin-top: 40px;
 }
 
 .cancelar {
-  width: 130px;
+  width: 120px;
   height: 42px;
   border: none;
-  border-radius: 8px;
-  background: #d8d8d8;
+  border-radius: 6px;
+  background: #d7d7d7;
+  color: #444;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,.20);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cadastrar {
   width: 190px;
   height: 42px;
   border: none;
-  border-radius: 8px;
-  background: #2e7d54;
+  border-radius: 6px;
+  background: #2f7d53;
   color: white;
   cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,.20);
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cadastrar:hover {
-  background: #256746;
+  background: #286b47;
 }
