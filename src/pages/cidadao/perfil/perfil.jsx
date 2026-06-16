@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./perfil.module.css";
+import { Link } from "react-router-dom";
 
 import arvoreLogo from "../../../assets/arvore.png";
 
@@ -19,7 +20,6 @@ export default function Perfil() {
       <header className={styles.headerPerfil}>
         <div className={styles.logoArea}>
           <img src={arvoreLogo} alt="Logo Meio Ambiente" />
-
           <div>
             <p>SECRETARIA DO</p>
             <h2>MEIO AMBIENTE</h2>
@@ -27,10 +27,7 @@ export default function Perfil() {
         </div>
 
         <div className={styles.headerButtons}>
-          <button className={styles.btnVoltar}>
-            Voltar
-          </button>
-
+          <button className={styles.btnVoltar}>Voltar</button>
           <button
             className={styles.menuIcon}
             onClick={() => setMenuAberto(!menuAberto)}
@@ -55,7 +52,7 @@ export default function Perfil() {
           </button>
         </div>
 
-        <Link to="/">
+        <Link to="/cidadao">
           <button className={`${styles.menuItem} ${styles.menuHome}`}>
             🏠 Home
           </button>
@@ -67,27 +64,21 @@ export default function Perfil() {
           </button>
         </Link>
 
-        <Link to="/">
+        <Link to="/solicitar">
           <button className={styles.menuItem}>
             📋 Solicitar serviço
           </button>
         </Link>
 
-        <Link to="/">
+        <Link to="/status">
           <button className={styles.menuItem}>
             📊 Status
           </button>
         </Link>
 
-        <Link to="/">
+        <Link to="/chat">
           <button className={styles.menuItem}>
             💬 Chat com Gestão
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            👤 Perfil
           </button>
         </Link>
 
@@ -140,38 +131,26 @@ export default function Perfil() {
                 onChange={(e) => setSenha(e.target.value)}
               />
             </div>
-
             <div>
               <label>Confirmar Senha</label>
               <input
                 type="password"
                 value={confirmarSenha}
-                onChange={(e) =>
-                  setConfirmarSenha(e.target.value)
-                }
+                onChange={(e) => setConfirmarSenha(e.target.value)}
               />
             </div>
           </div>
 
           <div className={styles.botoes}>
-            <button className={styles.btnSalvar}>
-              Salvar Alterações
-            </button>
-
-            <button className={styles.btnSenha}>
-              Alterar Senha
-            </button>
+            <button className={styles.btnSalvar}>Salvar Alterações</button>
+            <button className={styles.btnSenha}>Alterar Senha</button>
           </div>
         </section>
 
         {/* PERFIL CENTRAL */}
         <section className={styles.perfilUsuario}>
           <h1>MEU PERFIL</h1>
-
-          <div className={styles.avatar}>
-            👤
-          </div>
-
+          <div className={styles.avatar}>👤</div>
           <h2>{nome}</h2>
           <p>{email}</p>
         </section>

@@ -23,7 +23,6 @@ export default function Homec() {
         <header className={styles.headerHome}>
           <div className={styles.logoArea}>
             <img src={arvoreLogo} alt="Logo Meio Ambiente" />
-
             <div>
               <p>SECRETARIA DO</p>
               <h2>MEIO AMBIENTE</h2>
@@ -52,25 +51,25 @@ export default function Homec() {
             </button>
           </div>
 
-          <button className={`${styles.menuItem} ${styles.menuAtivo}`}>
-            🏠 Home
-          </button>
-
           <Link to="/relatar-problema">
-            <button className={styles.menuItem}>📋 Relatar</button>
+            <button className={styles.menuItem}>📄 Relatar problema</button>
           </Link>
 
           <Link to="/solicitar">
-            <button className={styles.menuItem}>📌 Solicitar</button>
+            <button className={styles.menuItem}>📋 Solicitar serviço</button>
           </Link>
 
           <Link to="/status">
             <button className={styles.menuItem}>📊 Status</button>
           </Link>
 
-          <button className={styles.menuItem}>💬 Chat com Gestão</button>
+          <Link to="/chat">
+            <button className={styles.menuItem}>💬 Chat com Gestão</button>
+          </Link>
 
-          <button className={styles.menuItem}>👤 Perfil</button>
+          <Link to="/perfil">
+            <button className={styles.menuItem}>👤 Perfil</button>
+          </Link>
 
           <div className={styles.menuFooter}>
             <img src={arvoreLogo} alt="logo" />
@@ -91,14 +90,11 @@ export default function Homec() {
         <section className={styles.cardsContainer}>
           <div className={`${styles.card} ${styles.cardAzul}`}>
             <div className={styles.cardIcon}>📋</div>
-
             <h2>Relatar um Problema</h2>
-
             <p>
               Utilize este espaço para descrever detalhadamente qualquer
               problema encontrado.
             </p>
-
             <Link to="/relatar-problema">
               <button>ENVIAR RELATO</button>
             </Link>
@@ -106,13 +102,8 @@ export default function Homec() {
 
           <div className={`${styles.card} ${styles.cardVerde}`}>
             <div className={styles.cardIcon}>📍</div>
-
             <h2>Solicitar Serviço</h2>
-
-            <p>
-              Faça solicitações ambientais e acompanhe todo o andamento.
-            </p>
-
+            <p>Faça solicitações ambientais e acompanhe todo o andamento.</p>
             <Link to="/solicitar">
               <button>PREENCHER SOLICITAÇÃO</button>
             </Link>
@@ -120,13 +111,8 @@ export default function Homec() {
 
           <div className={`${styles.card} ${styles.cardLaranja}`}>
             <div className={styles.cardIcon}>🌳</div>
-
             <h2>Acompanhar Solicitação</h2>
-
-            <p>
-              Consulte o andamento das suas solicitações em tempo real.
-            </p>
-
+            <p>Consulte o andamento das suas solicitações em tempo real.</p>
             <Link to="/status">
               <button>MINHAS SOLICITAÇÕES</button>
             </Link>
@@ -160,40 +146,25 @@ function HB() {
         </div>
 
         <hr className={hbStyles.menuDivisor} />
- <Link to="/">
-          <button className={`${styles.menuItem} ${styles.menuHome}`}>
-            🏠 Home
-          </button>
-        </Link>
 
         <Link to="/relatar-problema">
-          <button className={styles.menuItem}>
-            📄 Relatar problema
-          </button>
+          <button className={hbStyles.menuItem}>📄 Relatar problema</button>
         </Link>
 
-        <Link to="/">
-          <button className={styles.menuItem}>
-            📋 Solicitar serviço
-          </button>
+        <Link to="/solicitar">
+          <button className={hbStyles.menuItem}>📋 Solicitar serviço</button>
         </Link>
 
-        <Link to="/Status">
-          <button className={styles.menuItem}>
-            📊 Statuss
-          </button>
+        <Link to="/status">
+          <button className={hbStyles.menuItem}>📊 Status</button>
         </Link>
 
-        <Link to="/">
-          <button className={styles.menuItem}>
-            💬 Chat com Gestão
-          </button>
+        <Link to="/chat">
+          <button className={hbStyles.menuItem}>💬 Chat com Gestão</button>
         </Link>
 
-        <Link to="/">
-          <button className={styles.menuItem}>
-            👤 Perfil
-          </button>
+        <Link to="/perfil">
+          <button className={hbStyles.menuItem}>👤 Perfil</button>
         </Link>
       </div>
 
@@ -201,15 +172,11 @@ function HB() {
         <div className={hbStyles.cardUrgente}>
           <div className={hbStyles.cardUrgenteHeader}>
             <span className={hbStyles.iconAlert}>⚠️</span>
-
-            <span className={hbStyles.cardUrgenteTitulo}>
-              Denúncia Urgente
-            </span>
+            <span className={hbStyles.cardUrgenteTitulo}>Denúncia Urgente</span>
           </div>
 
           <p className={hbStyles.cardUrgenteTexto}>
-            EM CASO DE EMERGÊNCIAS AMBIENTAIS,
-            FAÇA UMA DENÚNCIA RÁPIDA.
+            EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.
           </p>
 
           <button
@@ -221,16 +188,11 @@ function HB() {
         </div>
 
         <div className={hbStyles.cardDuvidas}>
-          <h3 className={hbStyles.cardDuvidasTitulo}>
-            Dúvidas Frequentes
-          </h3>
+          <h3 className={hbStyles.cardDuvidasTitulo}>Dúvidas Frequentes</h3>
 
           <div className={hbStyles.listaDuvidas}>
             {duvidasFrequentes.map((duvida, index) => (
-              <button
-                key={index}
-                className={hbStyles.itemDuvida}
-              >
+              <button key={index} className={hbStyles.itemDuvida}>
                 {duvida}
               </button>
             ))}
@@ -245,7 +207,6 @@ function HB() {
       <footer className={hbStyles.footer}>
         <div className={hbStyles.footerColuna}>
           <h4>Prefeitura do Meio Ambiente</h4>
-
           <p>Rua Verde, 123, Centro, Cidade - UF</p>
           <p>Atendimento: Segunda a Sexta, 8h - 17h</p>
           <p>email@meioambiente.gov.br</p>
@@ -254,37 +215,16 @@ function HB() {
 
         <div className={hbStyles.footerColuna}>
           <h4>Sobre</h4>
-
-          <button className={hbStyles.footerLink}>
-            Política Ambiental
-          </button>
-
-          <button className={hbStyles.footerLink}>
-            Contato
-          </button>
+          <button className={hbStyles.footerLink}>Política Ambiental</button>
+          <button className={hbStyles.footerLink}>Contato</button>
         </div>
 
         <div className={hbStyles.footerColuna}>
           <h4>Redes Sociais:</h4>
-
           <div className={hbStyles.redesSociais}>
-            <button
-              className={`${hbStyles.btnRede} ${hbStyles.facebook}`}
-            >
-              f
-            </button>
-
-            <button
-              className={`${hbStyles.btnRede} ${hbStyles.instagram}`}
-            >
-              📷
-            </button>
-
-            <button
-              className={`${hbStyles.btnRede} ${hbStyles.whatsapp}`}
-            >
-              📱
-            </button>
+            <button className={`${hbStyles.btnRede} ${hbStyles.facebook}`}>f</button>
+            <button className={`${hbStyles.btnRede} ${hbStyles.instagram}`}>📷</button>
+            <button className={`${hbStyles.btnRede} ${hbStyles.whatsapp}`}>📱</button>
           </div>
         </div>
       </footer>
