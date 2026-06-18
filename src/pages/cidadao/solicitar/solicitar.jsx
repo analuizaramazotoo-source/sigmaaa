@@ -27,7 +27,6 @@ export default function Solicitar() {
       return;
     }
 
-    // Foto continua opcional
     navigate("/relato-enviado");
   };
 
@@ -74,41 +73,35 @@ export default function Solicitar() {
 
         <hr className={styles.menuDivisor} />
 
-        <Link to="/">
-                 <button className={`${styles.menuItem} ${styles.menuHome}`}>
-                   🏠 Home
-                 </button>
-               </Link>
-       
-               <Link to="/relatar-problema">
-                 <button className={styles.menuItem}>
-                   📄 Relatar problema
-                 </button>
-               </Link>
-       
-               <Link to="/">
-                 <button className={styles.menuItem}>
-                   📋 Solicitar serviço
-                 </button>
-               </Link>
-       
-               <Link to="/">
-                 <button className={styles.menuItem}>
-                   📊 Status
-                 </button>
-               </Link>
-       
-               <Link to="/">
-                 <button className={styles.menuItem}>
-                   💬 Chat com Gestão
-                 </button>
-               </Link>
-       
-               <Link to="/">
-                 <button className={styles.menuItem}>
-                   👤 Perfil
-                 </button>
-               </Link>
+        <Link to="/cidadao">
+          <button className={`${styles.menuItem} ${styles.menuHome}`}>
+            🏠 Home
+          </button>
+        </Link>
+
+        <Link to="/relatar-problema">
+          <button className={styles.menuItem}>
+            📄 Relatar problema
+          </button>
+        </Link>
+
+        <Link to="/status">
+          <button className={styles.menuItem}>
+            📊 Status
+          </button>
+        </Link>
+
+        <Link to="/chat">
+          <button className={styles.menuItem}>
+            💬 Chat com Gestão
+          </button>
+        </Link>
+
+        <Link to="/perfil">
+          <button className={styles.menuItem}>
+            👤 Perfil
+          </button>
+        </Link>
       </div>
 
       {/* BANNER */}
@@ -182,7 +175,6 @@ export default function Solicitar() {
                 >
                   ENVIAR RELATO
                 </button>
-                
               </div>
             </div>
           </div>

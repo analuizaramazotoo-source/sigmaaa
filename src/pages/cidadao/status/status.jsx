@@ -56,6 +56,7 @@ export default function Status() {
           <button className={styles.btnFechar} onClick={() => setMenuAberto(false)}>✕</button>
         </div>
         <hr className={styles.menuDivisor} />
+
         <Link to="/">
           <button className={`${styles.menuItem} ${styles.menuHome}`}>
             🏠 Home
@@ -68,25 +69,19 @@ export default function Status() {
           </button>
         </Link>
 
-        <Link to="/">
+        <Link to="/solicitar">
           <button className={styles.menuItem}>
             📋 Solicitar serviço
           </button>
         </Link>
 
-        <Link to="/status">
-          <button className={styles.menuItem}>
-            📊 Status
-          </button>
-        </Link>
-
-        <Link to="/">
+        <Link to="/chat">
           <button className={styles.menuItem}>
             💬 Chat com Gestão
           </button>
         </Link>
 
-        <Link to="/">
+        <Link to="/perfil">
           <button className={styles.menuItem}>
             👤 Perfil
           </button>
@@ -148,17 +143,10 @@ export default function Status() {
           {/* MAPA */}
           <div className={styles.mapaWrapper}>
             <div className={styles.mapa}>
-              {/* grade */}
               <div className={styles.mapaLinhaH} />
               <div className={styles.mapaLinhaV} />
-
-              {/* caminhão */}
               <div className={styles.caminhao}>🚛</div>
-
-              {/* ponto amarelo (ocorrência) */}
               <div className={styles.pontoAmarelo} />
-
-              {/* linha azul (rua) */}
               <div className={styles.ruaAzul} />
             </div>
           </div>
