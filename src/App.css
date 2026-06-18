@@ -1,4 +1,4 @@
-* { 
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,7 +12,7 @@ html, body, #root {
 /* CONTAINER FULL */
 .container {
   width: 100%;
-  min-height: 100vh; /* 🔥 alterado */
+  min-height: 100vh;
 
   background: url("/fundo.jpg") no-repeat center center;
   background-size: cover;
@@ -34,13 +34,21 @@ html, body, #root {
   z-index: 2;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 25px 50px;
   color: #e6ffe6;
 }
 
+/* LOGOS */
+.header-logos {
+  display: flex;
+  align-items: center;
+}
+
 .logo {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 0;
   font-weight: 500;
 }
 
@@ -54,15 +62,15 @@ html, body, #root {
   width: 220px;
   height: auto;
   display: block;
-  margin-top: 3px;
+
+  /* aproxima da logo da prefeitura */
+  margin-left: -50px;
+
+  /* ajuste fino vertical */
+  margin-top: 2px;
 }
 
-.header-logos {
-  display: flex;
-  align-items: center; /* ALINHA NA MESMA ALTURA */
-  gap: 5px; /* espaço entre elas */
-}
-
+/* AÇÕES */
 .actions {
   display: flex;
   gap: 15px;
@@ -105,7 +113,7 @@ html, body, #root {
   text-align: center;
   color: white;
 
-  min-height: calc(100vh - 80px); /* 🔥 alterado */
+  min-height: calc(100vh - 80px);
 
   display: flex;
   flex-direction: column;
@@ -145,7 +153,7 @@ html, body, #root {
   width: auto;
 
   margin: 0 auto;
-  
+
   transition: 0.2s;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
@@ -168,7 +176,7 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(6px);
 
-  max-width: 900px; /* 🔥 novo */
+  max-width: 900px;
   width: 100%;
 
   margin-left: auto;
@@ -190,7 +198,7 @@ html, body, #root {
   gap: 18px;
   justify-content: center;
 
-  flex-wrap: wrap; /* 🔥 novo */
+  flex-wrap: wrap;
 }
 
 /* CARD */
@@ -198,7 +206,7 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.95);
 
   width: 230px;
-  flex: 0 0 230px; /* 🔥 novo */
+  flex: 0 0 230px;
 
   padding: 18px;
   border-radius: 10px;

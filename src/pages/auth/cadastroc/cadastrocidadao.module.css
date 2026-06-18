@@ -8,10 +8,10 @@
 /* TOPO */
 
 .topo {
-  background-color: #2e7d32;
-  color: white;
 
-  padding: 10px 20px;
+  width: 100%;
+  background:#2f6f3e;
+  padding: 3px 0;
 
   display: flex;
   justify-content: space-between;
@@ -22,10 +22,39 @@
   display: flex;
   align-items: center;
   gap: 10px;
+
+}
+/* LOGOS */
+.header-logos {
+  display: flex;
+  align-items: center;
 }
 
-.topo-esquerda img {
-  width: 40px;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-weight: 500;
+}
+
+.logo-img {
+  width: 250px;
+  height: auto;
+  display: block;
+
+  margin-left: 65px;
+}
+
+.logos {
+  width: 220px;
+  height: auto;
+  display: block;
+
+  /* aproxima da logo da prefeitura */
+  margin-left: 230px;
+
+  /* ajuste fino vertical */
+  margin-top: 2px;
 }
 
 .btn-voltar {
@@ -48,7 +77,7 @@
 
 .lateral {
   width: 240px;
-  background-color: #2e7d32;
+  background: #2f6f3e;
 
   display: flex;
   flex-direction: column;
@@ -56,20 +85,31 @@
   align-items: center;
 
   padding: 20px;
+
+}
+.linha-grande {
+  width: calc(100% + 40px);
+  height: 2px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  margin: 20px 0 0;
+
+  margin-left: -20px;
+
+  box-shadow: 0 0 3px rgba(255,255,255,0.3);
 }
 
-.logo-prefeitura {
-  width: 150px;
+.linha-pequena {
+  width: calc(100% + 40px);
+  height: 2px;
+
+  background: rgba(255, 255, 255, 0.5);
+
+  margin-left: 0px;
+  margin-bottom: 25px;
 }
 
-.logo-inferior {
-  text-align: center;
-  color: #ffd600;
-}
-
-.logo-inferior img {
-  width: 60px;
-}
 
 /* CENTRO */
 
