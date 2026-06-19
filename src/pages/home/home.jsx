@@ -19,11 +19,6 @@ function Home() {
             </div>
           </div>
 
-          <div className="actions">
-            <a href="/login">Entrar</a>
-            <button className="btn-outline">Criar uma conta</button>
-          </div>
-
         </div>
       </header>
 
@@ -37,12 +32,8 @@ function Home() {
         </p>
 
         <button className="btn-primary">
-          Criar minha conta
+          Entrar como cidadão
         </button>
-
-        <p className="login">
-          Já possui conta? <a href="/login">Entrar</a>
-        </p>
 
         <div className="cards-wrapper">
 
@@ -64,7 +55,7 @@ function Home() {
               <img src="/img cidadão.png" className="card-img" alt="Cidadão" />
               <h3>Cidadão</h3>
               <span>Solicitação de serviços</span>
-              <Link to= "/cadastro"><button>Selecionar</button></Link>
+              <Link to= "/cidadao"><button>Selecionar</button></Link>
 
             </div>
 
