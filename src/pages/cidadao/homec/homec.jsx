@@ -1,11 +1,12 @@
-import { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import Layout from "./Layout"; // O nosso componente global!
 import styles from "./homec.module.css";
-import hbStyles from "./HB.module.css";
+
+// Trocamos os emojis por ícones profissionais
+import { FileWarning, MapPin, Search, AlertTriangle, HelpCircle } from "lucide-react";
 
 import bannerFundo from "../../../assets/banner.png";
-import arvoreLogo from "../../../assets/arvore.png";
 
 const duvidasFrequentes = [
   "Como denunciar lixo irregular?",
@@ -15,68 +16,13 @@ const duvidasFrequentes = [
 ];
 
 export default function Homec() {
-  const [menuAberto, setMenuAberto] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <>
-      <div className={styles.containerHome}>
-        <header className={styles.headerHome}>
-          <div className={styles.logoArea}>
-            <img src={arvoreLogo} alt="Logo Meio Ambiente" />
-            <div>
-              <p>SECRETARIA DO</p>
-              <h2>MEIO AMBIENTE</h2>
-            </div>
-          </div>
-
-          <button
-            className={styles.menuIcon}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            ⋮
-          </button>
-        </header>
-
-        <div
-          className={`${styles.menuLateral} ${
-            menuAberto ? styles.menuAberto : ""
-          }`}
-        >
-          <div className={styles.topoMenu}>
-            <button
-              className={styles.btnFechar}
-              onClick={() => setMenuAberto(false)}
-            >
-              ✕
-            </button>
-          </div>
-
-          <Link to="/relatar-problema">
-            <button className={styles.menuItem}>📄 Relatar problema</button>
-          </Link>
-
-          <Link to="/solicitar">
-            <button className={styles.menuItem}>📋 Solicitar serviço</button>
-          </Link>
-
-          <Link to="/status">
-            <button className={styles.menuItem}>📊 Status</button>
-          </Link>
-
-          <Link to="/chat">
-            <button className={styles.menuItem}>💬 Chat com Gestão</button>
-          </Link>
-
-          <Link to="/perfil">
-            <button className={styles.menuItem}>👤 Perfil</button>
-          </Link>
-
-          <div className={styles.menuFooter}>
-            <img src={arvoreLogo} alt="logo" />
-            <h3>SECRETARIA DO MEIO AMBIENTE</h3>
-          </div>
-        </div>
-
+    <Layout>
+      <div className={styles.pageContainer}>
+        
+        {/* BANNER PRINCIPAL */}
         <section
           className={styles.banner}
           style={{ backgroundImage: `url(${bannerFundo})` }}
@@ -87,147 +33,84 @@ export default function Homec() {
           </div>
         </section>
 
+        {/* CARDS DE AÇÃO RÁPIDA */}
         <section className={styles.cardsContainer}>
           <div className={`${styles.card} ${styles.cardAzul}`}>
-            <div className={styles.cardIcon}>📋</div>
+            <div className={styles.cardIcon}><FileWarning size={28} /></div>
             <h2>Relatar um Problema</h2>
-            <p>
-              Utilize este espaço para descrever detalhadamente qualquer
-              problema encontrado.
-            </p>
-            <Link to="/relatar-problema">
-              <button>ENVIAR RELATO</button>
-            </Link>
+            <p>Utilize este espaço para descrever detalhadamente qualquer problema encontrado.</p>
+            <Link to="/relatar-problema" className={styles.cardBtn}>ENVIAR RELATO</Link>
           </div>
 
           <div className={`${styles.card} ${styles.cardVerde}`}>
-            <div className={styles.cardIcon}>📍</div>
+            <div className={styles.cardIcon}><MapPin size={28} /></div>
             <h2>Solicitar Serviço</h2>
             <p>Faça solicitações ambientais e acompanhe todo o andamento.</p>
-            <Link to="/solicitar">
-              <button>PREENCHER SOLICITAÇÃO</button>
-            </Link>
+            <Link to="/solicitar" className={styles.cardBtn}>PREENCHER SOLICITAÇÃO</Link>
           </div>
 
           <div className={`${styles.card} ${styles.cardLaranja}`}>
-            <div className={styles.cardIcon}>🌳</div>
+            <div className={styles.cardIcon}><Search size={28} /></div>
             <h2>Acompanhar Solicitação</h2>
             <p>Consulte o andamento das suas solicitações em tempo real.</p>
-            <Link to="/status">
-              <button>MINHAS SOLICITAÇÕES</button>
-            </Link>
+            <Link to="/status" className={styles.cardBtn}>MINHAS SOLICITAÇÕES</Link>
           </div>
         </section>
+
+        {/* ÁREA INFERIOR: EMERGÊNCIA E FAQ */}
+        <div className={styles.bottomGrid}>
+          
+          {/* DENÚNCIA URGENTE */}
+          <div className={styles.cardUrgente}>
+            <div className={styles.cardUrgenteHeader}>
+              <AlertTriangle size={24} />
+              <h3>Denúncia Urgente</h3>
+            </div>
+            <p>EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.</p>
+            <button
+              className={styles.btnEmergencia}
+              onClick={() => navigate("/relatar-problema")}
+            >
+              RELATAR EMERGÊNCIA
+            </button>
+          </div>
+
+          {/* DÚVIDAS FREQUENTES */}
+          <div className={styles.cardDuvidas}>
+            <div className={styles.cardDuvidasHeader}>
+              <HelpCircle size={24} />
+              <h3>Dúvidas Frequentes</h3>
+            </div>
+            <div className={styles.listaDuvidas}>
+              {duvidasFrequentes.map((duvida, index) => (
+                <button key={index} className={styles.itemDuvida}>
+                  {duvida}
+                </button>
+              ))}
+            </div>
+            <button className={styles.btnVerTodas}>Ver todas as perguntas</button>
+          </div>
+
+        </div>
+
+        {/* RODAPÉ ESPECÍFICO DA PÁGINA */}
+        <footer className={styles.footer}>
+          <div className={styles.footerColuna}>
+            <h4>Prefeitura do Meio Ambiente</h4>
+            <p>Rua Verde, 123, Centro, Cidade - UF</p>
+            <p>Atendimento: Segunda a Sexta, 8h - 17h</p>
+            <p>email@meioambiente.gov.br</p>
+            <p>(00) 1234-5678</p>
+          </div>
+
+          <div className={styles.footerColuna}>
+            <h4>Sobre</h4>
+            <a href="#">Política Ambiental</a>
+            <a href="#">Contato</a>
+          </div>
+        </footer>
+        
       </div>
-
-      <HB />
-    </>
-  );
-}
-
-function HB() {
-  const [menuAberto, setMenuAberto] = useState(false);
-  const navigate = useNavigate();
-
-  return (
-    <div className={hbStyles.container}>
-      <div
-        className={`${hbStyles.menuLateral} ${
-          menuAberto ? hbStyles.menuAberto : ""
-        }`}
-      >
-        <div className={hbStyles.topoMenu}>
-          <button
-            className={hbStyles.btnFechar}
-            onClick={() => setMenuAberto(false)}
-          >
-            ✕
-          </button>
-        </div>
-
-        <hr className={hbStyles.menuDivisor} />
-
-        <Link to="/relatar-problema">
-          <button className={hbStyles.menuItem}>📄 Relatar problema</button>
-        </Link>
-
-        <Link to="/solicitar">
-          <button className={hbStyles.menuItem}>📋 Solicitar serviço</button>
-        </Link>
-
-        <Link to="/status">
-          <button className={hbStyles.menuItem}>📊 Status</button>
-        </Link>
-
-        <Link to="/chat">
-          <button className={hbStyles.menuItem}>💬 Chat com Gestão</button>
-        </Link>
-
-        <Link to="/perfil">
-          <button className={hbStyles.menuItem}>👤 Perfil</button>
-        </Link>
-      </div>
-
-      <main className={hbStyles.main}>
-        <div className={hbStyles.cardUrgente}>
-          <div className={hbStyles.cardUrgenteHeader}>
-            <span className={hbStyles.iconAlert}>⚠️</span>
-            <span className={hbStyles.cardUrgenteTitulo}>Denúncia Urgente</span>
-          </div>
-
-          <p className={hbStyles.cardUrgenteTexto}>
-            EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.
-          </p>
-
-          <button
-            className={hbStyles.btnEmergencia}
-            onClick={() => navigate("/relatar-problema")}
-          >
-            RELATAR EMERGÊNCIA
-          </button>
-        </div>
-
-        <div className={hbStyles.cardDuvidas}>
-          <h3 className={hbStyles.cardDuvidasTitulo}>Dúvidas Frequentes</h3>
-
-          <div className={hbStyles.listaDuvidas}>
-            {duvidasFrequentes.map((duvida, index) => (
-              <button key={index} className={hbStyles.itemDuvida}>
-                {duvida}
-              </button>
-            ))}
-          </div>
-
-          <button className={hbStyles.btnVerTodas}>
-            Ver todas as perguntas
-          </button>
-        </div>
-      </main>
-
-      <footer className={hbStyles.footer}>
-        <div className={hbStyles.footerColuna}>
-          <h4>Prefeitura do Meio Ambiente</h4>
-          <p>Rua Verde, 123, Centro, Cidade - UF</p>
-          <p>Atendimento: Segunda a Sexta, 8h - 17h</p>
-          <p>email@meioambiente.gov.br</p>
-          <p>(00) 1234-5678</p>
-        </div>
-
-        <div className={hbStyles.footerColuna}>
-          <h4>Sobre</h4>
-          <button className={hbStyles.footerLink}>Política Ambiental</button>
-          <button className={hbStyles.footerLink}>Contato</button>
-        </div>
-
-        <div className={hbStyles.footerColuna}>
-          <h4>Redes Sociais:</h4>
-          <div className={hbStyles.redesSociais}>
-            <button className={`${hbStyles.btnRede} ${hbStyles.facebook}`}>f</button>
-            <button className={`${hbStyles.btnRede} ${hbStyles.instagram}`}>📷</button>
-            <button className={`${hbStyles.btnRede} ${hbStyles.whatsapp}`}>📱</button>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   );
 }

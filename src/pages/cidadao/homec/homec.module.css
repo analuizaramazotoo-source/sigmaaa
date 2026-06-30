@@ -1,287 +1,226 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.containerHome {
-  width: 100%;
-  min-height: 100vh;
-  background: #dbe7cd;
+.pageContainer {
+  padding: 32px 40px;
   display: flex;
   flex-direction: column;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto;
+  gap: 32px;
 }
 
-/* HEADER */
-
-.headerHome {
-  width: 100%;
-  height: 78px;
-
-  background: #196f3d;
-  border-bottom: 4px solid #2f8f58;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0 30px;
-}
-
-.logoArea {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logoArea img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-}
-
-.logoArea p {
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.logoArea h2 {
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.menuIcon {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-/* MENU */
-
-.menuLateral {
-  position: fixed;
-  top: 0;
-  right: -320px;
-
-  width: 280px;
-  height: 100vh;
-
-  background: #196f3d;
-
-  padding: 20px 15px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  transition: all 0.35s ease;
-
-  z-index: 999;
-  box-shadow: -10px 0 25px rgba(0, 0, 0, 0.35);
-}
-
-.menuAberto {
-  right: 0;
-}
-
-.topoMenu {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.btnFechar {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.menuItem {
-  width: 100%;
-  border: none;
-  background: #2c7a4c;
-
-  color: white;
-  padding: 14px;
-
-  border-radius: 10px;
-
-  text-align: left;
-
-  font-size: 15px;
-  font-weight: 500;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.menuItem:hover {
-  background: #35945d;
-  transform: translateX(-4px);
-}
-
-.menuAtivo {
-  background: #f0a529;
-}
-
-.menuFooter {
-  margin-top: auto;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding-top: 20px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.menuFooter img {
-  width: 70px;
-  margin-bottom: 10px;
-}
-
-.menuFooter h3 {
-  color: #f4d03f;
-  text-align: center;
-  font-size: 22px;
-  line-height: 1.1;
-}
-
-/* BANNER */
-
+/* ================= BANNER ================= */
 .banner {
-  width: 100%;
-  height: 320px;
-
+  height: 220px;
+  border-radius: 16px;
   background-size: cover;
   background-position: center;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .overlayBanner {
-  text-align: center;
+  background-color: rgba(26, 77, 51, 0.85); /* Verde escuro com transparência */
+  padding: 24px 32px;
+  border-radius: 12px;
+  color: white;
 }
 
-.overlayBanner h1 {
-  font-size: 60px;
-  color: #2f6f52;
-  font-weight: 800;
+.overlayBanner h1 { margin: 0 0 8px 0; font-size: 32px; }
+.overlayBanner p { margin: 0; font-size: 16px; opacity: 0.9; }
 
-  text-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.438),
-    0 5px 12px rgba(0, 0, 0, 0.25);
-}
-
-.overlayBanner p {
-  color: #4f6f61;
-  font-size: 26px;
-  margin-top: 10px;
-}
-
-/* CARDS */
-
+/* ================= CARDS PRINCIPAIS ================= */
 .cardsContainer {
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-
-  padding: 40px 30px 70px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
 .card {
-  width: 320px;
-  min-height: 340px;
-
-  border-radius: 18px;
-
-  padding: 25px;
-
-  color: white;
-
+  background: white;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   display: flex;
   flex-direction: column;
-  align-items: center;
-
-  box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.25),
-    inset 0 -5px 0 rgba(0, 0, 0, 0.18);
+  align-items: flex-start;
+  border-top: 4px solid #ccc;
 }
 
+.cardAzul { border-top-color: #3498db; }
+.cardVerde { border-top-color: #27ae60; }
+.cardLaranja { border-top-color: #f39c12; }
+
 .cardIcon {
-  font-size: 55px;
-  margin-bottom: 10px;
+  background: #f4f7f5;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  color: #1a4d33;
 }
 
 .card h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 18px;
+  margin: 0 0 12px 0;
+  color: #1a4d33;
 }
 
 .card p {
-  text-align: center;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+  flex-grow: 1; /* Faz o botão ficar alinhado embaixo sempre */
 }
 
-.card button {
-  margin-top: auto;
+.cardBtn {
+  background-color: white;
+  color: #1a4d33;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+  border: 1px solid #d1e2d9;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
 
+.cardBtn:hover {
+  background-color: #1a4d33;
+  color: white;
+}
+
+/* ================= ÁREA INFERIOR ================= */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* DENÚNCIA URGENTE */
+.cardUrgente {
+  background: #fff5f5;
+  border: 1px solid #ffe3e3;
+  padding: 32px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cardUrgenteHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e53e3e;
+  margin-bottom: 16px;
+}
+
+.cardUrgenteHeader h3 { margin: 0; font-size: 20px; }
+
+.cardUrgente p {
+  color: #c53030;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.btnEmergencia {
+  background: #e53e3e;
+  color: white;
   border: none;
-
-  background: #f5c242;
-  color: #333;
-
-  padding: 12px 20px;
-
-  border-radius: 10px;
-
+  padding: 14px;
+  border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: background 0.2s;
 }
 
-.card button:hover {
-  transform: scale(1.03);
+.btnEmergencia:hover { background: #c53030; }
+
+/* DÚVIDAS FREQUENTES */
+.cardDuvidas {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 
-.cardAzul {
-  background: linear-gradient(to bottom, #2c7be0, #1f5fb1);
+.cardDuvidasHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1a4d33;
+  margin-bottom: 24px;
 }
 
-.cardVerde {
-  background: linear-gradient(to bottom, #42b94f, #2f8f3b);
+.cardDuvidasHeader h3 { margin: 0; font-size: 20px; }
+
+.listaDuvidas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.cardLaranja {
-  background: linear-gradient(to bottom, #ff8d1c, #db6d00);
+.itemDuvida {
+  background: #f7f9f8;
+  border: 1px solid #e2e8f0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 14px;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-/* FOOTER */
-
-.footerHome {
-  width: 100%;
-  height: 40px;
-  background: #196f3d;
-  margin-top: auto;
+.itemDuvida:hover {
+  background: #e6f4ea;
+  border-color: #a3c9b3;
+  color: #1a4d33;
 }
 
+.btnVerTodas {
+  background: none;
+  border: none;
+  color: #1a4d33;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+/* ================= RODAPÉ ================= */
+.footer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 100px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 32px;
+  margin-top: 16px;
+}
+
+.footerColuna h4 {
+  margin: 0 0 16px 0;
+  color: #1a4d33;
+  font-size: 16px;
+}
+
+.footerColuna p, .footerColuna a {
+  margin: 0 0 8px 0;
+  color: #718096;
+  font-size: 13px;
+  display: block;
+  text-decoration: none;
+}
+
+.footerColuna a:hover {
+  color: #1a4d33;
+  text-decoration: underline;
+}
