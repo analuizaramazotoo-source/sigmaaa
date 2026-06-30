@@ -1,347 +1,1375 @@
-.container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  overflow: hidden;
-  background: #5aa321;
+/* =========================
+
+   GERAL
+
+========================= */
+
+
+
+* {
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  font-family: "Segoe UI", sans-serif;
+
 }
+
+
+
+.container {
+
+  display: flex;
+
+  width: 100%;
+
+  height: 100vh;
+
+  background: #eef2f5;
+
+}
+
+
+
+/* =========================
+
+   SIDEBAR
+
+========================= */
+
+
 
 .sidebar {
-  width: 230px;
+
+  width: 250px;
+
   background: #1f7b45;
 
+  color: white;
+
   display: flex;
+
   flex-direction: column;
+
   justify-content: space-between;
 
-  padding: 30px 0;
+  padding: 28px 0;
+
+  box-shadow: 4px 0 15px rgba(0,0,0,.08);
+
 }
+
+
+
+.sidebarTop {
+
+  width: 100%;
+
+}
+
+
+
+.sidebarBottom {
+
+  width: 100%;
+
+}
+
+
 
 .logoPrefeitura {
+
   display: flex;
+
   justify-content: center;
+
 }
+
+
 
 .logoPrefeitura img {
-  width: 180px;
+
+  width: 185px;
+
 }
+
+
 
 .linha {
-  width: 160px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.7);
 
-  margin: 30px auto;
+  width: 170px;
+
+  height: 2px;
+
+  background: rgba(255,255,255,.45);
+
+  margin: 25px auto;
+
 }
 
+
+
 .menu {
+
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
 
   padding: 0 18px;
+
 }
+
+
 
 .menuBotao,
+
 .menuAtivo {
-  height: 40px;
+
+  height: 44px;
+
   border: none;
+
   border-radius: 10px;
 
-  text-align: left;
   padding-left: 18px;
 
+  text-align: left;
+
   cursor: pointer;
 
-  font-size: 14px;
   color: white;
 
-  transition: 0.2s;
+  font-size: 14px;
 
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+
+  transition: .25s;
+
+  box-shadow: 0 3px 8px rgba(0,0,0,.15);
+
 }
+
+
 
 .menuBotao {
-  background: #38864f;
+
+  background: #2d8a4d;
+
 }
+
+
 
 .menuBotao:hover {
-  background: #469960;
+
+  background: #3e9960;
+
 }
+
+
 
 .menuAtivo {
-  background: #f0a62a;
+
+  background: #f3a62d;
+
 }
+
+
 
 .logoSecretaria {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 
   text-align: center;
 
-  margin-bottom: 15px;
 }
+
+
 
 .logoSecretaria img {
-  width: 95px;
+
+  width: 90px;
+
 }
+
+
 
 .logoSecretaria h2 {
-  color: #ffd63f;
-  font-size: 24px;
-  font-weight: 700;
 
-  line-height: 1.15;
+  color: #ffd64c;
+
+  font-size: 21px;
+
+  line-height: 1.2;
 
   margin-top: 10px;
+
 }
+
+
+
+/* =========================
+
+   CONTENT
+
+========================= */
+
+
 
 .content {
+
   flex: 1;
-  background: #dde6db;
+
   display: flex;
+
   flex-direction: column;
+
 }
+
+
+
+/* =========================
+
+   HEADER
+
+========================= */
+
+
 
 .header {
-  height: 78px;
-  background: #238046;
+
+  height: 82px;
+
+  background: white;
 
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
 
-  padding: 0 22px;
+  padding: 0 35px;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+
 }
 
-.headerLogo {
+
+
+.tituloPagina h1 {
+
+  color: #234;
+
+  font-size: 28px;
+
+}
+
+
+
+.tituloPagina span {
+
+  color: #7d8790;
+
+  font-size: 13px;
+
+}
+
+
+
+.headerDireita {
+
   display: flex;
+
   align-items: center;
-  gap: 10px;
+
+  gap: 15px;
+
 }
 
-.headerLogo img {
-  width: 55px;
-}
 
-.headerLogo span {
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-}
 
-.headerLogo h1 {
-  color: white;
-  font-size: 24px;
-  line-height: 1;
-}
-
-.topMenu {
-  display: flex;
-  gap: 25px;
-}
-
-.topMenu button {
-  background: transparent;
-  border: none;
-
-  color: white;
-  cursor: pointer;
-
-  font-size: 13px;
-}
-
-.mapaArea {
-  flex: 1;
-  position: relative;
-  background: #d8e0dc;
-}
-
-.linhaVertical {
-  position: absolute;
-  left: 35%;
-  top: 15%;
-
-  width: 5px;
-  height: 68%;
-
-  background: #bdbdbd;
-}
-
-.linhaHorizontal {
-  position: absolute;
-  left: 0;
-  top: 44%;
-
-  width: 70%;
-  height: 5px;
-
-  background: #bdbdbd;
-}
-
-.pontoVerde {
-  position: absolute;
-
-  width: 18px;
-  height: 18px;
-
-  background: #2f8d3e;
-  border-radius: 50%;
-
-  left: 44%;
-  top: 33%;
-}
-
-.pontoLaranja {
-  position: absolute;
-
-  width: 18px;
-  height: 18px;
-
-  background: #ef9446;
-  border-radius: 50%;
-
-  left: 53%;
-  top: 65%;
-}
-
-.cardProblema {
-  position: absolute;
-
-  left: 80px;
-  top: 270px;
-
-  width: 260px;
-
-  background: #f3f3f3;
-
-  border-radius: 12px;
-  padding: 15px;
-
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
-}
-
-.cardProblema h3 {
-  font-size: 15px;
-  margin-bottom: 8px;
-}
-
-.cardProblema h4 {
-  font-size: 14px;
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-
-.cardProblema p {
-  font-size: 12px;
-  color: #444;
-}
-
-.cardBotoes {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.vaiPassar,
-.jaPassou {
-  flex: 1;
-  height: 34px;
-
-  border: none;
-  border-radius: 8px;
-
-  color: white;
-  cursor: pointer;
-
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .15);
-}
-
-.vaiPassar {
-  background: #efb43c;
-}
-
-.jaPassou {
-  background: #55b652;
-}
-
-.tarefas {
-  position: absolute;
-
-  right: 20px;
-  top: 95px;
+.headerDireita input {
 
   width: 250px;
-  height: 420px;
 
-  background: #efefef;
+  height: 40px;
 
-  border-radius: 18px;
-
-  padding: 18px;
-
-  display: flex;
-  flex-direction: column;
-
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-}
-
-.tarefas h2 {
-  text-align: center;
-
-  color: #3f7457;
-
-  font-weight: 600;
-
-  margin-bottom: 15px;
-}
-
-.tarefa {
-  background: white;
+  border: 1px solid #d7d7d7;
 
   border-radius: 10px;
 
-  padding: 12px;
+  padding: 0 15px;
 
-  margin-bottom: 12px;
+  outline: none;
 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .12);
 }
 
-.tarefa strong {
-  display: block;
 
-  margin-bottom: 4px;
 
-  font-size: 14px;
-}
-
-.tarefa p {
-  font-size: 13px;
-  color: #444;
-}
-
-.enviarRelatorio {
-  margin-top: auto;
+.novaOcorrencia {
 
   height: 42px;
 
+  padding: 0 22px;
+
   border: none;
+
   border-radius: 10px;
 
-  background: #f36f07;
+  background: #1f7b45;
 
   color: white;
 
-  font-size: 18px;
   font-weight: 600;
 
   cursor: pointer;
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+  transition: .2s;
+
 }
 
-.enviarRelatorio:hover {
-  background: #dc6200;
+
+
+.novaOcorrencia:hover {
+
+  background: #19673a;
+
+}
+
+
+
+/* =========================
+
+   CARDS
+
+========================= */
+
+
+
+.cards {
+
+  display: grid;
+
+  grid-template-columns: repeat(4,1fr);
+
+  gap: 20px;
+
+  padding: 25px 30px;
+
+}
+
+
+
+.cardResumo {
+
+  background: white;
+
+  border-radius: 15px;
+
+  padding: 22px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+
+}
+
+
+
+.cardResumo h3 {
+
+  font-size: 34px;
+
+  color: #1f7b45;
+
+}
+
+
+
+.cardResumo span {
+
+  display: block;
+
+  margin-top: 6px;
+
+  color: #666;
+
+  font-size: 14px;
+
+}
+
+
+
+/* =========================
+
+   DASHBOARD
+
+========================= */
+
+
+
+.dashboard{
+
+    display:flex;
+
+    gap:25px;
+
+    padding:0 30px 30px;
+
+    flex:1;
+
+}
+
+
+
+/* =========================
+
+   MAPA
+
+========================= */
+
+
+
+.mapaCard{
+
+    flex:1;
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+    padding:20px;
+
+}
+
+
+
+.cardTitulo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.cardTitulo h2{
+
+    font-size:22px;
+
+    color:#2f3d46;
+
+}
+
+
+
+.cardTitulo span{
+
+    color:#888;
+
+    font-size:13px;
+
+}
+
+
+
+.mapa{
+
+    position:relative;
+
+    width:100%;
+
+    height:470px;
+
+    background:#e8ecef;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+
+
+/* RUAS */
+
+
+
+.ruaHorizontal{
+
+    position:absolute;
+
+    width:100%;
+
+    height:6px;
+
+    background:#bfc5ca;
+
+    top:48%;
+
+}
+
+
+
+.ruaVertical{
+
+    position:absolute;
+
+    width:6px;
+
+    height:100%;
+
+    background:#bfc5ca;
+
+    left:42%;
+
+}
+
+
+
+/* MARCADORES */
+
+
+
+.pontoVerde{
+
+    position:absolute;
+
+    width:18px;
+
+    height:18px;
+
+    background:#3cb54a;
+
+    border-radius:50%;
+
+    left:40%;
+
+    top:32%;
+
+    box-shadow:0 0 10px rgba(60,181,74,.4);
+
+}
+
+
+
+.pontoLaranja{
+
+    position:absolute;
+
+    width:18px;
+
+    height:18px;
+
+    background:#ff9d2f;
+
+    border-radius:50%;
+
+    left:63%;
+
+    top:63%;
+
+    box-shadow:0 0 10px rgba(255,157,47,.4);
+
+}
+
+
+
+/* POPUP */
+
+
+
+.popupMapa{
+
+    position:absolute;
+
+    left:70px;
+
+    bottom:45px;
+
+
+
+    width:280px;
+
+
+
+    background:white;
+
+
+
+    border-radius:14px;
+
+
+
+    padding:18px;
+
+
+
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+
+}
+
+
+
+.popupMapa h3{
+
+    color:#1f7b45;
+
+    margin-bottom:8px;
+
+    font-size:18px;
+
+}
+
+
+
+.popupMapa p{
+
+    font-weight:600;
+
+    margin-bottom:6px;
+
+}
+
+
+
+.popupMapa span{
+
+    color:#666;
+
+    font-size:13px;
+
+    line-height:1.4;
+
+}
+
+
+
+.popupBotoes{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:18px;
+
+}
+
+
+
+.btnAmarelo,
+
+.btnVerde{
+
+
+
+    flex:1;
+
+
+
+    height:38px;
+
+
+
+    border:none;
+
+
+
+    border-radius:10px;
+
+
+
+    color:white;
+
+
+
+    cursor:pointer;
+
+
+
+    font-weight:600;
+
+
+
+    transition:.2s;
+
+}
+
+
+
+.btnAmarelo{
+
+    background:#f0a62a;
+
+}
+
+
+
+.btnAmarelo:hover{
+
+    background:#df9618;
+
+}
+
+
+
+.btnVerde{
+
+    background:#2fa64d;
+
+}
+
+
+
+.btnVerde:hover{
+
+    background:#258840;
+
+}
+
+
+
+/* =========================
+
+   LATERAL DIREITA
+
+========================= */
+
+
+
+.lateralDireita{
+
+    width:300px;
+
+}
+
+
+
+.solicitacoes{
+
+
+
+    background:white;
+
+
+
+    border-radius:18px;
+
+
+
+    padding:22px;
+
+
+
+    height:100%;
+
+
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+.solicitacoes h2{
+
+    text-align:center;
+
+    color:#1f7b45;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.itemSolicitacao{
+
+
+
+    background:#f7f7f7;
+
+
+
+    border-radius:12px;
+
+
+
+    padding:15px;
+
+
+
+    margin-bottom:15px;
+
+
+
+    box-shadow:0 2px 6px rgba(0,0,0,.05);
+
+}
+
+
+
+.itemSolicitacao strong{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#333;
+
+}
+
+
+
+.itemSolicitacao p{
+
+    color:#666;
+
+    font-size:14px;
+
+}
+
+
+
+.enviarRelatorio{
+
+
+
+    margin-top:auto;
+
+
+
+    height:45px;
+
+
+
+    border:none;
+
+
+
+    border-radius:10px;
+
+
+
+    background:#f36f07;
+
+
+
+    color:white;
+
+
+
+    font-size:16px;
+
+
+
+    font-weight:600;
+
+
+
+    cursor:pointer;
+
+
+
+    transition:.2s;
+
+}
+
+
+
+.enviarRelatorio:hover{
+
+    background:#db6203;
+
+}
+
+/* =========================
+
+   TABELA DE OCORRÊNCIAS
+
+========================= */
+
+
+
+.tabelaCard{
+
+    margin:30px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+
+
+.tabelaTitulo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+
+
+.tabelaTitulo h2{
+
+    color:#1f7b45;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+
+
+.tabelaTitulo button{
+
+    border:none;
+
+    background:#1f7b45;
+
+    color:#fff;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+
+.tabelaTitulo button:hover{
+
+    background:#176238;
+
+}
+
+
+
+.tabela{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+
+
+.tabela th{
+
+    background:#f2f2f2;
+
+    color:#444;
+
+    padding:14px;
+
+    font-size:14px;
+
+    text-align:left;
+
+}
+
+
+
+.tabela td{
+
+    padding:14px;
+
+    border-bottom:1px solid #ececec;
+
+    font-size:14px;
+
+    color:#555;
+
+}
+
+
+
+.tabela tr:hover{
+
+    background:#fafafa;
+
+}
+
+
+
+/* =========================
+
+   STATUS
+
+========================= */
+
+
+
+.status{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    color:#fff;
+
+}
+
+
+
+.statusPendente{
+
+    background:#efb43c;
+
+}
+
+
+
+.statusAndamento{
+
+    background:#2f8d3e;
+
+}
+
+
+
+.statusConcluido{
+
+    background:#3f8cff;
+
+}
+
+
+
+/* =========================
+
+   BOTÕES DE AÇÃO
+
+========================= */
+
+
+
+.acoes{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+
+
+.btnEditar,
+
+.btnExcluir{
+
+    border:none;
+
+    padding:7px 14px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    transition:.2s;
+
+}
+
+
+
+.btnEditar{
+
+    background:#2f8d3e;
+
+}
+
+
+
+.btnEditar:hover{
+
+    background:#246f30;
+
+}
+
+
+
+.btnExcluir{
+
+    background:#e14a4a;
+
+}
+
+
+
+.btnExcluir:hover{
+
+    background:#bf3636;
+
+}
+
+
+
+/* =========================
+
+   RODAPÉ
+
+========================= */
+
+
+
+.footer{
+
+    height:55px;
+
+    background:#238046;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:13px;
+
+}
+
+
+
+/* =========================
+
+   RESPONSIVO
+
+========================= */
+
+
+
+@media(max-width:1200px){
+
+
+
+    .dashboard{
+
+        flex-direction:column;
+
+    }
+
+
+
+    .lateralDireita{
+
+        width:100%;
+
+    }
+
+
+
+    .solicitacoes{
+
+        height:auto;
+
+    }
+
+}
+
+
+
+@media(max-width:900px){
+
+
+
+    .sidebar{
+
+        width:85px;
+
+    }
+
+
+
+    .logoPrefeitura img{
+
+        width:60px;
+
+    }
+
+
+
+    .logoSecretaria h2,
+
+    .menuBotao,
+
+    .menuAtivo{
+
+        font-size:0;
+
+    }
+
+
+
+    .menuBotao,
+
+    .menuAtivo{
+
+        padding-left:0;
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+    }
+
+
+
+    .header{
+
+        flex-direction:column;
+
+        height:auto;
+
+        padding:15px;
+
+        gap:12px;
+
+    }
+
+
+
+    .topMenu{
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+    }
+
+
+
+    .mapa{
+
+        height:350px;
+
+    }
+
+
+
+    .popupMapa{
+
+        width:220px;
+
+        left:20px;
+
+    }
+
+
+
+    .tabela{
+
+        display:block;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+
+    }
+
+}
+
+
+
+@media(max-width:600px){
+
+
+
+    .dashboard{
+
+        padding:15px;
+
+    }
+
+
+
+    .cardTitulo{
+
+        flex-direction:column;
+
+        gap:8px;
+
+        align-items:flex-start;
+
+    }
+
+
+
+    .popupMapa{
+
+        position:relative;
+
+        left:auto;
+
+        bottom:auto;
+
+        margin-top:20px;
+
+        width:100%;
+
+    }
+
+
+
+    .mapa{
+
+        height:280px;
+
+    }
+
+
+
+    .tabelaCard{
+
+        margin:15px;
+
+    }
+
 }

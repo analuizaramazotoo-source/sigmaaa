@@ -1,18 +1,18 @@
 import { useState } from "react";
-
 import styles from "./homeg.module.css";
 
 import prefeituraLogo from "../../../assets/prefeitura.png";
 import arvoreLogo from "../../../assets/arvore.png";
 
 export default function Homeg() {
-  const [menuAtivo, setMenuAtivo] = useState("Mapa");
+  const [menuAtivo, setMenuAtivo] = useState("dashboard");
 
   return (
     <div className={styles.container}>
-      {/* MENU LATERAL */}
+      {/* ================= SIDEBAR ================= */}
       <aside className={styles.sidebar}>
-        <div>
+
+        <div className={styles.sidebarTop}>
           <div className={styles.logoPrefeitura}>
             <img
               src={prefeituraLogo}
@@ -22,174 +22,293 @@ export default function Homeg() {
 
           <div className={styles.linha}></div>
 
-          <div className={styles.menu}>
+          <nav className={styles.menu}>
+
             <button
               className={
-                menuAtivo === "Mapa"
+                menuAtivo === "dashboard"
                   ? styles.menuAtivo
                   : styles.menuBotao
               }
-              onClick={() => setMenuAtivo("Mapa")}
+              onClick={() => setMenuAtivo("dashboard")}
             >
-              🏠 Mapa
+              🏠 Dashboard
             </button>
 
             <button
               className={
-                menuAtivo === "Relatos"
+                menuAtivo === "ocorrencias"
                   ? styles.menuAtivo
                   : styles.menuBotao
               }
-              onClick={() => setMenuAtivo("Relatos")}
+              onClick={() => setMenuAtivo("ocorrencias")}
             >
-              📄 Relatos
+              📄 Ocorrências
             </button>
 
             <button
               className={
-                menuAtivo === "Chat"
+                menuAtivo === "agenda"
                   ? styles.menuAtivo
                   : styles.menuBotao
               }
-              onClick={() => setMenuAtivo("Chat")}
+              onClick={() => setMenuAtivo("agenda")}
             >
-              💬 Chat
+              📅 Agenda
             </button>
 
             <button
               className={
-                menuAtivo === "Historico"
+                menuAtivo === "relatorios"
                   ? styles.menuAtivo
                   : styles.menuBotao
               }
-              onClick={() =>
-                setMenuAtivo("Historico")
-              }
+              onClick={() => setMenuAtivo("relatorios")}
             >
-              📊 Histórico e Relatórios
+              📊 Relatórios
             </button>
 
             <button
               className={
-                menuAtivo === "Perfil"
+                menuAtivo === "usuarios"
                   ? styles.menuAtivo
                   : styles.menuBotao
               }
-              onClick={() => setMenuAtivo("Perfil")}
+              onClick={() => setMenuAtivo("usuarios")}
+            >
+              👥 Usuários
+            </button>
+
+            <button
+              className={
+                menuAtivo === "perfil"
+                  ? styles.menuAtivo
+                  : styles.menuBotao
+              }
+              onClick={() => setMenuAtivo("perfil")}
             >
               👤 Perfil
             </button>
-          </div>
+
+          </nav>
         </div>
 
-        <div className={styles.logoSecretaria}>
-          <img
-            src={arvoreLogo}
-            alt="Secretaria"
-          />
+        <div className={styles.sidebarBottom}>
 
-          <h2>
-            SECRETARIA DO
-            <br />
-            MEIO AMBIENTE
-          </h2>
-        </div>
-      </aside>
+          <div className={styles.linha}></div>
 
-      {/* CONTEÚDO */}
-      <main className={styles.content}>
-        <header className={styles.header}>
-          <div className={styles.headerLogo}>
+          <div className={styles.logoSecretaria}>
             <img
               src={arvoreLogo}
               alt="Secretaria"
             />
 
-            <div>
-              <span>SECRETARIA DO</span>
-              <h1>MEIO AMBIENTE</h1>
-            </div>
+            <h2>
+              SECRETARIA DO
+              <br />
+              MEIO AMBIENTE
+            </h2>
           </div>
 
-          <nav className={styles.topMenu}>
-            <button>Mapa</button>
-            <button>Acompanhamento</button>
-            <button>Relatórios</button>
-          </nav>
+        </div>
+
+      </aside>
+
+      {/* ================= CONTEÚDO ================= */}
+
+      <main className={styles.content}>
+
+        {/* HEADER */}
+
+        <header className={styles.header}>
+
+          <div className={styles.tituloPagina}>
+            <h1>Dashboard</h1>
+            <span>
+              Sistema Integrado de Gestão e Monitoramento Ambiental
+            </span>
+          </div>
+
+          <div className={styles.headerDireita}>
+
+            <input
+              type="text"
+              placeholder="Pesquisar..."
+            />
+
+            <button className={styles.novaOcorrencia}>
+              + Nova Ocorrência
+            </button>
+
+          </div>
+
         </header>
 
-        {/* MAPA */}
-        <section className={styles.mapaArea}>
-          <div className={styles.linhaVertical}></div>
-          <div className={styles.linhaHorizontal}></div>
+        {/* CARDS */}
 
-          <div className={styles.pontoVerde}></div>
-          <div className={styles.pontoLaranja}></div>
+        <section className={styles.cards}>
 
-          {/* CARD */}
-          <div className={styles.cardProblema}>
-            <h3>Rua das Palmeiras</h3>
-
-            <h4>Lixo acumulado</h4>
-
-            <p>
-              Grande quantidade de lixo
-              irregular
-            </p>
-
-            <div className={styles.cardBotoes}>
-              <button
-                className={styles.vaiPassar}
-              >
-                Vai Passar
-              </button>
-
-              <button
-                className={styles.jaPassou}
-              >
-                Já Passou
-              </button>
-            </div>
+          <div className={styles.cardResumo}>
+            <h3>126</h3>
+            <span>Ocorrências</span>
           </div>
 
-          {/* TAREFAS */}
-          <div className={styles.tarefas}>
-            <h2>Minhas Tarefas</h2>
-
-            <div className={styles.tarefa}>
-              <strong>
-                Rua das Palmeiras
-              </strong>
-
-              <p>Lixo acumulado</p>
-            </div>
-
-            <div className={styles.tarefa}>
-              <strong>
-                Praça Central
-              </strong>
-
-              <p>Árvore caída</p>
-            </div>
-
-            <div className={styles.tarefa}>
-              <strong>
-                Bairro Jardim
-              </strong>
-
-              <p>
-                Descarte irregular
-              </p>
-            </div>
-
-            <button
-              className={styles.enviarRelatorio}
-            >
-              Enviar Relatório
-            </button>
+          <div className={styles.cardResumo}>
+            <h3>54</h3>
+            <span>Em andamento</span>
           </div>
+
+          <div className={styles.cardResumo}>
+            <h3>39</h3>
+            <span>Concluídas</span>
+          </div>
+
+          <div className={styles.cardResumo}>
+            <h3>12</h3>
+            <span>Equipes</span>
+          </div>
+
         </section>
+
+                {/* CONTEÚDO PRINCIPAL */}
+        <section className={styles.dashboard}>
+
+          {/* MAPA */}
+          <div className={styles.mapaCard}>
+
+            <div className={styles.cardTitulo}>
+              <h2>Mapa de Ocorrências</h2>
+              <span>Atualizado em tempo real</span>
+            </div>
+
+            <div className={styles.mapa}>
+
+              <div className={styles.ruaHorizontal}></div>
+              <div className={styles.ruaVertical}></div>
+
+              <div className={styles.pontoVerde}></div>
+              <div className={styles.pontoLaranja}></div>
+
+              <div className={styles.popupMapa}>
+                <h3>Rua das Palmeiras</h3>
+
+                <p>Lixo acumulado</p>
+
+                <span>
+                  Grande quantidade de resíduos na via pública.
+                </span>
+
+                <div className={styles.popupBotoes}>
+                  <button className={styles.btnAmarelo}>
+                    Vai Passar
+                  </button>
+
+                  <button className={styles.btnVerde}>
+                    Já Passou
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* PAINEL LATERAL */}
+          <aside className={styles.lateralDireita}>
+
+            <div className={styles.solicitacoes}>
+
+              <h2>Minhas Solicitações</h2>
+
+              <div className={styles.itemSolicitacao}>
+                <strong>Rua das Palmeiras</strong>
+                <p>Lixo acumulado</p>
+              </div>
+
+              <div className={styles.itemSolicitacao}>
+                <strong>Praça Central</strong>
+                <p>Árvore caída</p>
+              </div>
+
+              <div className={styles.itemSolicitacao}>
+                <strong>Bairro Jardim</strong>
+                <p>Descarte irregular</p>
+              </div>
+
+              <div className={styles.itemSolicitacao}>
+                <strong>Av. Tamoios</strong>
+                <p>Poda de árvore</p>
+              </div>
+
+              <button className={styles.enviarRelatorio}>
+                Enviar Relatório
+              </button>
+
+            </div>
+
+          </aside>
+
+        </section>
+
+        {/* TABELA */}
+
+        <section className={styles.ultimasOcorrencias}>
+
+          <div className={styles.cardTitulo}>
+            <h2>Últimas Ocorrências</h2>
+          </div>
+
+          <table className={styles.tabela}>
+
+            <thead>
+              <tr>
+                <th>Local</th>
+                <th>Problema</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Rua das Palmeiras</td>
+                <td>Lixo acumulado</td>
+                <td>
+                  <span className={styles.statusPendente}>
+                    Pendente
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Praça Central</td>
+                <td>Árvore caída</td>
+                <td>
+                  <span className={styles.statusAndamento}>
+                    Em andamento
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Bairro Jardim</td>
+                <td>Descarte irregular</td>
+                <td>
+                  <span className={styles.statusConcluido}>
+                    Concluído
+                  </span>
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </section>
+
       </main>
+
     </div>
   );
 }

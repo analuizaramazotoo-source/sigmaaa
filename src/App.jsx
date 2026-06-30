@@ -96,7 +96,7 @@ function App() {
           path="/cadastrog"
           element={<Cadastrog />}
        />
-
+        {/* HOME GESTOR */}
       <Route
      path="/homeg"
      element={<Homeg />}
