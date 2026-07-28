@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Wrench, UploadCloud, MapPin, AlertCircle, Send } from "lucide-react";
+
+// Importação corrigida subindo 3 níveis até src/layout.jsx
+import Layout from "../../../layout";
+
 import styles from "./Solicitar.module.css";
-import bannerFundo from "../../../assets/banner.png";
-import arvoreLogo from "../../../assets/arvore.png";
 
 export default function Solicitar() {
-  const [menuAberto, setMenuAberto] = useState(false);
   const [problema, setProblema] = useState("");
   const [descricao, setDescricao] = useState("");
   const [foto, setFoto] = useState(null);
@@ -16,7 +18,9 @@ export default function Solicitar() {
     if (file) setFoto(file.name);
   };
 
-  const handleEnviar = () => {
+  const handleEnviar = (e) => {
+    e.preventDefault();
+
     if (!problema.trim()) {
       alert("Preencha o campo Problema.");
       return;
@@ -31,156 +35,87 @@ export default function Solicitar() {
   };
 
   return (
-    <div className={styles.container}>
-      {/* HEADER */}
-      <header className={styles.header}>
-        <div className={styles.logoArea}>
-          <img src={arvoreLogo} alt="logo" />
-          <div>
-            <p>SECRETARIA DO</p>
-            <h2>MEIO AMBIENTE</h2>
-          </div>
-        </div>
-
-        <div className={styles.headerButtons}>
-          <button className={styles.btnVoltar} onClick={() => navigate(-1)}>
-            Voltar
-          </button>
-
-          <button
-            className={styles.menuIcon}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            ⋮
-          </button>
-        </div>
-      </header>
-
-      {/* MENU LATERAL */}
-      <div
-        className={`${styles.menuLateral} ${
-          menuAberto ? styles.menuAberto : ""
-        }`}
-      >
-        <div className={styles.topoMenu}>
-          <button
-            className={styles.btnFechar}
-            onClick={() => setMenuAberto(false)}
-          >
-            ✕
-          </button>
-        </div>
-
-        <hr className={styles.menuDivisor} />
-
-        <Link to="/cidadao">
-          <button className={`${styles.menuItem} ${styles.menuHome}`}>
-            🏠 Home
-          </button>
-        </Link>
-
-        <Link to="/relatar-problema">
-          <button className={styles.menuItem}>
-            📄 Relatar problema
-          </button>
-        </Link>
-
-        <Link to="/status">
-          <button className={styles.menuItem}>
-            📊 Status
-          </button>
-        </Link>
-
-        <Link to="/chat">
-          <button className={styles.menuItem}>
-            💬 Chat com Gestão
-          </button>
-        </Link>
-
-        <Link to="/perfil">
-          <button className={styles.menuItem}>
-            👤 Perfil
-          </button>
-        </Link>
-      </div>
-
-      {/* BANNER */}
-      <section
-        className={styles.banner}
-        style={{ backgroundImage: `url(${bannerFundo})` }}
-      >
-        <div className={styles.bannerTexto}>
-          <h1>Solicitar um serviço</h1>
-          <p>
-            Informe um problema ambiental na sua região para que
-            <br />
-            possamos ajudar a resolver!
-          </p>
-        </div>
-      </section>
-
-      {/* CARD PRINCIPAL */}
-      <main className={styles.main}>
+    <Layout
+      nomeSistema="SOLICITAR"
+      subtituloSistema="SERVIÇOS AMBIENTAIS"
+      tituloPagina="Solicitar Serviço"
+      subtituloPagina="Informe um problema ambiental na sua região para podermos ajudar"
+    >
+      <div className={styles.container}>
         <div className={styles.card}>
-          {/* LADO ESQUERDO */}
+          
+          {/* LADO ESQUERDO: FORMULÁRIO */}
           <div className={styles.cardEsquerdo}>
-            <div className={styles.cardTituloArea}>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                alt="clipboard"
-                className={styles.clipboardIcon}
-              />
-              <h3 className={styles.cardTitulo}>Detalhes do Problema</h3>
+            <div className={styles.cardHeader}>
+              <div className={styles.iconBadge}>
+                <Wrench size={24} />
+              </div>
+              <div>
+                <h2>Detalhes do Problema</h2>
+                <p>Preencha os dados abaixo com as informações da ocorrência.</p>
+              </div>
             </div>
 
-            <label className={styles.labelCampo}>Problema:</label>
-            <input
-              type="text"
-              className={styles.inputCampo}
-              value={problema}
-              onChange={(e) => setProblema(e.target.value)}
-            />
-
-            <label className={styles.labelCampo}>Descrição:</label>
-            <textarea
-              className={styles.textareaCampo}
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-              rows={3}
-            />
-
-            <label className={styles.labelCampo}>Foto do Problema:</label>
-
-            <div className={styles.fotoArea}>
-              <div className={styles.fotoBox}>
-                <span className={styles.fotoTexto}>
-                  {foto ? foto : "Anexar foto (opcional)"}
-                </span>
+            <form onSubmit={handleEnviar} className={styles.form}>
+              <div className={styles.formGroup}>
+                <label htmlFor="problema">Problema / Serviço *</label>
+                <input
+                  id="problema"
+                  type="text"
+                  placeholder="Ex: Poda de árvore com risco de queda"
+                  value={problema}
+                  onChange={(e) => setProblema(e.target.value)}
+                  required
+                />
               </div>
 
-              <div className={styles.fotoBotoes}>
-                <label className={styles.btnCarregarFoto}>
-                  CARREGAR FOTO
+              <div className={styles.formGroup}>
+                <label htmlFor="descricao">Descrição Detalhada *</label>
+                <textarea
+                  id="descricao"
+                  rows={4}
+                  placeholder="Descreva a situação com detalhes..."
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Foto do Problema (Opcional)</label>
+                <div className={styles.fileUpload}>
+                  <UploadCloud size={28} />
+                  <p>{foto ? foto : "Clique ou arraste uma foto aqui"}</p>
                   <input
                     type="file"
                     accept="image/*"
-                    style={{ display: "none" }}
                     onChange={handleFoto}
                   />
-                </label>
+                </div>
+              </div>
 
+              <div className={styles.formActions}>
                 <button
-                  className={styles.btnEnviarRelato}
-                  onClick={handleEnviar}
+                  type="button"
+                  className={styles.btnSecondary}
+                  onClick={() => navigate(-1)}
                 >
-                  ENVIAR RELATO
+                  Voltar
+                </button>
+                <button type="submit" className={styles.btnPrimary}>
+                  <Send size={16} /> Enviar Relato
                 </button>
               </div>
-            </div>
+            </form>
           </div>
 
-          {/* LADO DIREITO - MAPA */}
+          {/* LADO DIREITO: MAPA */}
           <div className={styles.cardDireito}>
+            <div className={styles.mapaHeader}>
+              <MapPin size={18} />
+              <span>Localização da Ocorrência</span>
+            </div>
+
             <div className={styles.mapaPlaceholder}>
               <div
                 className={styles.mapaPonto}
@@ -197,20 +132,18 @@ export default function Solicitar() {
               <div className={styles.mapaLinha} />
             </div>
           </div>
+
         </div>
 
-        {/* AVISO */}
+        {/* AVISO INFORMATIVO */}
         <div className={styles.aviso}>
-          <span className={styles.avisoIcone}>🟡</span>
-          <span className={styles.avisoTexto}>
-            Esteja localizado corretamente ao selecionar o local no mapa para
-            facilitar o trabalho das equipes.
+          <AlertCircle size={20} className={styles.avisoIcone} />
+          <span>
+            Certifique-se de selecionar corretamente a localização no mapa para
+            facilitar o atendimento das equipes de campo.
           </span>
         </div>
-      </main>
-
-      {/* FOOTER */}
-      <footer className={styles.footer} />
-    </div>
+      </div>
+    </Layout>
   );
 }

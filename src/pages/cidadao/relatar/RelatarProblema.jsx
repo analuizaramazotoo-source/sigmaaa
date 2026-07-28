@@ -1,225 +1,146 @@
-import { useState } from "react";
-import styles from "./RelatarProblema.module.css";
-import bannerFundo from "../../../assets/banner.png";
-import arvoreLogo from "../../../assets/arvore.png";
-import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { AlertTriangle, UploadCloud, Send } from 'lucide-react';
 
-const problemas = [
-  "Lixo irregular",
-  "Queimada",
-  "Poluição da água",
-  "Desmatamento",
-  "Maus-tratos ou Abandono de animais",
-  "Contaminação do solo",
-  "Desperdício ou Vazamento de água",
-  "Poluição do Ar",
-  "Outro",
-];
+// Caminho relativo para subir 3 níveis de pastas até 'src/layout.jsx'
+import Layout from '../../../layout'; 
+
+import styles from './RelatarProblema.module.css';
 
 export default function RelatarProblema() {
-  const [dropdownAberto, setDropdownAberto] = useState(false);
-  const [problemaSelecionado, setProblemaSelecionado] = useState("");
-  const [menuAberto, setMenuAberto] = useState(false);
-  const [outro, setOutro] = useState("");
-  const [endereco, setEndereco] = useState("");
+  const [formData, setFormData] = useState({
+    titulo: '',
+    categoria: '',
+    data: '',
+    endereco: '',
+    descricao: '',
+    arquivos: null
+  });
 
-  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { id, value, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: files ? files : value
+    }));
+  };
 
-  const handleEnviar = () => {
-    if (!problemaSelecionado) {
-      alert("Selecione um problema.");
-      return;
-    }
-
-    if (!outro.trim()) {
-      alert("Informe uma descrição.");
-      return;
-    }
-
-    if (!endereco.trim()) {
-      alert("Informe o endereço do problema.");
-      return;
-    }
-
-    // Futuramente você salvará os dados no banco aqui
-
-    navigate("/relato-enviado");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Dados do formulário enviados:', formData);
   };
 
   return (
-    <div className={styles["container-relatar"]}>
-      {/* HEADER */}
-      <header className={styles["header-relatar"]}>
-        <div className={styles["logo-area"]}>
-          <img src={arvoreLogo} alt="logo" />
-          <div>
-            <p>SECRETARIA DO</p>
-            <h2>MEIO AMBIENTE</h2>
-          </div>
-        </div>
-
-        <div className={styles["header-buttons"]}>
-          <Link to="/cidadao">
-            <button className={styles["btn-voltar"]}>Voltar</button>
-          </Link>
-
-          <button
-            className={styles["menu-icon"]}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            ⋮
-          </button>
-        </div>
-      </header>
-
-      {/* MENU LATERAL */}
-      <div
-        className={`${styles.menuLateral} ${
-          menuAberto ? styles.menuAberto : ""
-        }`}
-      >
-        <div className={styles.topoMenu}>
-          <button
-            className={styles.btnFechar}
-            onClick={() => setMenuAberto(false)}
-          >
-            ✕
-          </button>
-        </div>
-
-        <hr className={styles.menuDivisor} />
-
-        <Link to="/">
-          <button className={`${styles.menuItem} ${styles.menuHome}`}>
-            🏠 Home
-          </button>
-        </Link>
-
-        <Link to="/relatar-problema">
-          <button className={styles.menuItem}>
-            📄 Relatar problema
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            📋 Solicitar serviço
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            📊 Status
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            💬 Chat com Gestão
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            👤 Perfil
-          </button>
-        </Link>
-      </div>
-
-      {/* BANNER */}
-      <section
-        className={styles.banner}
-        style={{ backgroundImage: `url(${bannerFundo})` }}
-      >
-        <h1 className={styles.bannerTitulo}>
-          Relatar Problema Ambiental
-        </h1>
-      </section>
-
-      {/* CARD */}
-      <section className={styles["card-relatar"]}>
-        {/* DROPDOWN PROBLEMAS */}
-        <div className={styles.dropdownWrapper}>
-          <label className={styles.dropdownLabel}>
-            Informe o Problema Ambiental:
-          </label>
-
-          <button
-            className={`${styles.dropdownBtn} ${
-              problemaSelecionado
-                ? styles.dropdownBtnSelecionado
-                : ""
-            }`}
-            onClick={() => setDropdownAberto(!dropdownAberto)}
-          >
-            <span className={styles.dropdownTexto}>
-              {problemaSelecionado || "Selecione um problema"}
-            </span>
-
-            {dropdownAberto ? (
-              <IoChevronUp className={styles.dropdownIcone} />
-            ) : (
-              <IoChevronDown className={styles.dropdownIcone} />
-            )}
-          </button>
-
-          {dropdownAberto && (
-            <div className={styles.dropdownLista}>
-              {problemas.map((problema) => (
-                <button
-                  key={problema}
-                  className={`${styles.dropdownItem} ${
-                    problemaSelecionado === problema
-                      ? styles.dropdownItemAtivo
-                      : ""
-                  }`}
-                  onClick={() => {
-                    setProblemaSelecionado(problema);
-                    setDropdownAberto(false);
-                  }}
-                >
-                  {problema}
-                </button>
-              ))}
+    <Layout 
+      nomeSistema="RELATAR" 
+      subtituloSistema="OCORRÊNCIAS"
+      tituloPagina="Relatar Ocorrência" 
+      subtituloPagina="Secretaria do Meio Ambiente"
+    >
+      <div className={styles.container}>
+        <div className={styles.card}>
+          
+          {/* CABEÇALHO DO CARD */}
+          <div className={styles.cardHeader}>
+            <div className={styles.iconBadge}>
+              <AlertTriangle size={24} />
             </div>
-          )}
-        </div>
+            <div>
+              <h2>Relatar um Problema Ambiental</h2>
+              <p>
+                Preencha os campos abaixo para que nossa equipe possa analisar e tomar as providências necessárias.
+              </p>
+            </div>
+          </div>
 
-        {/* DESCRIÇÃO */}
-        <div className={styles.formGroup}>
-          <label>Descrição:</label>
-          <input
-            type="text"
-            className={styles.inputEstilizado}
-            value={outro}
-            onChange={(e) => setOutro(e.target.value)}
-          />
-        </div>
+          {/* FORMULÁRIO */}
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.grid}>
+              
+              {/* Título */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label htmlFor="titulo">Título do Relato *</label>
+                <input 
+                  type="text" 
+                  id="titulo" 
+                  placeholder="Ex: Descarte irregular de entulho na via pública" 
+                  value={formData.titulo}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
 
-        {/* ENDEREÇO */}
-        <div className={styles.formGroup}>
-          <label>Endereço do problema:</label>
-          <input
-            type="text"
-            className={styles.inputEstilizado}
-            value={endereco}
-            onChange={(e) => setEndereco(e.target.value)}
-          />
-        </div>
+              {/* Categoria */}
+              <div className={styles.formGroup}>
+                <label htmlFor="categoria">Categoria do Problema *</label>
+                <select 
+                  id="categoria" 
+                  value={formData.categoria}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" disabled>Selecione uma categoria</option>
+                  <option value="lixo">Lixo / Entulho Irregular</option>
+                  <option value="esgoto">Esgoto a Céu Aberto</option>
+                  <option value="desmatamento">Desmatamento / Poda Irregular</option>
+                  <option value="queimada">Queimada / Fumaça</option>
+                  <option value="agua">Poluição de Recursos Hídricos</option>
+                  <option value="outro">Outros</option>
+                </select>
+              </div>
 
-        <div className={styles["btn-area"]}>
-          <button
-            className={styles["btn-enviar"]}
-            onClick={handleEnviar}
-          >
-            Enviar
-          </button>
-        </div>
-      </section>
+              {/* Data da Ocorrência */}
+              <div className={styles.formGroup}>
+                <label htmlFor="data">Data da Ocorrência *</label>
+                <input 
+                  type="date" 
+                  id="data" 
+                  value={formData.data}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
 
-      {/* FOOTER */}
-      <footer className={styles["footer-relatar"]}></footer>
-    </div>
+              {/* Endereço / Localização */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label htmlFor="endereco">Endereço / Localização do Ocorrido *</label>
+                <input 
+                  type="text" 
+                  id="endereco" 
+                  placeholder="Rua, Número, Bairro e Ponto de Referência" 
+                  value={formData.endereco}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
+
+              {/* Descrição Detalhada (Opcional) */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label htmlFor="descricao">Descrição Detalhada (Opcional)</label>
+                <textarea 
+                  id="descricao" 
+                  rows="4" 
+                  placeholder="Descreva com detalhes o problema encontrado, se desejar..." 
+                  value={formData.descricao}
+                  onChange={handleChange}
+                />
+              </div>
+
+
+            </div>
+
+            {/* BOTÕES DE AÇÃO */}
+            <div className={styles.actions}>
+              <button type="button" className={styles.btnSecondary}>
+                Cancelar
+              </button>
+              <button type="submit" className={styles.btnPrimary}>
+                <Send size={16} /> Enviar Relato
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </Layout>
   );
 }
