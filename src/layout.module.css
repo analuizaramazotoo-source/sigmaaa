@@ -6,6 +6,24 @@
   color: #333;
 }
 
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff; /* Garante fundo branco em toda a tela */
+}
+
+.content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Centraliza o card no meio da tela */
+  align-items: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
 /* ================== SIDEBAR ================== */
 .sidebar {
   width: 260px;

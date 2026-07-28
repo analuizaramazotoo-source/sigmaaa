@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Clock, Truck, MapPin } from "lucide-react";
+
+// Importação do Layout localizado na raiz da pasta 'src'
+import Layout from "../../../layout";
+
 import styles from "./Status.module.css";
-import bannerFundo from "../../../assets/banner.png";
-import arvoreLogo from "../../../assets/arvore.png";
 
 const etapas = [
   { label: "Enviado", cor: "#e74c3c" },
@@ -13,93 +15,38 @@ const etapas = [
 ];
 
 const mensagens = [
-  "Sua solicitação foi enviada com sucesso.",
-  "Sua solicitação está sendo analisada pela equipe.",
+  "Sua solicitação foi enviada com sucesso e recebida pelo sistema.",
+  "Sua solicitação está sendo analisada pela equipe responsável.",
   "A equipe da prefeitura está a caminho do local da ocorrência.",
-  "A equipe está resolvendo o problema no local.",
-  "Problema resolvido com sucesso. Obrigado!",
+  "A equipe técnica está trabalhando na resolução do problema no local.",
+  "Problema resolvido com sucesso! Agradecemos sua colaboração.",
 ];
 
 export default function Status() {
-  const [menuAberto, setMenuAberto] = useState(false);
   const [etapaAtiva, setEtapaAtiva] = useState(2);
-  const navigate = useNavigate();
 
   return (
-    <div className={styles.container}>
-      {/* HEADER */}
-      <header className={styles.header}>
-        <div className={styles.logoArea}>
-          <img src={arvoreLogo} alt="logo" />
-          <div>
-            <p>SECRETARIA DO</p>
-            <h2>MEIO AMBIENTE</h2>
-          </div>
-        </div>
-
-        <div className={styles.headerButtons}>
-          <button className={styles.btnVoltar} onClick={() => navigate(-1)}>
-            Voltar
-          </button>
-          <button
-            className={styles.menuIcon}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            ⋮
-          </button>
-        </div>
-      </header>
-
-      {/* MENU LATERAL */}
-      <div className={`${styles.menuLateral} ${menuAberto ? styles.menuAberto : ""}`}>
-        <div className={styles.topoMenu}>
-          <button className={styles.btnFechar} onClick={() => setMenuAberto(false)}>✕</button>
-        </div>
-        <hr className={styles.menuDivisor} />
-
-        <Link to="/">
-          <button className={`${styles.menuItem} ${styles.menuHome}`}>
-            🏠 Home
-          </button>
-        </Link>
-
-        <Link to="/relatar-problema">
-          <button className={styles.menuItem}>
-            📄 Relatar problema
-          </button>
-        </Link>
-
-        <Link to="/solicitar">
-          <button className={styles.menuItem}>
-            📋 Solicitar serviço
-          </button>
-        </Link>
-
-        <Link to="/chat">
-          <button className={styles.menuItem}>
-            💬 Chat com Gestão
-          </button>
-        </Link>
-
-        <Link to="/perfil">
-          <button className={styles.menuItem}>
-            👤 Perfil
-          </button>
-        </Link>
-      </div>
-
-      {/* BANNER */}
-      <section
-        className={styles.banner}
-        style={{ backgroundImage: `url(${bannerFundo})` }}
-      />
-
-      {/* CARD PRINCIPAL */}
-      <main className={styles.main}>
+    <Layout
+      nomeSistema="STATUS"
+      subtituloSistema="ACOMPANHAMENTO"
+      tituloPagina="Status da Solicitação"
+      subtituloPagina="Acompanhe o progresso do atendimento em tempo real"
+    >
+      <div className={styles.wrapperCentralizado}>
         <div className={styles.card}>
-          <h2 className={styles.titulo}>Status da Solicitação</h2>
+          
+          {/* CABEÇALHO DO CARD */}
+          <div className={styles.cardHeader}>
+            <div className={styles.iconBadge}>
+              <Clock size={32} />
+            </div>
+            <div>
+              <h2>Acompanhamento do Pedido</h2>
+              <p>Protocolo: <strong>#2024/00142</strong></p>
+            </div>
+          </div>
 
-          {/* LINHA DO TEMPO */}
+          {/* LINHA DO TEMPO / TIMELINE */}
           <div className={styles.timeline}>
             <div className={styles.timelineLinha}>
               {etapas.map((_, i) => (
@@ -108,7 +55,7 @@ export default function Status() {
                     key={i}
                     className={styles.timelineSegmento}
                     style={{
-                      background: i < etapaAtiva ? "#2e7d4e" : "#ccc",
+                      background: i < etapaAtiva ? "#1a4d33" : "#e2e8f0",
                     }}
                   />
                 )
@@ -119,11 +66,12 @@ export default function Status() {
               {etapas.map((etapa, i) => (
                 <div key={i} className={styles.etapaItem}>
                   <button
+                    type="button"
                     className={styles.etapaPonto}
                     style={{
-                      background: i <= etapaAtiva ? etapa.cor : "#ccc",
+                      background: i <= etapaAtiva ? etapa.cor : "#cbd5e1",
                       boxShadow: i === etapaAtiva
-                        ? `0 0 0 4px ${etapa.cor}44`
+                        ? `0 0 0 6px ${etapa.cor}44`
                         : "none",
                       transform: i === etapaAtiva ? "scale(1.25)" : "scale(1)",
                     }}
@@ -131,7 +79,10 @@ export default function Status() {
                   />
                   <span
                     className={styles.etapaLabel}
-                    style={{ fontWeight: i === etapaAtiva ? "700" : "400" }}
+                    style={{
+                      fontWeight: i === etapaAtiva ? "700" : "500",
+                      color: i === etapaAtiva ? "#1a4d33" : "#64748b"
+                    }}
                   >
                     {etapa.label}
                   </span>
@@ -142,22 +93,30 @@ export default function Status() {
 
           {/* MAPA */}
           <div className={styles.mapaWrapper}>
+            <div className={styles.mapaHeader}>
+              <MapPin size={20} />
+              <span>Localização e Deslocamento</span>
+            </div>
             <div className={styles.mapa}>
               <div className={styles.mapaLinhaH} />
               <div className={styles.mapaLinhaV} />
-              <div className={styles.caminhao}>🚛</div>
-              <div className={styles.pontoAmarelo} />
+              
+              <div className={styles.caminhao} title="Equipe a caminho">
+                <Truck size={36} color="#1a4d33" />
+              </div>
+              
+              <div className={styles.pontoAmarelo} title="Local da ocorrência" />
               <div className={styles.ruaAzul} />
             </div>
           </div>
 
-          {/* MENSAGEM */}
-          <p className={styles.mensagem}>{mensagens[etapaAtiva]}</p>
-        </div>
-      </main>
+          {/* MENSAGEM DO STATUS */}
+          <div className={styles.mensagemCard}>
+            <p className={styles.mensagem}>{mensagens[etapaAtiva]}</p>
+          </div>
 
-      {/* FOOTER */}
-      <footer className={styles.footer} />
-    </div>
+        </div>
+      </div>
+    </Layout>
   );
 }
