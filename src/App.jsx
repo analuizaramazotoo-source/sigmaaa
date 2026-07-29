@@ -17,7 +17,6 @@ import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
 import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
-import RelatoEnviado from "./pages/cidadao/relatar/relatoenviado/relatoenviado";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
 import Homeg from "./pages/gestao/homeg/homeg";
 
@@ -36,12 +35,6 @@ function App() {
         <Route
           path="/relatar-problema"
           element={<RelatarProblema />}
-        />
-
-        {/* RELATO ENVIADO */}
-        <Route
-          path="/relato-enviado"
-          element={<RelatoEnviado />}
         />
 
         {/* CADASTRO */}

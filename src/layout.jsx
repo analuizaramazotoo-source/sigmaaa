@@ -8,17 +8,17 @@ import {
 
 export default function Layout({ 
   children, 
-  nomeSistema = "CADASTRO",              // Nome no topo do menu verde
-  subtituloSistema = "SEGURO AMBIENTAL", // Subtítulo no topo do menu verde
-  tituloPagina = "Cadastro Seguro Ambiental", // Título no cabeçalho superior branco
-  subtituloPagina = "Secretaria do Meio Ambiente" // Subtítulo no cabeçalho superior branco
+  nomeSistema = "CADASTRO", 
+  subtituloSistema = "SEGURO AMBIENTAL", 
+  tituloPagina = "Cadastro Seguro Ambiental", 
+  subtituloPagina = "Secretaria do Meio Ambiente" 
 }) {
   const location = useLocation();
 
   return (
     <div className={styles.container}>
       
-      {/* ================= MENU LATERAL ================= */}
+      {/* ================= MENU LATERAL (SIDEBAR) ================= */}
       <aside className={styles.sidebar}>
         <div className={styles.logo}>
           <Leaf size={32} />
@@ -62,7 +62,7 @@ export default function Layout({
       </aside>
 
       {/* ================= ÁREA PRINCIPAL ================= */}
-      <main className={styles.mainWrapper}>
+      <div className={styles.mainWrapper}>
         
         {/* CABEÇALHO SUPERIOR */}
         <header className={styles.header}>
@@ -90,12 +90,14 @@ export default function Layout({
           </div>
         </header>
 
-        {/* CONTEÚDO DINÂMICO */}
-        <div className={styles.pageContent}>
-          {children}
-        </div>
+        {/* CONTEÚDO DINÂMICO DAS PÁGINAS */}
+        <main className={styles.pageContent}>
+          <div className={styles.contentInner}>
+            {children}
+          </div>
+        </main>
 
-      </main>
+      </div>
     </div>
   );
 }
