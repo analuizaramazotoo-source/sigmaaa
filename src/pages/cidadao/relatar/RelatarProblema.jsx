@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Send, CheckCircle2, RotateCcw } from 'lucide-react';
 
-// Caminho relativo para o layout
+// Caminho para o Layout (ajuste a quantidade de ../ conforme a pasta onde seu arquivo está)
 import Layout from '../../../layout'; 
 
 import styles from './RelatarProblema.module.css';
@@ -28,13 +28,10 @@ export default function RelatarProblema() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Dados do formulário enviados:', formData);
-    
-    // Alterna o estado para exibir a confirmação na própria tela
     setEnviado(true);
   };
 
   const handleNovoRelato = () => {
-    // Reseta o formulário e volta para a tela inicial
     setFormData({
       titulo: '',
       categoria: '',

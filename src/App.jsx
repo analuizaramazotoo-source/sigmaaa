@@ -11,7 +11,6 @@ import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Homec from "./pages/cidadao/homec/homec";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
-import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
@@ -19,6 +18,7 @@ import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
 import Homeg from "./pages/gestao/homeg/homeg";
+import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
 
 function App() {
   return (
@@ -49,12 +49,6 @@ function App() {
           element={<Solicitar />}
         />
 
-        {/* CHAT */}
-        <Route
-          path="/chat"
-          element={<Chat />}
-        />
-
         {/* PERFIL */}
         <Route
           path="/perfil"
@@ -65,6 +59,12 @@ function App() {
         <Route
           path="/status"
           element={<Status />}
+        />
+
+          {/* DENUNCIA URGENTE */}
+         <Route
+         path="/denuncia"
+         element={<DenunciaUrgente />}
         />
 
         {/* ALTERAR */}

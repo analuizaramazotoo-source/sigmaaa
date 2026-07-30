@@ -10,26 +10,26 @@
   background-color: #ffffff;
   border-radius: 16px;
   padding: 36px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #fee2e2;
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.08);
   width: 100%;
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .cardHeader {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-bottom: 20px;
+  padding-bottom: 16px;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.iconBadge {
-  background-color: #fef3c7;
-  color: #d97706;
+.iconBadgeUrgent {
+  background-color: #fee2e2;
+  color: #dc2626;
   padding: 12px;
   border-radius: 12px;
   display: flex;
@@ -39,7 +39,7 @@
 
 .cardHeader h2 {
   font-size: 20px;
-  color: #1a4d33;
+  color: #991b1b;
   margin: 0 0 4px 0;
   font-weight: 700;
 }
@@ -50,16 +50,34 @@
   margin: 0;
 }
 
+/* BOX DE AVISO */
+.avisoBox {
+  background-color: #fff1f2;
+  border-left: 4px solid #dc2626;
+  padding: 12px 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #991b1b;
+}
+
+.avisoIcon {
+  flex-shrink: 0;
+}
+
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
+  margin-top: 8px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 18px;
 }
 
 .fullWidth {
@@ -69,7 +87,7 @@
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .formGroup label {
@@ -93,7 +111,7 @@
 .formGroup input:focus,
 .formGroup select:focus,
 .formGroup textarea:focus {
-  border-color: #1a4d33;
+  border-color: #dc2626;
 }
 
 .actions {
@@ -103,7 +121,7 @@
   padding-top: 12px;
 }
 
-.btnPrimary,
+.btnUrgent,
 .btnSecondary {
   display: flex;
   align-items: center;
@@ -117,14 +135,14 @@
   transition: all 0.2s;
 }
 
-.btnPrimary {
-  background-color: #1a4d33;
+.btnUrgent {
+  background-color: #dc2626;
   color: #ffffff;
   border: none;
 }
 
-.btnPrimary:hover {
-  background-color: #276243;
+.btnUrgent:hover {
+  background-color: #b91c1c;
 }
 
 .btnSecondary {
@@ -137,12 +155,12 @@
   background-color: #f1f5f9;
 }
 
-/* CARD SUCESSO */
+/* CARD SUCESSO URGENTE */
 .cardSucesso {
   background-color: #ffffff;
   border-radius: 16px;
   padding: 40px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #fee2e2;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 580px;
@@ -153,7 +171,7 @@
 }
 
 .iconBoxSucesso {
-  background-color: #e8f5e9;
+  background-color: #fee2e2;
   padding: 16px;
   border-radius: 50%;
   display: flex;
@@ -163,11 +181,11 @@
 }
 
 .sucessoIcon {
-  color: #1a4d33;
+  color: #dc2626;
 }
 
 .cardSucesso h2 {
-  color: #1a4d33;
+  color: #991b1b;
   margin: 0 0 12px 0;
   font-size: 24px;
 }
@@ -188,8 +206,8 @@
 }
 
 .infoBox {
-  background-color: #f8faf9;
-  border: 1px solid #e2e8f0;
+  background-color: #fff1f2;
+  border: 1px solid #fecdd3;
   padding: 12px 20px;
   border-radius: 8px;
   display: flex;
@@ -200,12 +218,12 @@
 }
 
 .infoBox strong {
-  color: #1a4d33;
+  color: #991b1b;
 }
 
-.badgeStatus {
-  background-color: #fef3c7;
-  color: #92400e;
+.badgeUrgente {
+  background-color: #dc2626;
+  color: #ffffff;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;

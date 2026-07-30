@@ -1,68 +1,82 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import "./home.module.css";
+import styles from "./home.module.css";
 
-//import img from '../../assets/secre.png'
 /* ================= HOME ================= */
 
-function Home() {
+export default function Home() {
   return (
-    <div className="container">
+    <div className={styles.container}>
 
-      <header className="topbar">
-        <div className="header">
-
-          <div className="header-logos">
-            <div className="logo">
-              <img src="logotupa.png" className="logo-img" />
-              <img src="secretaria meio ambiente.png" className="logos" />
-              {/*<img src={img} className="logos" />*/}
+      {/* BARRA VERDE SUPERIOR */}
+      <header className={styles.topbar}>
+        <div className={styles.header}>
+          <div className={styles["header-logos"]}>
+            <div className={styles.logo}>
+              <img 
+                src="/logotupa.png" 
+                className={styles["logo-img"]} 
+                alt="Prefeitura de Tupã" 
+              />
+              <img 
+                src="/secretaria meio ambiente.png" 
+                className={styles.logos} 
+                alt="Secretaria do Meio Ambiente" 
+              />
             </div>
           </div>
-
         </div>
       </header>
 
-      <main className="main">
+      {/* CONTEÚDO PRINCIPAL */}
+      <main className={styles.main}>
 
-        <h1>CRIE SUA CONTA NA</h1>
-        <h2>SECRETARIA DO MEIO AMBIENTE</h2>
+        <span className={styles["badge-header"]}>PORTAL DE SERVIÇOS AMBIENTAIS</span>
+        <h1>SECRETARIA DO MEIO AMBIENTE</h1>
 
-        <p className="sub">
-          Registre-se e conecte-se ao portal para solicitar serviços ambientais
+        <p className={styles.sub}>
+          Conecte-se ao portal para registrar ocorrências, solicitar serviços e acompanhar suas solicitações.
         </p>
 
-        <button className="btn-primary">
-          Entrar como cidadão
-        </button>
+        {/* PAINEL DE CARDS */}
+        <div className={styles["cards-wrapper"]}>
 
-        <div className="cards-wrapper">
-
-          <p className="perfil-title">
-            SELECIONE SEU PERFIL:
+          <p className={styles["perfil-title"]}>
+            SELECIONE SEU PERFIL DE ACESSO:
           </p>
 
-          <div className="cards">
+          <div className={styles.cards}>
 
-            <div className="card">
-              <img src="/img equipe.png" className="card-img" alt="Equipe" />
+            {/* CARD 1: EQUIPE */}
+            <div className={styles.card}>
+              <div className={styles["card-img-container"]}>
+                <img src="/img equipe.png" className={styles["card-img"]} alt="Equipe" />
+              </div>
               <h3>Equipe</h3>
-              <span>Membros das equipes</span>
+              <span>Atendimento em campo e execução</span>
               <button>Selecionar</button>
-              
             </div>
 
-            <div className="card">
-              <img src="/img cidadão.png" className="card-img" alt="Cidadão" />
+            {/* CARD 2: CIDADÃO (DESTAQUE) */}
+            <div className={`${styles.card} ${styles["card-destaque"]}`}>
+              <span className={styles["tag-recomendado"]}>Principal</span>
+              <div className={styles["card-img-container"]}>
+                <img src="/img cidadão.png" className={styles["card-img"]} alt="Cidadão" />
+              </div>
               <h3>Cidadão</h3>
-              <span>Solicitação de serviços</span>
-              <Link to= "/cidadao"><button>Selecionar</button></Link>
-
+              <span>Solicitação e relatos de serviços</span>
+              <Link to="/cidadao" className={styles["btn-link"]}>
+                <button>Selecionar</button>
+              </Link>
             </div>
 
-            <div className="card">
-              <img src="/img gestao.png" className="card-img" alt="Gestão" />
+            {/* CARD 3: GESTÃO */}
+            <div className={styles.card}>
+              <div className={styles["card-img-container"]}>
+                <img src="/img gestao.png" className={styles["card-img"]} alt="Gestão" />
+              </div>
               <h3>Gestão</h3>
-              <span>Coordenação</span>
+              <span>Coordenação e painel gerencial</span>
               <button>Selecionar</button>
             </div>
 
@@ -75,5 +89,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

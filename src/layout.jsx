@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styles from './Layout.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, Phone, Bell, ChevronDown, Leaf
+  HelpCircle, Phone, Leaf
 } from 'lucide-react';
 
 export default function Layout({ 
@@ -29,7 +29,7 @@ export default function Layout({
         </div>
 
         <nav className={styles.nav}>
-          <Link to="/" className={location.pathname === '/' ? styles.active : ''}>
+          <Link to="/cidadao" className={location.pathname === '/' ? styles.active : ''}>
             <Home size={20} /> Dashboard
           </Link>
           <Link to="/mapa" className={location.pathname === '/mapa' ? styles.active : ''}>
@@ -74,19 +74,9 @@ export default function Layout({
             </div>
           </div>
           
+          {/* LADO DIREITO MODIFICADO (APENAS "CIDADÃO") */}
           <div className={styles.headerRight}>
-            <div className={styles.notification}>
-              <Bell size={20} />
-              <span className={styles.badge}>3</span>
-            </div>
-            <div className={styles.userProfile}>
-              <div className={styles.avatar}>AL</div>
-              <div className={styles.userInfo}>
-                <strong>Ana Luiza</strong>
-                <span>Cidadão</span>
-              </div>
-              <ChevronDown size={16} />
-            </div>
+            <span className={styles.tagCidadao}>Cidadão</span>
           </div>
         </header>
 

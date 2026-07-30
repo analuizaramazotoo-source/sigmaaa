@@ -3,10 +3,14 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* ================= BANNER ================= */
 .banner {
+  width: 100%;
   height: 220px;
   border-radius: 16px;
   background-size: cover;
@@ -16,35 +20,47 @@
   display: flex;
   align-items: center;
   padding: 0 40px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
 .overlayBanner {
-  background-color: rgba(26, 77, 51, 0.85); /* Verde escuro com transparência */
+  background-color: rgba(26, 77, 51, 0.85);
   padding: 24px 32px;
   border-radius: 12px;
   color: white;
 }
 
-.overlayBanner h1 { margin: 0 0 8px 0; font-size: 32px; }
-.overlayBanner p { margin: 0; font-size: 16px; opacity: 0.9; }
+.overlayBanner h1 { 
+  margin: 0 0 8px 0; 
+  font-size: 32px; 
+}
+
+.overlayBanner p { 
+  margin: 0; 
+  font-size: 16px; 
+  opacity: 0.9; 
+}
 
 /* ================= CARDS PRINCIPAIS ================= */
 .cardsContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  width: 100%;
 }
 
 .card {
   background: white;
   padding: 32px 24px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   border-top: 4px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cardAzul { border-top-color: #3498db; }
@@ -70,7 +86,7 @@
   color: #666;
   line-height: 1.5;
   margin: 0 0 24px 0;
-  flex-grow: 1; /* Faz o botão ficar alinhado embaixo sempre */
+  flex-grow: 1;
 }
 
 .cardBtn {
@@ -98,6 +114,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+  width: 100%;
 }
 
 /* DENÚNCIA URGENTE */
@@ -109,6 +126,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cardUrgenteHeader {
@@ -119,7 +138,10 @@
   margin-bottom: 16px;
 }
 
-.cardUrgenteHeader h3 { margin: 0; font-size: 20px; }
+.cardUrgenteHeader h3 { 
+  margin: 0; 
+  font-size: 20px; 
+}
 
 .cardUrgente p {
   color: #c53030;
@@ -140,14 +162,18 @@
   transition: background 0.2s;
 }
 
-.btnEmergencia:hover { background: #c53030; }
+.btnEmergencia:hover { 
+  background: #c53030; 
+}
 
 /* DÚVIDAS FREQUENTES */
 .cardDuvidas {
   background: white;
   padding: 32px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cardDuvidasHeader {
@@ -158,7 +184,10 @@
   margin-bottom: 24px;
 }
 
-.cardDuvidasHeader h3 { margin: 0; font-size: 20px; }
+.cardDuvidasHeader h3 { 
+  margin: 0; 
+  font-size: 20px; 
+}
 
 .listaDuvidas {
   display: flex;
@@ -204,6 +233,8 @@
   border-top: 1px solid #e2e8f0;
   padding-top: 32px;
   margin-top: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .footerColuna h4 {
@@ -212,7 +243,8 @@
   font-size: 16px;
 }
 
-.footerColuna p, .footerColuna a {
+.footerColuna p, 
+.footerColuna a {
   margin: 0 0 8px 0;
   color: #718096;
   font-size: 13px;
