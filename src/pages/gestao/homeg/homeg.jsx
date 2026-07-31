@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './homeg.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Phone, Bell, ChevronDown, Plus, ClipboardCheck, 
   Clock, Settings, CheckCircle2, Filter, Trash2, Flame, 
-  Droplet, Volume2, Leaf, Menu, X, Shield, ArrowUpRight
+  Droplet, Volume2, Leaf, Menu, X, Shield, ArrowUpRight, LogOut, User, Edit3
 } from 'lucide-react';
 
 const STATS_DATA = [
@@ -42,7 +43,7 @@ const STATS_DATA = [
   },
 ];
 
-const FILA_TRABALHO_DATA = [
+const INITIAL_FILA = [
   { 
     id: 1, 
     title: "Descarte irregular de lixo", 
@@ -82,7 +83,75 @@ const FILA_TRABALHO_DATA = [
 ];
 
 export default function Homeg() {
+  const navigate = useNavigate();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(5);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  
+  // Modais
+  const [modalNewRecord, setModalNewRecord] = useState(false);
+  const [modalFilter, setModalFilter] = useState(false);
+  const [modalViewAll, setModalViewAll] = useState(false);
+  const [selectedOcorrencia, setSelectedOcorrencia] = useState(null);
+
+  // Lista Dinâmica de Ocorrências
+  const [fila, setFila] = useState(INITIAL_FILA);
+  const [activeFilter, setActiveFilter] = useState('todos');
+
+  // Formulário de Nova Ocorrência
+  const [formData, setFormData] = useState({
+    title: '',
+    address: '',
+    category: 'descarte'
+  });
+
+  const handleCreateRecord = (e) => {
+    e.preventDefault();
+    if (!formData.title || !formData.address) return;
+
+    let icon = Trash2;
+    if (formData.category === 'queimada') icon = Flame;
+    if (formData.category === 'agua') icon = Droplet;
+    if (formData.category === 'som') icon = Volume2;
+
+    const newEntry = {
+      id: Date.now(),
+      title: formData.title,
+      address: formData.address,
+      date: new Date().toLocaleDateString('pt-BR'),
+      status: "Pendente triagem",
+      statusType: "analise",
+      icon: icon
+    };
+
+    setFila([newEntry, ...fila]);
+    setFormData({ title: '', address: '', category: 'descarte' });
+    setModalNewRecord(false);
+  };
+
+  const handleUpdateStatus = (newStatus, newStatusType) => {
+    if (!selectedOcorrencia) return;
+
+    setFila(fila.map(item => {
+      if (item.id === selectedOcorrencia.id) {
+        return {
+          ...item,
+          status: newStatus,
+          statusType: newStatusType
+        };
+      }
+      return item;
+    }));
+
+    setSelectedOcorrencia(null);
+  };
+
+  const filteredFila = fila.filter(item => {
+    if (activeFilter === 'todos') return true;
+    return item.statusType === activeFilter;
+  });
 
   return (
     <div className={styles.appContainer}>
@@ -94,7 +163,7 @@ export default function Homeg() {
         />
       )}
 
-      {/* SIDEBAR OPERACIONAL */}
+      {/* SIDEBAR COM REACT ROUTER LINK */}
       <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
@@ -114,26 +183,25 @@ export default function Homeg() {
         </div>
 
         <nav className={styles.navigation}>
-          <a href="#" className={styles.navItemActive}><Home size={18} /> Painel Geral</a>
-          <a href="#" className={styles.navItem}><MapIcon size={18} /> Geoprocessamento</a>
-          <a href="#" className={styles.navItem}><ClipboardList size={18} /> Fila de Fiscalização</a>
-          <a href="#" className={styles.navItem}><FileText size={18} /> Autos e Notificações</a>
-          <a href="#" className={styles.navItem}><BarChart2 size={18} /> Relatórios Técnicos</a>
-          <a href="#" className={styles.navItem}><HelpCircle size={18} /> Legislação</a>
-          <a href="#" className={styles.navItem}><Phone size={18} /> Suporte Interno</a>
+          <Link to="/home" className={styles.navItemActive}>
+            <Home size={18} /> Painel Geral
+          </Link>
+          <Link to="/geoprocessamento" className={styles.navItem}>
+            <MapIcon size={18} /> Geoprocessamento
+          </Link>
+          <Link to="/fila-fiscalizacao" className={styles.navItem}>
+            <ClipboardList size={18} /> Fila de Fiscalização
+          </Link>
+          <Link to="/autos-notificacoes" className={styles.navItem}>
+            <FileText size={18} /> Autos e Notificações
+          </Link>
+          <Link to="/relatorios-tecnicos" className={styles.navItem}>
+            <BarChart2 size={18} /> Relatórios Técnicos
+          </Link>
+          <Link to="/legislacao" className={styles.navItem}>
+            <HelpCircle size={18} /> Legislação
+          </Link>
         </nav>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.helpCard}>
-            <div className={styles.helpIconWrapper}>
-              <Phone size={18} />
-            </div>
-            <div className={styles.helpInfo}>
-              <strong>Plantão de Fiscalização</strong>
-              <p>Ramal 1920</p>
-            </div>
-          </div>
-        </div>
       </aside>
 
       {/* ÁREA PRINCIPAL */}
@@ -154,32 +222,100 @@ export default function Homeg() {
           </div>
 
           <div className={styles.headerRight}>
-            <button className={styles.iconButton} aria-label="Notificações Internas">
-              <Bell size={18} />
-              <span className={styles.badge}>5</span>
-            </button>
+            {/* NOTIFICAÇÕES */}
+            <div className={styles.popoverContainer}>
+              <button 
+                className={styles.iconButton} 
+                onClick={() => {
+                  setShowNotifications(!showNotifications);
+                  setShowUserDropdown(false);
+                }}
+                aria-label="Notificações Internas"
+              >
+                <Bell size={18} />
+                {unreadNotifications > 0 && <span className={styles.badge}>{unreadNotifications}</span>}
+              </button>
+
+              {showNotifications && (
+                <div className={styles.popoverMenu}>
+                  <div className={styles.popoverHeader}>
+                    <strong>Notificações Internas</strong>
+                    <button 
+                      onClick={() => setUnreadNotifications(0)}
+                      className={styles.textBtn}
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                  <ul className={styles.notificationList}>
+                    <li>📌 Novo chamado de Queimada registrado no Setor Norte.</li>
+                    <li>⚠️ Auto de Infração nº 402 finalizado.</li>
+                    <li>📋 Relatório mensal disponível para exportação.</li>
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <div className={styles.dividerVertical} />
 
-            <button className={styles.userDropdown}>
-              <div className={styles.avatar}>AL</div>
-              <div className={styles.userInfo}>
-                <span className={styles.userName}>Ana Luiza Silva</span>
-                <span className={styles.userRole}>Fiscal Ambiental • Mat. 48.201</span>
-              </div>
-              <ChevronDown size={16} className={styles.dropdownIcon} />
-            </button>
+            {/* USUÁRIO DROPDOWN COM NAVEGAÇÃO */}
+            <div className={styles.popoverContainer}>
+              <button 
+                className={styles.userDropdown}
+                onClick={() => {
+                  setShowUserDropdown(!showUserDropdown);
+                  setShowNotifications(false);
+                }}
+              >
+                <div className={styles.avatar}>AL</div>
+                <div className={styles.userInfo}>
+                  <span className={styles.userName}>Ana Luiza Silva</span>
+                  <span className={styles.userRole}>Fiscal Ambiental • Mat. 48.201</span>
+                </div>
+                <ChevronDown size={16} className={styles.dropdownIcon} />
+              </button>
+
+              {showUserDropdown && (
+                <div className={styles.popoverMenuRight}>
+                  <div className={styles.userMenuHeader}>
+                    <strong>Ana Luiza Silva</strong>
+                    <span>Fiscal de Campo</span>
+                  </div>
+                  <div className={styles.menuDivider} />
+                  
+                  <Link to="/perfilg" className={styles.menuItemBtn}>
+                    <User size={16} /> Meu Perfil
+                  </Link>
+
+                  <Link to="/config" className={styles.menuItemBtn}>
+                    <Settings size={16} /> Configurações
+                  </Link>
+
+                  <div className={styles.menuDivider} />
+
+                  <button 
+                    onClick={() => navigate('/login')} 
+                    className={`${styles.menuItemBtn} ${styles.dangerText}`}
+                  >
+                    <LogOut size={16} /> Sair da Conta
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
         <main className={styles.mainContent}>
-          {/* BANNER BOAS-VINDAS INTERNO */}
+          {/* BANNER BOAS-VINDAS */}
           <section className={styles.welcomeCard}>
             <div className={styles.welcomeText}>
               <h2>Painel de Controle - Fiscalização</h2>
-              <p>Há 18 ocorrências aguardando triagem técnica na sua região de cobertura.</p>
+              <p>Há {fila.filter(i => i.statusType === 'analise').length} ocorrências aguardando triagem técnica no momento.</p>
             </div>
-            <button className={styles.btnPrimary}>
+            <button 
+              className={styles.btnPrimary}
+              onClick={() => setModalNewRecord(true)}
+            >
               <Plus size={18} /> Novo Registro Interno
             </button>
           </section>
@@ -203,13 +339,16 @@ export default function Homeg() {
             })}
           </section>
 
-          {/* GRID: MAPA DE FISCALIZAÇÃO E FILA DE TRABALHO */}
+          {/* GRID: MAPA E FILA */}
           <section className={styles.contentGrid}>
             <div className={styles.cardSection}>
               <div className={styles.cardHeader}>
                 <h3>Geoprocessamento e Chamados</h3>
-                <button className={styles.btnSecondary}>
-                  <Filter size={16} /> Filtrar por Setor
+                <button 
+                  className={styles.btnSecondary}
+                  onClick={() => setModalFilter(true)}
+                >
+                  <Filter size={16} /> Filtrar por Status
                 </button>
               </div>
 
@@ -217,6 +356,9 @@ export default function Homeg() {
                 <div className={styles.mapPlaceholder}>
                   <MapIcon size={56} className={styles.mapPlaceholderIcon} />
                   <p>Mapa Tático de Ocorrências e Rotas de Fiscalização</p>
+                  <small style={{ marginTop: '8px', opacity: 0.8 }}>
+                    Exibindo {filteredFila.length} ponto(s) filtrado(s)
+                  </small>
                 </div>
 
                 <div className={styles.mapLegend}>
@@ -234,14 +376,24 @@ export default function Homeg() {
             <div className={styles.cardSection}>
               <div className={styles.cardHeader}>
                 <h3>Fila de Triagem e Despacho</h3>
-                <a href="#" className={styles.linkAction}>Ver fila completa <ArrowUpRight size={14} /></a>
+                <button 
+                  className={styles.linkActionBtn}
+                  onClick={() => setModalViewAll(true)}
+                >
+                  Ver fila completa <ArrowUpRight size={14} />
+                </button>
               </div>
 
               <div className={styles.requestsList}>
-                {FILA_TRABALHO_DATA.map((item) => {
+                {filteredFila.slice(0, 4).map((item) => {
                   const ItemIcon = item.icon;
                   return (
-                    <div key={item.id} className={styles.requestCard}>
+                    <div 
+                      key={item.id} 
+                      className={styles.requestCardSelectable}
+                      onClick={() => setSelectedOcorrencia(item)}
+                      title="Clique para alterar o status"
+                    >
                       <div className={styles.requestIcon}>
                         <ItemIcon size={18} />
                       </div>
@@ -252,7 +404,7 @@ export default function Homeg() {
                       <div className={styles.requestMeta}>
                         <span className={styles.requestDate}>{item.date}</span>
                         <span className={`${styles.badgeStatus} ${styles[`status_${item.statusType}`]}`}>
-                          {item.status}
+                          {item.status} <Edit3 size={10} style={{ marginLeft: '4px' }} />
                         </span>
                       </div>
                     </div>
@@ -273,7 +425,9 @@ export default function Homeg() {
                 <p>Consulte as novas diretrizes normativas no módulo de Legislação antes do despacho de equipes.</p>
               </div>
             </div>
-            <button className={styles.btnOutline}>Acessar Diretrizes</button>
+            <Link to="/legislacao" className={styles.btnOutline}>
+              Acessar Diretrizes
+            </Link>
           </section>
         </main>
 
@@ -281,6 +435,195 @@ export default function Homeg() {
           <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
         </footer>
       </div>
+
+      {/* ==========================================================================
+          MODAIS E DIÁLOGOS INTERATIVOS
+          ========================================================================== */}
+      
+      {/* MODAL: ALTERAR STATUS DA OCORRÊNCIA */}
+      {selectedOcorrencia && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <h3>Atualizar Status da Demanda</h3>
+              <button onClick={() => setSelectedOcorrencia(null)} className={styles.closeBtnModal}><X size={18} /></button>
+            </div>
+            <div className={styles.statusChangeBody}>
+              <strong>{selectedOcorrencia.title}</strong>
+              <p>{selectedOcorrencia.address}</p>
+              
+              <div className={styles.statusOptionsList}>
+                <button 
+                  className={`${styles.statusOptionBtn} ${styles.status_analise}`}
+                  onClick={() => handleUpdateStatus("Pendente triagem", "analise")}
+                >
+                  <Clock size={16} /> Marcar como "Pendente triagem"
+                </button>
+                <button 
+                  className={`${styles.statusOptionBtn} ${styles.status_andamento}`}
+                  onClick={() => handleUpdateStatus("Em campo", "andamento")}
+                >
+                  <Settings size={16} /> Marcar como "Em campo"
+                </button>
+                <button 
+                  className={`${styles.statusOptionBtn} ${styles.status_resolvida}`}
+                  onClick={() => handleUpdateStatus("Fiscalizado", "resolvida")}
+                >
+                  <CheckCircle2 size={16} /> Marcar como "Fiscalizado"
+                </button>
+                <button 
+                  className={`${styles.statusOptionBtn} ${styles.status_naoAtendida}`}
+                  onClick={() => handleUpdateStatus("Arquivado", "naoAtendida")}
+                >
+                  <X size={16} /> Marcar como "Arquivado / Improcedente"
+                </button>
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={() => setSelectedOcorrencia(null)} className={styles.btnCancel}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: NOVO REGISTRO INTERNO */}
+      {modalNewRecord && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <h3>Novo Registro de Ocorrência Interna</h3>
+              <button onClick={() => setModalNewRecord(false)} className={styles.closeBtnModal}><X size={18} /></button>
+            </div>
+            <form onSubmit={handleCreateRecord} className={styles.modalForm}>
+              <label>
+                Título da Demanda
+                <input 
+                  type="text" 
+                  placeholder="Ex: Queimada em lote vago"
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  required
+                />
+              </label>
+
+              <label>
+                Endereço / Localização
+                <input 
+                  type="text" 
+                  placeholder="Ex: Av. Principal, nº 100 - Bairro Verde"
+                  value={formData.address}
+                  onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  required
+                />
+              </label>
+
+              <label>
+                Categoria
+                <select 
+                  value={formData.category}
+                  onChange={(e) => setFormData({...formData, category: e.target.value})}
+                >
+                  <option value="descarte">Descarte Irregular</option>
+                  <option value="queimada">Queimada Urbana</option>
+                  <option value="agua">Recursos Hídricos</option>
+                  <option value="som">Poluição Sonora</option>
+                </select>
+              </label>
+
+              <div className={styles.modalActions}>
+                <button type="button" onClick={() => setModalNewRecord(false)} className={styles.btnCancel}>Cancelar</button>
+                <button type="submit" className={styles.btnPrimaryModal}>Salvar Registro</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: FILTRAR MAPA */}
+      {modalFilter && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <h3>Filtrar Ocorrências no Mapa</h3>
+              <button onClick={() => setModalFilter(false)} className={styles.closeBtnModal}><X size={18} /></button>
+            </div>
+            <div className={styles.filterOptions}>
+              <button 
+                className={activeFilter === 'todos' ? styles.filterChipActive : styles.filterChip}
+                onClick={() => setActiveFilter('todos')}
+              >
+                Todas as Ocorrências
+              </button>
+              <button 
+                className={activeFilter === 'analise' ? styles.filterChipActive : styles.filterChip}
+                onClick={() => setActiveFilter('analise')}
+              >
+                Pendente Triagem
+              </button>
+              <button 
+                className={activeFilter === 'andamento' ? styles.filterChipActive : styles.filterChip}
+                onClick={() => setActiveFilter('andamento')}
+              >
+                Equipe em Campo
+              </button>
+              <button 
+                className={activeFilter === 'resolvida' ? styles.filterChipActive : styles.filterChip}
+                onClick={() => setActiveFilter('resolvida')}
+              >
+                Fiscalizado / Concluído
+              </button>
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={() => setModalFilter(false)} className={styles.btnPrimaryModal}>Aplicar Filtro</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: VER FILA COMPLETA */}
+      {modalViewAll && (
+        <div className={styles.modalOverlay}>
+          <div className={`${styles.modalContent} ${styles.modalLarge}`}>
+            <div className={styles.modalHeader}>
+              <h3>Fila Completa de Atendimento ({fila.length})</h3>
+              <button onClick={() => setModalViewAll(false)} className={styles.closeBtnModal}><X size={18} /></button>
+            </div>
+            <div className={styles.modalListScroll}>
+              {fila.map((item) => {
+                const ItemIcon = item.icon;
+                return (
+                  <div 
+                    key={item.id} 
+                    className={styles.requestCardSelectable}
+                    onClick={() => {
+                      setSelectedOcorrencia(item);
+                      setModalViewAll(false);
+                    }}
+                  >
+                    <div className={styles.requestIcon}>
+                      <ItemIcon size={18} />
+                    </div>
+                    <div className={styles.requestBody}>
+                      <strong className={styles.requestTitle}>{item.title}</strong>
+                      <p className={styles.requestAddress}>{item.address}</p>
+                    </div>
+                    <div className={styles.requestMeta}>
+                      <span className={styles.requestDate}>{item.date}</span>
+                      <span className={`${styles.badgeStatus} ${styles[`status_${item.statusType}`]}`}>
+                        {item.status} <Edit3 size={10} style={{ marginLeft: '4px' }} />
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={() => setModalViewAll(false)} className={styles.btnCancel}>Fechar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

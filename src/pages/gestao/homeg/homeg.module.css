@@ -1,14 +1,11 @@
-/* ==========================================================================
-   VARIÁVEIS DE DESIGN SYSTEM - TOM VERDE AMBIENTAL / INSTITUCIONAL
-   ========================================================================== */
 :root {
-  --bg-app: #f0fdf4;             /* Fundo esverdeado suave */
+  --bg-app: #f0fdf4;
   --bg-surface: #ffffff;
-  --bg-sidebar: #f4fbf7;         /* Fundo lateral esverdeado */
-  --border-color: #d1fae5;       /* Bordas em tom verde claro */
+  --bg-sidebar: #f4fbf7;
+  --border-color: #d1fae5;
   
-  --text-primary: #064e3b;       /* Verde-floresta escuro */
-  --text-secondary: #047857;     /* Verde institucional */
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
   --text-muted: #6ee7b7;
   
   --brand-primary: #059669;
@@ -36,9 +33,6 @@
   --transition-fast: 0.2s ease;
 }
 
-/* ==========================================================================
-   LAYOUT BASE
-   ========================================================================== */
 .appContainer {
   display: flex;
   min-height: 100vh;
@@ -53,7 +47,6 @@
   background-color: rgba(6, 78, 59, 0.4);
   backdrop-filter: blur(3px);
   z-index: 40;
-  display: none;
 }
 
 .mainWrapper {
@@ -73,9 +66,6 @@
   gap: 1.75rem;
 }
 
-/* ==========================================================================
-   SIDEBAR (INSTITUCIONAL / VERDE)
-   ========================================================================== */
 .sidebar {
   width: 270px;
   background-color: var(--bg-sidebar);
@@ -168,44 +158,6 @@
   box-shadow: var(--shadow-sm);
 }
 
-.sidebarFooter {
-  padding: 1rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.helpCard {
-  background-color: var(--brand-light);
-  padding: 0.875rem;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border: 1px solid var(--border-color);
-}
-
-.helpIconWrapper {
-  background-color: var(--brand-primary);
-  color: white;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-}
-
-.helpInfo strong {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--brand-dark);
-}
-
-.helpInfo p {
-  font-size: 0.75rem;
-  color: var(--brand-primary-hover);
-  margin: 0;
-}
-
-/* ==========================================================================
-   HEADER
-   ========================================================================== */
 .header {
   height: 75px;
   background-color: var(--bg-surface);
@@ -249,6 +201,10 @@
   gap: 1.25rem;
 }
 
+.popoverContainer {
+  position: relative;
+}
+
 .iconButton {
   position: relative;
   background: var(--brand-light);
@@ -280,6 +236,94 @@
   align-items: center;
   justify-content: center;
   border: 2px solid var(--bg-surface);
+}
+
+.popoverMenu, .popoverMenuRight {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.75rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 1rem;
+  z-index: 100;
+  width: 280px;
+}
+
+.popoverMenu { left: 0; }
+.popoverMenuRight { right: 0; }
+
+.popoverHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.textBtn {
+  background: none;
+  border: none;
+  color: var(--brand-primary);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.notificationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.notificationList li {
+  padding: 0.5rem;
+  background: var(--bg-app);
+  border-radius: var(--radius-sm);
+}
+
+.userMenuHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.userMenuHeader strong { font-size: 0.9rem; color: var(--brand-dark); }
+.userMenuHeader span { font-size: 0.75rem; color: var(--text-secondary); }
+
+.menuDivider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+.menuItemBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.menuItemBtn:hover {
+  background-color: var(--brand-light);
+}
+
+.dangerText {
+  color: var(--status-danger);
 }
 
 .dividerVertical {
@@ -333,9 +377,6 @@
   color: var(--text-secondary);
 }
 
-/* ==========================================================================
-   CARDS & SEÇÕES
-   ========================================================================== */
 .welcomeCard {
   background: linear-gradient(135deg, #059669 0%, #064e3b 100%);
   color: white;
@@ -470,9 +511,6 @@
   color: #64748b;
 }
 
-/* ==========================================================================
-   GRID DE CONTEÚDO (MAPA EXPANDIDO: 2/3 DA TELA)
-   ========================================================================== */
 .contentGrid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -503,17 +541,19 @@
   margin: 0;
 }
 
-.linkAction {
+.linkActionBtn {
+  background: none;
+  border: none;
   font-size: 0.8rem;
   color: var(--brand-primary);
   font-weight: 700;
-  text-decoration: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.linkAction:hover {
+.linkActionBtn:hover {
   text-decoration: underline;
 }
 
@@ -584,14 +624,13 @@
 .dotSuccess { background-color: var(--status-success); }
 .dotDanger { background-color: var(--status-danger); }
 
-/* FILA DE TRABALHO */
 .requestsList {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.requestCard {
+.requestCardSelectable {
   display: flex;
   align-items: center;
   padding: 0.9rem;
@@ -599,12 +638,14 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   gap: 1rem;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.requestCard:hover {
+.requestCardSelectable:hover {
   border-color: var(--brand-primary);
-  transform: translateX(2px);
+  background-color: var(--brand-light);
+  transform: translateX(4px);
 }
 
 .requestIcon {
@@ -659,6 +700,8 @@
   font-weight: 700;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
+  display: flex;
+  align-items: center;
 }
 
 .status_andamento { background-color: var(--status-info-bg); color: var(--status-info); }
@@ -666,7 +709,6 @@
 .status_resolvida { background-color: var(--status-success-bg); color: var(--status-success); }
 .status_naoAtendida { background-color: var(--status-danger-bg); color: var(--status-danger); }
 
-/* INFORMATIVO INFERIOR */
 .infoBanner {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -704,7 +746,6 @@
   color: var(--text-secondary);
 }
 
-/* FOOTER */
 .footer {
   text-align: center;
   padding: 1.5rem;
@@ -714,7 +755,179 @@
   margin-top: auto;
 }
 
-/* RESPONSIVIDADE */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 78, 59, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modalLarge {
+  max-width: 700px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--brand-dark);
+}
+
+.closeBtnModal {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modalForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+.modalForm input, .modalForm select {
+  padding: 0.65rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.modalForm input:focus, .modalForm select:focus {
+  border-color: var(--brand-primary);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btnCancel {
+  background-color: #f1f5f9;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.btnPrimaryModal {
+  background-color: var(--brand-primary);
+  border: none;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnPrimaryModal:hover {
+  background-color: var(--brand-primary-hover);
+}
+
+.statusChangeBody strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--brand-dark);
+}
+
+.statusChangeBody p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 1rem 0;
+}
+
+.statusOptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statusOptionBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.statusOptionBtn:hover {
+  transform: translateX(4px);
+}
+
+.filterOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterChip, .filterChipActive {
+  padding: 0.5rem 0.875rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.filterChipActive {
+  background-color: var(--brand-primary);
+  color: white;
+  border-color: var(--brand-primary);
+}
+
+.modalListScroll {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-right: 0.5rem;
+}
+
 @media (max-width: 1200px) {
   .contentGrid {
     grid-template-columns: 1fr;
@@ -741,10 +954,6 @@
 
   .sidebarOpen {
     transform: translateX(0);
-  }
-
-  .overlay {
-    display: block;
   }
 
   .mainContent {

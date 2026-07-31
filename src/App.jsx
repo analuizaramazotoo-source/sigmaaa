@@ -19,6 +19,8 @@ import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
 import Homeg from "./pages/gestao/homeg/homeg";
 import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
+import Perfilg from "./pages/gestao/perfil/perfil"
+import Configuracoes from "./pages/gestao/config/configuracoes";
 
 function App() {
   return (
@@ -94,6 +96,19 @@ function App() {
      path="/homeg"
      element={<Homeg />}
         />
+ 
+         {/* PERFIL GESTOR */}
+      <Route
+         path="/perfilg"
+        element={<Perfilg />}
+        />
+
+        {/* CONFIG */}
+        <Route
+          path="/config"
+          element={<Configuracoes />}
+        />
+
 
       </Routes>
     </Router>
