@@ -22,6 +22,7 @@ import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
 import Perfilg from "./pages/gestao/perfil/perfil"
 import Configuracoes from "./pages/gestao/config/configuracoes";
 
+
 function App() {
   return (
     <Router>
@@ -108,6 +109,7 @@ function App() {
           path="/config"
           element={<Configuracoes />}
         />
+
 
 
       </Routes>
