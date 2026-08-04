@@ -8,22 +8,21 @@
 /* TOPO */
 
 .topo {
-
   width: 100%;
-  background:#2f6f3e;
-  padding: 3px 0;
-
+  background: #2f6f3e;
+  padding: 10px 40px; /* Padding ajustado nas laterais para afastar o botão das bordas */
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .topo-esquerda {
   display: flex;
   align-items: center;
   gap: 10px;
-
 }
+
 /* LOGOS */
 .header-logos {
   display: flex;
@@ -41,29 +40,29 @@
   width: 250px;
   height: auto;
   display: block;
-
-  margin-left: 65px;
 }
 
 .logos {
   width: 220px;
   height: auto;
   display: block;
-
-  /* aproxima da logo da prefeitura */
-  margin-left: 230px;
-
-  /* ajuste fino vertical */
-  margin-top: 2px;
 }
 
+/* BOTÃO VOLTAR */
 .btn-voltar {
   background-color: #fdd835;
+  color: #000;
   border: none;
-  padding: 8px 18px;
+  padding: 8px 24px;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+  margin-right: 20px; /* Garante distância do canto direito */
+  transition: background-color 0.2s;
+}
+
+.btn-voltar:hover {
+  background-color: #fbc02d;
 }
 
 /* CONTEÚDO */
@@ -78,45 +77,50 @@
 .lateral {
   width: 240px;
   background: #2f6f3e;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-
   padding: 20px;
-
+  box-sizing: border-box;
 }
+
 .linha-grande {
   width: calc(100% + 40px);
   height: 2px;
-
   background: rgba(255, 255, 255, 0.9);
-
   margin: 20px 0 0;
-
   margin-left: -20px;
-
-  box-shadow: 0 0 3px rgba(255,255,255,0.3);
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
 .linha-pequena {
   width: calc(100% + 40px);
   height: 2px;
-
   background: rgba(255, 255, 255, 0.5);
-
   margin-left: 0px;
   margin-bottom: 25px;
 }
 
+.logo-inferior {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: white;
+  gap: 8px;
+}
+
+.logo-inferior img {
+  width: 50px;
+  height: auto;
+}
 
 /* CENTRO */
 
 .centro {
   flex: 1;
   background-color: #e0e0e0;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,81 +129,80 @@
 /* CARD */
 
 .card {
-  background-color: #eeeeee;
-
-  padding: 30px;
-
-  border-radius: 12px;
-
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-
-  width: 700px;
+  background-color: #ffffff;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  width: 750px;
+  max-width: 90%;
 }
 
 .card h2 {
   color: #2e7d32;
   text-align: center;
+  font-size: 28px;
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .sub {
   text-align: center;
-  color: #f1f1f1;
-  margin-bottom: 25px;
+  color: #555555; /* Alterado de #f1f1f1 para ficar visível sobre o card claro */
+  margin-bottom: 30px;
+  font-size: 14px;
 }
 
 /* FORM */
 
 .form-area {
   display: flex;
-  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .inputs {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1;
 }
 
 .inputs input {
-  padding: 12px;
-
+  padding: 12px 14px;
   border-radius: 8px;
-
-  border: none;
-
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
-
-  width: 300px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  outline: none;
 }
 
+/* SENHA E CONFIRMAR SENHA LADO A LADO */
 .senha {
   display: flex;
   gap: 10px;
+  width: 100%;
+}
+
+.senha input {
+  flex: 1;
+  width: 50%;
+}
+
+.link-cadastrar {
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
 }
 
 .btn-cadastrar {
   background-color: #43a047;
-
   color: white;
-
   border: none;
-
-  padding: 10px;
-
+  padding: 12px 24px;
   border-radius: 8px;
-
-  width: 150px;
-
-  margin-top: 10px;
-
-  cursor: pointer;
-}
-
-/* IMAGEM */
-
-.imagem img {
-  width: 450px;
-  position: absolute;
-  top: 21rem;
-  left: 64rem;
+  font-weight: bold;
+  font-size: 14px;
 }
