@@ -1,20 +1,12 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Layout.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Phone, Bell, ChevronDown, Leaf
 } from 'lucide-react';
 
-export default function Layout({ 
-  children, 
-  nomeSistema = "CADASTRO",              // Nome no topo do menu verde
-  subtituloSistema = "SEGURO AMBIENTAL", // Subtítulo no topo do menu verde
-  tituloPagina = "Cadastro Seguro Ambiental", // Título no cabeçalho superior branco
-  subtituloPagina = "Secretaria do Meio Ambiente" // Subtítulo no cabeçalho superior branco
-}) {
-  const location = useLocation();
-
+export default function Layout({ children }) {
   return (
     <div className={styles.container}>
       
@@ -23,33 +15,20 @@ export default function Layout({
         <div className={styles.logo}>
           <Leaf size={32} />
           <div>
-            <strong>{nomeSistema}</strong>
-            <span>{subtituloSistema}</span>
+            <strong>CADASTRO</strong>
+            <span>SEGURO AMBIENTAL</span>
           </div>
         </div>
 
         <nav className={styles.nav}>
-          <Link to="/" className={location.pathname === '/' ? styles.active : ''}>
-            <Home size={20} /> Dashboard
-          </Link>
-          <Link to="/mapa" className={location.pathname === '/mapa' ? styles.active : ''}>
-            <MapIcon size={20} /> Mapa
-          </Link>
-          <Link to="/ocorrencias" className={location.pathname === '/ocorrencias' ? styles.active : ''}>
-            <ClipboardList size={20} /> Ocorrências
-          </Link>
-          <Link to="/solicitacoes" className={location.pathname === '/solicitacoes' ? styles.active : ''}>
-            <FileText size={20} /> Minhas Solicitações
-          </Link>
-          <Link to="/relatorios" className={location.pathname === '/relatorios' ? styles.active : ''}>
-            <BarChart2 size={20} /> Relatórios
-          </Link>
-          <Link to="/orientacoes" className={location.pathname === '/orientacoes' ? styles.active : ''}>
-            <HelpCircle size={20} /> Orientações
-          </Link>
-          <Link to="/contato" className={location.pathname === '/contato' ? styles.active : ''}>
-            <Phone size={20} /> Contato
-          </Link>
+          {/* Você pode ajustar os Links do 'to' para as suas rotas reais depois */}
+          <Link to="/" className={styles.active}><Home size={20} /> Dashboard</Link>
+          <Link to="/mapa"><MapIcon size={20} /> Mapa</Link>
+          <Link to="/ocorrencias"><ClipboardList size={20} /> Ocorrências</Link>
+          <Link to="/solicitacoes"><FileText size={20} /> Minhas Solicitações</Link>
+          <Link to="/relatorios"><BarChart2 size={20} /> Relatórios</Link>
+          <Link to="/orientacoes"><HelpCircle size={20} /> Orientações</Link>
+          <Link to="/contato"><Phone size={20} /> Contato</Link>
         </nav>
 
         <div className={styles.helpCard}>
@@ -69,8 +48,8 @@ export default function Layout({
           <div className={styles.headerLeft}>
             <button className={styles.menuBtn}>☰</button>
             <div className={styles.headerTitles}>
-              <h1>{tituloPagina}</h1>
-              <p>{subtituloPagina}</p>
+              <h1>Cadastro Seguro Ambiental</h1>
+              <p>Secretaria do Meio Ambiente</p>
             </div>
           </div>
           
@@ -90,7 +69,7 @@ export default function Layout({
           </div>
         </header>
 
-        {/* CONTEÚDO DINÂMICO */}
+        {/* CONTEÚDO DINÂMICO (Onde as telas vão aparecer) */}
         <div className={styles.pageContent}>
           {children}
         </div>

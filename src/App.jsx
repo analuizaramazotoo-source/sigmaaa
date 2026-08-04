@@ -11,17 +11,15 @@ import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Homec from "./pages/cidadao/homec/homec";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
+import Chat from "./pages/cidadao/chat/chat";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
 import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
+import RelatoEnviado from "./pages/cidadao/relatar/relatoenviado/relatoenviado";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
 import Homeg from "./pages/gestao/homeg/homeg";
-import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
-import Perfilg from "./pages/gestao/perfil/perfil"
-import Configuracoes from "./pages/gestao/config/configuracoes";
-
 
 function App() {
   return (
@@ -40,6 +38,12 @@ function App() {
           element={<RelatarProblema />}
         />
 
+        {/* RELATO ENVIADO */}
+        <Route
+          path="/relato-enviado"
+          element={<RelatoEnviado />}
+        />
+
         {/* CADASTRO */}
         <Route
           path="/cadastro"
@@ -52,6 +56,12 @@ function App() {
           element={<Solicitar />}
         />
 
+        {/* CHAT */}
+        <Route
+          path="/chat"
+          element={<Chat />}
+        />
+
         {/* PERFIL */}
         <Route
           path="/perfil"
@@ -62,12 +72,6 @@ function App() {
         <Route
           path="/status"
           element={<Status />}
-        />
-
-          {/* DENUNCIA URGENTE */}
-         <Route
-         path="/denuncia"
-         element={<DenunciaUrgente />}
         />
 
         {/* ALTERAR */}
@@ -97,20 +101,6 @@ function App() {
      path="/homeg"
      element={<Homeg />}
         />
- 
-         {/* PERFIL GESTOR */}
-      <Route
-         path="/perfilg"
-        element={<Perfilg />}
-        />
-
-        {/* CONFIG */}
-        <Route
-          path="/config"
-          element={<Configuracoes />}
-        />
-
-
 
       </Routes>
     </Router>
