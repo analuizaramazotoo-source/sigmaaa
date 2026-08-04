@@ -1,7 +1,24 @@
 import styles from "./cadastrocidadao.module.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function CadastroCidadao() {
+  const navigate = useNavigate();
+
+  // Permite apenas números nos campos de Celular e CPF
+  const handleOnlyNumbers = (e) => {
+    e.target.value = e.target.value.replace(/\D/g, "");
+  };
+
+  // Trata o cadastro e limpa o histórico da rota para não voltar na setinha
+  const handleCadastrar = () => {
+    navigate("/cidadao", { replace: true });
+  };
+
+  // Define a rota exata de onde o botão Voltar deve ir
+  const handleVoltar = () => {
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className={styles["cadastro-page"]}>
       {/* TOPO */}
@@ -21,7 +38,8 @@ function CadastroCidadao() {
         {/* BOTÃO VOLTAR */}
         <button
           className={styles["btn-voltar"]}
-          onClick={() => window.history.back()}
+          onClick={handleVoltar}
+          type="button"
         >
           Voltar
         </button>
@@ -69,36 +87,50 @@ function CadastroCidadao() {
 
             <div className={styles["form-area"]}>
               <div className={styles.inputs}>
-                <input placeholder="Nome Completo" />
-                <input placeholder="E-mail" />
-                <input placeholder="Celular" />
-                <input placeholder="CPF" />
+                <input type="text" placeholder="Nome Completo" />
+                <input type="email" placeholder="E-mail" />
 
+                {/* Apenas Números */}
+                <input
+                  type="tel"
+                  placeholder="Celular"
+                  onInput={handleOnlyNumbers}
+                />
+                <input
+                  type="text"
+                  placeholder="CPF"
+                  maxLength={11}
+                  onInput={handleOnlyNumbers}
+                />
+
+                {/* Senhas lado a lado */}
                 <div className={styles.senha}>
                   <input
                     placeholder="Senha"
                     type="password"
                   />
-
                   <input
                     placeholder="Confirmar Senha"
                     type="password"
                   />
                 </div>
 
-                <Link to="/cidadao">
-                  <button className={styles["btn-cadastrar"]}>
-                    CADASTRAR
-                  </button>
-                </Link>
+                {/* BOTÃO CADASTRAR */}
+                <button
+                  className={styles["btn-cadastrar"]}
+                  onClick={handleCadastrar}
+                  type="button"
+                >
+                  CADASTRAR
+                </button>
               </div>
-            </div>
 
-            <div className={styles.imagem}>
-              <img
-                src="/cadastrocidadao.png"
-                alt="Segurança"
-              />
+              <div className={styles.imagem}>
+                <img
+                  src="/cadastrocidadao.png"
+                  alt="Segurança"
+                />
+              </div>
             </div>
           </div>
         </div>
