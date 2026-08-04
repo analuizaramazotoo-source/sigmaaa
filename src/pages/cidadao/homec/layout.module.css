@@ -73,8 +73,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  height: 100vh; /* Trava a altura na tela inteira */
+  overflow: hidden; /* Evita que a tela toda role */
 }
 
 /* ================== HEADER ================== */
@@ -116,5 +116,5 @@
 /* ================== PAGE CONTENT ================== */
 .pageContent {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto; /* Apenas o miolo da página rola para baixo! */
 }

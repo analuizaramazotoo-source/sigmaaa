@@ -1,11 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-// Importação corrigida para o caminho da raiz (src/layout.jsx)
-import Layout from "../../../layout";
+import Layout from "./Layout"; // O nosso componente global!
 import styles from "./homec.module.css";
 
-// Ícones profissionais
+// Trocamos os emojis por ícones profissionais
 import { FileWarning, MapPin, Search, AlertTriangle, HelpCircle } from "lucide-react";
 
 import bannerFundo from "../../../assets/banner.png";
@@ -21,12 +19,7 @@ export default function Homec() {
   const navigate = useNavigate();
 
   return (
-    <Layout
-      nomeSistema="CADASTRO"
-      subtituloSistema="SEGURO AMBIENTAL"
-      tituloPagina="Cadastro Seguro Ambiental"
-      subtituloPagina="Secretaria do Meio Ambiente"
-    >
+    <Layout>
       <div className={styles.pageContainer}>
         
         {/* BANNER PRINCIPAL */}
@@ -76,7 +69,7 @@ export default function Homec() {
             <p>EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.</p>
             <button
               className={styles.btnEmergencia}
-              onClick={() => navigate("/denuncia")}
+              onClick={() => navigate("/relatar-problema")}
             >
               RELATAR EMERGÊNCIA
             </button>
