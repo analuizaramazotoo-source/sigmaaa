@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
 
-import prefeituraLogo from '../../../assets/prefeitura.png';
-import arvoreLogo from '../../../assets/arvore.png';
+// CAMINHOS DE IMPORTAÇÃO CORRIGIDOS (Subindo 4 pastas até a raiz 'src')
+import prefeituraLogo from '../../../../assets/prefeitura.png';
+import arvoreLogo from '../../../../assets/arvore.png';
 
 import { 
   MapPin, 
@@ -14,64 +15,112 @@ import {
   Users, 
   LogOut, 
   Bell, 
-  AlertTriangle, 
-  Navigation,
-  CheckCircle2,
-  Clock,
-  Filter,
-  Layers
+  Clock 
 } from 'lucide-react';
 
 export default function HomeE() {
   const navigate = useNavigate();
 
-  // Simulação das ocorrências sincronizadas em tempo real vindas do Módulo da Gestão
-  const [ocorrenciasGestao, setOcorrenciasGestao] = useState([
+  // Dados iniciais padrão para o caso do localStorage estar vazio
+  const pontosPadrao = [
     {
       id: 1,
-      titulo: 'Descarte Irregular de Entulho',
-      endereco: 'Rua das Palmeiras, 142 - Centro',
-      prioridade: 'Alta',
-      status: 'Pendente',
+      titulo: 'Manutenção de Parques',
+      descricao: 'Lixar e pintar bancos; vistoria no playground',
+      prioridade: 'Médio',
+      status: 'Em Andamento',
+      corStatus: 'amarelo', // Amarelo: Em Ação
       data: 'Hoje, 10:30',
-      lat: -22.356,
-      lng: -50.512
+      posicaoTop: '45%',
+      posicaoLeft: '48%'
     },
     {
       id: 2,
-      titulo: 'Corte Não Autorizado de Árvore',
-      endereco: 'Av. Tamoios, 890 - Jardim Unesp',
-      prioridade: 'Urgente',
-      status: 'Em Andamento',
+      titulo: 'Corte Irregular de Árvore',
+      descricao: 'Fiscalizar denúncia na área urbana',
+      prioridade: 'Alta',
+      status: 'Não Visitado',
+      corStatus: 'vermelho', // Vermelho: Não Visitado
       data: 'Hoje, 09:15',
-      lat: -22.361,
-      lng: -50.505
+      posicaoTop: '58%',
+      posicaoLeft: '28%'
     },
     {
       id: 3,
-      titulo: 'Queimada Urbana / Fumaça',
-      endereco: 'Rua Caingangs, 45 - Vila Vargas',
-      prioridade: 'Média',
-      status: 'Pendente',
+      titulo: 'Poda Concluída',
+      descricao: 'Limpeza de galhos após tempestade',
+      prioridade: 'Baixa',
+      status: 'Já Visitado',
+      corStatus: 'verde', // Verde: Já Visitado
       data: 'Ontem, 16:40',
-      lat: -22.348,
-      lng: -50.518
+      posicaoTop: '32%',
+      posicaoLeft: '62%'
     }
-  ]);
+  ];
 
-  const [ocorrenciaSelecionada, setOcorrenciaSelecionada] = useState(ocorrenciasGestao[0]);
+  const [ocorrenciasGestao, setOcorrenciasGestao] = useState([]);
+  const [ocorrenciaSelecionada, setOcorrenciaSelecionada] = useState(null);
+
+  // 1. CARREGAR E ESCUTAR MUDANÇAS EM TEMPO REAL DA GESTÃO
+  const carregarOcorrencias = () => {
+    const salvas = localStorage.getItem('ocorrencias_mapa');
+    if (salvas) {
+      const dados = JSON.parse(salvas);
+      setOcorrenciasGestao(dados);
+      if (dados.length > 0 && !ocorrenciaSelecionada) {
+        setOcorrenciaSelecionada(dados[0]);
+      }
+    } else {
+      // Se for a primeira execução, grava os pontos padrão
+      localStorage.setItem('ocorrencias_mapa', JSON.stringify(pontosPadrao));
+      setOcorrenciasGestao(pontosPadrao);
+      setOcorrenciaSelecionada(pontosPadrao[0]);
+    }
+  };
+
+  useEffect(() => {
+    carregarOcorrencias();
+
+    // Escuta o evento que é disparado quando a Gestão salva algo no localStorage
+    const handleStorageChange = () => {
+      carregarOcorrencias();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // 2. ATUALIZAR STATUS PARA CONCLUÍDO E SINCRONIZAR COM O LOCALSTORAGE
+  const handleMarcarConcluido = (id) => {
+    const listaAtualizada = ocorrenciasGestao.map(item => {
+      if (item.id === id) {
+        return { ...item, status: 'Já Visitado', corStatus: 'verde' };
+      }
+      return item;
+    });
+
+    setOcorrenciasGestao(listaAtualizada);
+    
+    // Atualiza o item selecionado atual
+    const selecionadoAtualizado = listaAtualizada.find(i => i.id === id);
+    setOcorrenciaSelecionada(selecionadoAtualizado);
+
+    // Salva no localStorage para que a Gestão também veja a alteração realizada
+    localStorage.setItem('ocorrencias_mapa', JSON.stringify(listaAtualizada));
+    window.dispatchEvent(new Event('storage'));
+  };
 
   const menuModulos = [
-    { id: 'mapa', titulo: 'Mapa de Ocorrências', icon: <MapPin size={22} />, rota: '/homee', ativo: true },
+    { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee', ativo: true },
     { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/fila-fiscalizacao' },
     { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autos-notificacoes' },
-    { id: 'relatorios', titulo: 'Relatórios de Campo', icon: <BarChart2 size={22} />, rota: '/relatorios-tecnicos' },
+    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorios-tecnicos' },
     { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/legislacao' }
   ];
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR (MESMO PADRÃO DA HOMEG) */}
+      {/* SIDEBAR PADRÃO */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
@@ -84,7 +133,7 @@ export default function HomeE() {
         </div>
 
         <nav className={styles.sidebarNav}>
-          <span className={styles.navCategory}>Menu do Fiscal</span>
+          <span className={styles.navCategory}>Menu do Servidor</span>
           {menuModulos.map(item => (
             <button 
               key={item.id} 
@@ -106,8 +155,8 @@ export default function HomeE() {
       <div className={styles.mainWrapper}>
         <header className={styles.header}>
           <div className={styles.headerLeft}>
-            <h1 className={styles.headerTitle}>Mapa de Ocorrências e Vistorias</h1>
-            <span className={styles.headerSubtitle}>Pontos demarcados em tempo real pela Coordenação / Gestão</span>
+            <h1 className={styles.headerTitle}>Olá, Equipe Ambiental!</h1>
+            <span className={styles.headerSubtitle}>Pontos e vistorias atribuídos em tempo real pela Gestão</span>
           </div>
 
           <div className={styles.headerRight}>
@@ -120,8 +169,8 @@ export default function HomeE() {
                 <Users size={18} />
               </div>
               <div className={styles.userInfo}>
-                <strong className={styles.userName}>Equipe Alpha 01</strong>
-                <span className={styles.userRole}>Fiscalização Externa</span>
+                <strong className={styles.userName}>Equipe de Campo</strong>
+                <span className={styles.userRole}>Operacional</span>
               </div>
             </div>
 
@@ -137,11 +186,20 @@ export default function HomeE() {
 
         <main className={styles.mainContent}>
           <div className={styles.mapGridContainer}>
-            {/* PAINEL LATERAL DE OCORRÊNCIAS */}
+            
+            {/* PAINEL DE LEGENDA E OCORRÊNCIAS */}
             <section className={styles.listSection}>
+              <div className={styles.legendaBox}>
+                <h3>Legenda do Mapa</h3>
+                <ul className={styles.legendaList}>
+                  <li><span className={`${styles.dot} ${styles.dotRed}`}></span> Não Visitado</li>
+                  <li><span className={`${styles.dot} ${styles.dotYellow}`}></span> Em Ação</li>
+                  <li><span className={`${styles.dot} ${styles.dotGreen}`}></span> Já Visitado</li>
+                </ul>
+              </div>
+
               <div className={styles.listHeader}>
-                <h3>Ocorrências Marcadas ({ocorrenciasGestao.length})</h3>
-                <span className={styles.liveBadge}>● Sincronizado com a Gestão</span>
+                <h3>Tarefas da Gestão ({ocorrenciasGestao.length})</h3>
               </div>
 
               <div className={styles.ocorrenciasList}>
@@ -152,67 +210,63 @@ export default function HomeE() {
                     onClick={() => setOcorrenciaSelecionada(item)}
                   >
                     <div className={styles.cardHeaderTop}>
-                      <span className={`${styles.badgePrioridade} ${styles[item.prioridade.toLowerCase()]}`}>
-                        {item.prioridade}
+                      <span className={`${styles.badgeStatus} ${styles['status_' + item.corStatus]}`}>
+                        ● {item.status}
                       </span>
                       <span className={styles.timeText}><Clock size={12} /> {item.data}</span>
                     </div>
 
                     <h4 className={styles.ocorrenciaTitle}>{item.titulo}</h4>
-                    <p className={styles.ocorrenciaAddr}><Navigation size={14} /> {item.endereco}</p>
+                    <p className={styles.ocorrenciaDesc}>{item.descricao}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-                    <div className={styles.cardFooterInfo}>
-                      <span className={styles.statusLabel}>
-                        <CheckCircle2 size={14} /> {item.status}
-                      </span>
-                      <button className={styles.btnVerDetalhes}>
-                        Ver no mapa
+            {/* MAPA DA CIDADE */}
+            <section className={styles.mapSection}>
+              <div className={styles.mapControlsHeader}>
+                <h2>VISÃO GERAL DA CIDADE:</h2>
+                <button className={styles.btnEnviarRelatorio} onClick={() => navigate('/relatorios-tecnicos')}>
+                  Enviar Relatório
+                </button>
+              </div>
+
+              <div className={styles.mapCanvas}>
+                {/* PONTOS / PINOS MARCADOS NO MAPA */}
+                {ocorrenciasGestao.map((ponto) => (
+                  <div 
+                    key={ponto.id}
+                    className={`${styles.mapDotPin} ${styles['dot_' + ponto.corStatus]} ${ocorrenciaSelecionada?.id === ponto.id ? styles.dotActive : ''}`}
+                    style={{ top: ponto.posicaoTop, left: ponto.posicaoLeft }}
+                    onClick={() => setOcorrenciaSelecionada(ponto)}
+                  >
+                  </div>
+                ))}
+
+                {/* CARD DE DETALHES POPUP DO PONTO SELECIONADO */}
+                {ocorrenciaSelecionada && (
+                  <div 
+                    className={styles.mapPopupCard}
+                    style={{ top: '50%', left: '55%' }}
+                  >
+                    <h4>{ocorrenciaSelecionada.titulo}</h4>
+                    <p>{ocorrenciaSelecionada.descricao}</p>
+                    <small>Prioridade: {ocorrenciaSelecionada.prioridade}</small>
+
+                    <div className={styles.popupFooter}>
+                      <button 
+                        className={styles.btnConcluir}
+                        onClick={() => handleMarcarConcluido(ocorrenciaSelecionada.id)}
+                      >
+                        Marcar como Concluído
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            </section>
-
-            {/* ÁREA DO MAPA */}
-            <section className={styles.mapSection}>
-              <div className={styles.mapControlsHeader}>
-                <div className={styles.controlGroup}>
-                  <button className={styles.mapBtnActive}><Layers size={16} /> Satélite / Vias</button>
-                  <button className={styles.mapBtn}><Filter size={16} /> Filtrar Urgentes</button>
-                </div>
-                {ocorrenciaSelecionada && (
-                  <div className={styles.selectedLocationTag}>
-                    <MapPin size={16} /> Selecionado: <strong>{ocorrenciaSelecionada.titulo}</strong>
-                  </div>
                 )}
               </div>
-
-              {/* SIMULAÇÃO DA INTERFACE DO MAPA */}
-              <div className={styles.mapCanvas}>
-                <div className={styles.mapOverlayInfo}>
-                  <p>📍 Marcadores inseridos pelo módulo da <strong>Gestão</strong> são refletidos automaticamente neste mapa.</p>
-                </div>
-
-                {/* PIN DE EXEMPLE NO MAPA */}
-                {ocorrenciasGestao.map((ponto, idx) => (
-                  <div 
-                    key={ponto.id}
-                    className={`${styles.mapPin} ${styles['pin' + (idx + 1)]} ${ocorrenciaSelecionada?.id === ponto.id ? styles.pinActive : ''}`}
-                    onClick={() => setOcorrenciaSelecionada(ponto)}
-                    title={ponto.titulo}
-                  >
-                    <div className={styles.pinIcon}>
-                      <AlertTriangle size={16} />
-                    </div>
-                    <div className={styles.pinTooltip}>
-                      <strong>{ponto.titulo}</strong>
-                      <span>{ponto.endereco}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </section>
+
           </div>
         </main>
       </div>

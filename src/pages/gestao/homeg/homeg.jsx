@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './homeg.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, Phone, Bell, ChevronDown, Plus, ClipboardCheck, 
+  HelpCircle, Bell, ChevronDown, Plus, ClipboardCheck, 
   Clock, Settings, CheckCircle2, Filter, Trash2, Flame, 
   Droplet, Volume2, Leaf, Menu, X, Shield, ArrowUpRight, LogOut, User, Edit3
 } from 'lucide-react';
@@ -46,40 +46,40 @@ const STATS_DATA = [
 const INITIAL_FILA = [
   { 
     id: 1, 
-    title: "Descarte irregular de lixo", 
+    title: "Manutenção de Parques", 
     address: "Rua das Flores, 123 - Centro", 
-    date: "12/06/2026", 
+    date: "12/08/2026", 
     status: "Em campo", 
     statusType: "andamento",
+    corStatus: "amarelo",
+    posicaoTop: "45%",
+    posicaoLeft: "48%",
     icon: Trash2 
   },
   { 
     id: 2, 
-    title: "Queimada urbana", 
+    title: "Corte Irregular de Árvore", 
     address: "Av. Brasil, 456 - Jardim Novo", 
-    date: "08/06/2026", 
+    date: "08/08/2026", 
     status: "Pendente triagem", 
     statusType: "analise",
+    corStatus: "vermelho",
+    posicaoTop: "58%",
+    posicaoLeft: "28%",
     icon: Flame 
   },
   { 
     id: 3, 
-    title: "Poluição de recursos hídricos", 
+    title: "Poda Concluída", 
     address: "Rio das Pedras, s/n - Centro", 
-    date: "02/06/2026", 
+    date: "02/08/2026", 
     status: "Fiscalizado", 
     statusType: "resolvida",
+    corStatus: "verde",
+    posicaoTop: "32%",
+    posicaoLeft: "62%",
     icon: Droplet 
-  },
-  { 
-    id: 4, 
-    title: "Poluição sonora comercial", 
-    address: "Rua da Paz, 78 - Vila Esperança", 
-    date: "28/05/2026", 
-    status: "Arquivado", 
-    statusType: "naoAtendida",
-    icon: Volume2 
-  },
+  }
 ];
 
 export default function Homeg() {
@@ -96,8 +96,8 @@ export default function Homeg() {
   const [modalViewAll, setModalViewAll] = useState(false);
   const [selectedOcorrencia, setSelectedOcorrencia] = useState(null);
 
-  // Lista Dinâmica de Ocorrências
-  const [fila, setFila] = useState(INITIAL_FILA);
+  // Lista Dinâmica de Ocorrências com Persistência
+  const [fila, setFila] = useState([]);
   const [activeFilter, setActiveFilter] = useState('todos');
 
   // Formulário de Nova Ocorrência
@@ -107,44 +107,97 @@ export default function Homeg() {
     category: 'descarte'
   });
 
+  // 1. CARREGAR E ESCUTAR SINCRONIZAÇÃO DO LOCALSTORAGE
+  const carregarFila = () => {
+    const dadosSalvos = localStorage.getItem('ocorrencias_mapa');
+    if (dadosSalvos) {
+      const dados = JSON.parse(dadosSalvos);
+      // Mapeia os ícones conforme a categoria/título
+      const dadosComIcones = dados.map(item => ({
+        ...item,
+        icon: item.iconName === 'flame' ? Flame : item.iconName === 'droplet' ? Droplet : item.iconName === 'volume' ? Volume2 : Trash2
+      }));
+      setFila(dadosComIcones);
+    } else {
+      localStorage.setItem('ocorrencias_mapa', JSON.stringify(INITIAL_FILA));
+      setFila(INITIAL_FILA);
+    }
+  };
+
+  useEffect(() => {
+    carregarFila();
+
+    // Escuta quando a tela da Equipe atualizar status (ex: marcar como concluído)
+    const handleStorageChange = () => {
+      carregarFila();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Auxiliar para salvar no localStorage e notificar outras abas/telas
+  const salvarEAtualizar = (novaFila) => {
+    setFila(novaFila);
+    localStorage.setItem('ocorrencias_mapa', JSON.stringify(novaFila));
+    window.dispatchEvent(new Event('storage'));
+  };
+
+  // 2. CRIAR NOVA OCORRÊNCIA PELA GESTÃO E ENVIAR PARA A EQUIPE
   const handleCreateRecord = (e) => {
     e.preventDefault();
     if (!formData.title || !formData.address) return;
 
-    let icon = Trash2;
-    if (formData.category === 'queimada') icon = Flame;
-    if (formData.category === 'agua') icon = Droplet;
-    if (formData.category === 'som') icon = Volume2;
+    let iconName = 'trash';
+    if (formData.category === 'queimada') iconName = 'flame';
+    if (formData.category === 'agua') iconName = 'droplet';
+    if (formData.category === 'som') iconName = 'volume';
+
+    // Gerar posições aleatórias dentro do mapa simulado para exibição do ponto na Equipe
+    const topRand = Math.floor(Math.random() * 50 + 25) + '%';
+    const leftRand = Math.floor(Math.random() * 50 + 25) + '%';
 
     const newEntry = {
       id: Date.now(),
       title: formData.title,
+      titulo: formData.title,
       address: formData.address,
+      descricao: formData.address,
       date: new Date().toLocaleDateString('pt-BR'),
+      data: 'Hoje, ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       status: "Pendente triagem",
       statusType: "analise",
-      icon: icon
+      corStatus: "vermelho",
+      prioridade: "Média",
+      posicaoTop: topRand,
+      posicaoLeft: leftRand,
+      iconName: iconName
     };
 
-    setFila([newEntry, ...fila]);
+    const novaFila = [newEntry, ...fila];
+    salvarEAtualizar(novaFila);
+
     setFormData({ title: '', address: '', category: 'descarte' });
     setModalNewRecord(false);
   };
 
-  const handleUpdateStatus = (newStatus, newStatusType) => {
+  // 3. ATUALIZAR STATUS PELA GESTÃO
+  const handleUpdateStatus = (newStatus, newStatusType, newCor) => {
     if (!selectedOcorrencia) return;
 
-    setFila(fila.map(item => {
+    const novaFila = fila.map(item => {
       if (item.id === selectedOcorrencia.id) {
         return {
           ...item,
           status: newStatus,
-          statusType: newStatusType
+          statusType: newStatusType,
+          corStatus: newCor || (newStatusType === 'resolvida' ? 'verde' : newStatusType === 'andamento' ? 'amarelo' : 'vermelho')
         };
       }
       return item;
-    }));
+    });
 
+    salvarEAtualizar(novaFila);
     setSelectedOcorrencia(null);
   };
 
@@ -386,7 +439,7 @@ export default function Homeg() {
 
               <div className={styles.requestsList}>
                 {filteredFila.slice(0, 4).map((item) => {
-                  const ItemIcon = item.icon;
+                  const ItemIcon = item.icon || Trash2;
                   return (
                     <div 
                       key={item.id} 
@@ -398,11 +451,11 @@ export default function Homeg() {
                         <ItemIcon size={18} />
                       </div>
                       <div className={styles.requestBody}>
-                        <strong className={styles.requestTitle}>{item.title}</strong>
-                        <p className={styles.requestAddress}>{item.address}</p>
+                        <strong className={styles.requestTitle}>{item.title || item.titulo}</strong>
+                        <p className={styles.requestAddress}>{item.address || item.descricao}</p>
                       </div>
                       <div className={styles.requestMeta}>
-                        <span className={styles.requestDate}>{item.date}</span>
+                        <span className={styles.requestDate}>{item.date || item.data}</span>
                         <span className={`${styles.badgeStatus} ${styles[`status_${item.statusType}`]}`}>
                           {item.status} <Edit3 size={10} style={{ marginLeft: '4px' }} />
                         </span>
@@ -449,31 +502,31 @@ export default function Homeg() {
               <button onClick={() => setSelectedOcorrencia(null)} className={styles.closeBtnModal}><X size={18} /></button>
             </div>
             <div className={styles.statusChangeBody}>
-              <strong>{selectedOcorrencia.title}</strong>
-              <p>{selectedOcorrencia.address}</p>
+              <strong>{selectedOcorrencia.title || selectedOcorrencia.titulo}</strong>
+              <p>{selectedOcorrencia.address || selectedOcorrencia.descricao}</p>
               
               <div className={styles.statusOptionsList}>
                 <button 
                   className={`${styles.statusOptionBtn} ${styles.status_analise}`}
-                  onClick={() => handleUpdateStatus("Pendente triagem", "analise")}
+                  onClick={() => handleUpdateStatus("Pendente triagem", "analise", "vermelho")}
                 >
                   <Clock size={16} /> Marcar como "Pendente triagem"
                 </button>
                 <button 
                   className={`${styles.statusOptionBtn} ${styles.status_andamento}`}
-                  onClick={() => handleUpdateStatus("Em campo", "andamento")}
+                  onClick={() => handleUpdateStatus("Em campo", "andamento", "amarelo")}
                 >
                   <Settings size={16} /> Marcar como "Em campo"
                 </button>
                 <button 
                   className={`${styles.statusOptionBtn} ${styles.status_resolvida}`}
-                  onClick={() => handleUpdateStatus("Fiscalizado", "resolvida")}
+                  onClick={() => handleUpdateStatus("Fiscalizado", "resolvida", "verde")}
                 >
                   <CheckCircle2 size={16} /> Marcar como "Fiscalizado"
                 </button>
                 <button 
                   className={`${styles.statusOptionBtn} ${styles.status_naoAtendida}`}
-                  onClick={() => handleUpdateStatus("Arquivado", "naoAtendida")}
+                  onClick={() => handleUpdateStatus("Arquivado", "naoAtendida", "vermelho")}
                 >
                   <X size={16} /> Marcar como "Arquivado / Improcedente"
                 </button>
@@ -532,7 +585,7 @@ export default function Homeg() {
 
               <div className={styles.modalActions}>
                 <button type="button" onClick={() => setModalNewRecord(false)} className={styles.btnCancel}>Cancelar</button>
-                <button type="submit" className={styles.btnPrimaryModal}>Salvar Registro</button>
+                <button type="submit" className={styles.btnPrimaryModal}>Salvar e Enviar para Equipe</button>
               </div>
             </form>
           </div>
@@ -590,7 +643,7 @@ export default function Homeg() {
             </div>
             <div className={styles.modalListScroll}>
               {fila.map((item) => {
-                const ItemIcon = item.icon;
+                const ItemIcon = item.icon || Trash2;
                 return (
                   <div 
                     key={item.id} 
@@ -604,11 +657,11 @@ export default function Homeg() {
                       <ItemIcon size={18} />
                     </div>
                     <div className={styles.requestBody}>
-                      <strong className={styles.requestTitle}>{item.title}</strong>
-                      <p className={styles.requestAddress}>{item.address}</p>
+                      <strong className={styles.requestTitle}>{item.title || item.titulo}</strong>
+                      <p className={styles.requestAddress}>{item.address || item.descricao}</p>
                     </div>
                     <div className={styles.requestMeta}>
-                      <span className={styles.requestDate}>{item.date}</span>
+                      <span className={styles.requestDate}>{item.date || item.data}</span>
                       <span className={`${styles.badgeStatus} ${styles[`status_${item.statusType}`]}`}>
                         {item.status} <Edit3 size={10} style={{ marginLeft: '4px' }} />
                       </span>
