@@ -262,7 +262,7 @@
   flex-direction: column;
 }
 
-/* GRID DO MAPA E OCORRÊNCIAS */
+/* GRID DO MAPA E LEGENDA */
 .mapGridContainer {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -271,7 +271,7 @@
   min-height: calc(100vh - 130px);
 }
 
-/* PAINEL DE LEGENDA E LISTA */
+/* PAINEL ESQUERDO */
 .listSection {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -410,7 +410,7 @@
   line-height: 1.35;
 }
 
-/* ÁREA DO MAPA MELHORADA */
+/* ÁREA DO MAPA */
 .mapSection {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -456,7 +456,7 @@
   color: white;
 }
 
-/* CANVAS DO MAPA COM ESTILO CIDADE */
+/* CANVAS DO MAPA */
 .mapCanvas {
   flex: 1;
   background-color: #e2e8f0;
@@ -469,7 +469,6 @@
   overflow: hidden;
 }
 
-/* Efeito visual de malha urbana/zonas */
 .mapCanvas::before {
   content: "";
   position: absolute;
@@ -480,7 +479,7 @@
   pointer-events: none;
 }
 
-/* PONTOS / PINOS DO MAPA COM ANIMAÇÃO DE PULSO */
+/* PONTOS / PINOS DO MAPA */
 .mapDotPin {
   position: absolute;
   width: 18px;
@@ -521,52 +520,61 @@
   100% { transform: scale(1.8); opacity: 0; }
 }
 
-/* POPUP MODERNO SOBRE O PONTO SELECIONADO */
+/* CARD FIXO NO CANTO INFERIOR DIREITO */
 .mapPopupCard {
   position: absolute;
-  transform: translate(-50%, -120%);
-  width: 240px;
+  bottom: 20px;
+  right: 20px;
+  width: 280px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 1.1rem;
   box-shadow: var(--shadow-lg);
   z-index: 20;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  animation: fadeInPopup 0.2s ease-out;
+  gap: 0.5rem;
+  animation: slideInCorner 0.25s ease-out;
 }
 
-@keyframes fadeInPopup {
-  from { opacity: 0; transform: translate(-50%, -110%); }
-  to { opacity: 1; transform: translate(-50%, -120%); }
+@keyframes slideInCorner {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .mapPopupCard h4 {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--brand-dark);
   margin: 0;
 }
 
 .mapPopupCard p {
-  font-size: 0.775rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .mapPopupCard small {
-  font-size: 0.7rem;
+  font-size: 0.725rem;
   font-weight: 700;
   color: var(--brand-primary);
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .popupFooter {
-  margin-top: 0.4rem;
-  padding-top: 0.4rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
   border-top: 1px dashed var(--border-color);
 }
 
@@ -575,9 +583,9 @@
   background-color: var(--brand-primary);
   color: white;
   border: none;
-  padding: 0.45rem 0.75rem;
+  padding: 0.65rem;
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -603,5 +611,12 @@
 
   .mapCanvas {
     min-height: 380px;
+  }
+
+  .mapPopupCard {
+    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
+    bottom: 20px;
   }
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
 
-// CAMINHOS DE IMPORTAÇÃO CORRIGIDOS (Subindo 4 pastas até a raiz 'src')
+// CAMINHOS DE IMPORTAÇÃO (Ajustados para subir 4 pastas até 'src/assets')
 import prefeituraLogo from '../../../../assets/prefeitura.png';
 import arvoreLogo from '../../../../assets/arvore.png';
 
@@ -21,7 +21,7 @@ import {
 export default function HomeE() {
   const navigate = useNavigate();
 
-  // Dados iniciais padrão para o caso do localStorage estar vazio
+  // PONTOS PADRÃO (Caso o localStorage ainda não tenha sido populado)
   const pontosPadrao = [
     {
       id: 1,
@@ -29,7 +29,7 @@ export default function HomeE() {
       descricao: 'Lixar e pintar bancos; vistoria no playground',
       prioridade: 'Médio',
       status: 'Em Andamento',
-      corStatus: 'amarelo', // Amarelo: Em Ação
+      corStatus: 'amarelo',
       data: 'Hoje, 10:30',
       posicaoTop: '45%',
       posicaoLeft: '48%'
@@ -40,7 +40,7 @@ export default function HomeE() {
       descricao: 'Fiscalizar denúncia na área urbana',
       prioridade: 'Alta',
       status: 'Não Visitado',
-      corStatus: 'vermelho', // Vermelho: Não Visitado
+      corStatus: 'vermelho',
       data: 'Hoje, 09:15',
       posicaoTop: '58%',
       posicaoLeft: '28%'
@@ -51,7 +51,7 @@ export default function HomeE() {
       descricao: 'Limpeza de galhos após tempestade',
       prioridade: 'Baixa',
       status: 'Já Visitado',
-      corStatus: 'verde', // Verde: Já Visitado
+      corStatus: 'verde',
       data: 'Ontem, 16:40',
       posicaoTop: '32%',
       posicaoLeft: '62%'
@@ -71,7 +71,6 @@ export default function HomeE() {
         setOcorrenciaSelecionada(dados[0]);
       }
     } else {
-      // Se for a primeira execução, grava os pontos padrão
       localStorage.setItem('ocorrencias_mapa', JSON.stringify(pontosPadrao));
       setOcorrenciasGestao(pontosPadrao);
       setOcorrenciaSelecionada(pontosPadrao[0]);
@@ -81,7 +80,6 @@ export default function HomeE() {
   useEffect(() => {
     carregarOcorrencias();
 
-    // Escuta o evento que é disparado quando a Gestão salva algo no localStorage
     const handleStorageChange = () => {
       carregarOcorrencias();
     };
@@ -90,7 +88,7 @@ export default function HomeE() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // 2. ATUALIZAR STATUS PARA CONCLUÍDO E SINCRONIZAR COM O LOCALSTORAGE
+  // 2. MARCAR OCORRÊNCIA COMO CONCLUÍDA E SALVAR
   const handleMarcarConcluido = (id) => {
     const listaAtualizada = ocorrenciasGestao.map(item => {
       if (item.id === id) {
@@ -101,11 +99,9 @@ export default function HomeE() {
 
     setOcorrenciasGestao(listaAtualizada);
     
-    // Atualiza o item selecionado atual
     const selecionadoAtualizado = listaAtualizada.find(i => i.id === id);
     setOcorrenciaSelecionada(selecionadoAtualizado);
 
-    // Salva no localStorage para que a Gestão também veja a alteração realizada
     localStorage.setItem('ocorrencias_mapa', JSON.stringify(listaAtualizada));
     window.dispatchEvent(new Event('storage'));
   };
@@ -187,7 +183,7 @@ export default function HomeE() {
         <main className={styles.mainContent}>
           <div className={styles.mapGridContainer}>
             
-            {/* PAINEL DE LEGENDA E OCORRÊNCIAS */}
+            {/* PAINEL DE LEGENDA E LISTA DE OCORRÊNCIAS */}
             <section className={styles.listSection}>
               <div className={styles.legendaBox}>
                 <h3>Legenda do Mapa</h3>
@@ -233,26 +229,22 @@ export default function HomeE() {
               </div>
 
               <div className={styles.mapCanvas}>
-                {/* PONTOS / PINOS MARCADOS NO MAPA */}
+                {/* PINOS/PONTOS NO MAPA */}
                 {ocorrenciasGestao.map((ponto) => (
                   <div 
                     key={ponto.id}
                     className={`${styles.mapDotPin} ${styles['dot_' + ponto.corStatus]} ${ocorrenciaSelecionada?.id === ponto.id ? styles.dotActive : ''}`}
                     style={{ top: ponto.posicaoTop, left: ponto.posicaoLeft }}
                     onClick={() => setOcorrenciaSelecionada(ponto)}
-                  >
-                  </div>
+                  />
                 ))}
 
-                {/* CARD DE DETALHES POPUP DO PONTO SELECIONADO */}
+                {/* CARD DE DETALHES FIXO NO CANTO INFERIOR DIREITO */}
                 {ocorrenciaSelecionada && (
-                  <div 
-                    className={styles.mapPopupCard}
-                    style={{ top: '50%', left: '55%' }}
-                  >
+                  <div className={styles.mapPopupCard}>
                     <h4>{ocorrenciaSelecionada.titulo}</h4>
                     <p>{ocorrenciaSelecionada.descricao}</p>
-                    <small>Prioridade: {ocorrenciaSelecionada.prioridade}</small>
+                    <small>PRIORIDADE: {ocorrenciaSelecionada.prioridade}</small>
 
                     <div className={styles.popupFooter}>
                       <button 
