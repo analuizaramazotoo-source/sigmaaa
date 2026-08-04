@@ -1,0 +1,247 @@
+:root {
+  --bg-app: #f0fdf4;
+  --bg-surface: #ffffff;
+  --border-color: #d1fae5;
+  --brand-primary: #059669;
+  --brand-primary-hover: #047857;
+  --brand-light: #dcfce7;
+  --brand-dark: #065f46;
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-md: 0 4px 12px rgba(5, 150, 105, 0.1);
+}
+
+.appContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 75px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.headerTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0;
+}
+
+.headerSubtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.btnBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: var(--brand-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnBack:hover {
+  background-color: var(--brand-light);
+  color: var(--brand-dark);
+}
+
+.mainContent {
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1.25rem;
+}
+
+.headerIconBadge {
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  display: flex;
+}
+
+.filterBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filterItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 350px;
+}
+
+.filterIcon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.filterItem select {
+  width: 100%;
+  padding: 0.65rem 0.75rem 0.65rem 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  outline: none;
+  font-size: 0.875rem;
+  background-color: white;
+  color: var(--text-primary);
+}
+
+.btnFilter {
+  background-color: var(--brand-light);
+  color: var(--brand-dark);
+  border: 1px solid var(--border-color);
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btnFilter:hover {
+  background-color: var(--brand-primary);
+  color: white;
+}
+
+.gridRelatorios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.cardRelatorio {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  background-color: #f4fbf7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cardRelatorio:hover {
+  border-color: var(--brand-primary);
+  transform: translateY(-2px);
+}
+
+.infoRelatorio {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.badgePdf {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+}
+
+.badgeExcel {
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+}
+
+.tituloRelatorio {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0 0 0.35rem 0;
+}
+
+.descRelatorio {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.35;
+}
+
+.metaRelatorio {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.btnDownload {
+  background-color: var(--brand-primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.btnDownload:hover {
+  background-color: var(--brand-primary-hover);
+}

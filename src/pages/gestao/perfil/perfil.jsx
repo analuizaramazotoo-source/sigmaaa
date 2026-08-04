@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './perfil.module.css';
+import styles from './homeg.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Bell, ChevronDown, Leaf, Menu, X, Shield, 
   LogOut, User, Settings, Save, Key, Mail, Phone, BadgeCheck, Camera
 } from 'lucide-react';
 
-export default function Perfilg() {
+export default function Perfil() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
