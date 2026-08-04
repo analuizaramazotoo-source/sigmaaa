@@ -1,0 +1,276 @@
+legislacao.module.css:root {
+  --bg-app: #f0fdf4;
+  --bg-surface: #ffffff;
+  --border-color: #d1fae5;
+  --brand-primary: #059669;
+  --brand-primary-hover: #047857;
+  --brand-light: #dcfce7;
+  --brand-dark: #065f46;
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-md: 0 4px 12px rgba(5, 150, 105, 0.1);
+}
+
+.appContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 75px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.headerTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0;
+}
+
+.headerSubtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.btnBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: var(--brand-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnBack:hover {
+  background-color: var(--brand-light);
+  color: var(--brand-dark);
+}
+
+.mainContent {
+  padding: 2rem;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.cardPrincipal {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1.25rem;
+}
+
+.headerIconBadge {
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  display: flex;
+}
+
+.searchBar {
+  margin-bottom: 2rem;
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-secondary);
+}
+
+.inputContainer input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 3rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.inputContainer input:focus {
+  border-color: var(--brand-primary);
+}
+
+.listaDocumentos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.itemDocumento {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: #fcfdfc;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.itemDocumento:hover {
+  border-color: var(--brand-primary);
+  transform: translateX(5px);
+}
+
+.iconCircle {
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  padding: 0.75rem;
+  border-radius: 50%;
+  display: flex;
+}
+
+.docContent {
+  flex: 1;
+}
+
+.docHeaderInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.badgeCategoria {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+}
+
+.docData {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.docTitulo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0 0 0.5rem 0;
+}
+
+.docDescricao {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.docActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btnVisualizar {
+  background-color: var(--brand-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btnLinkExterno {
+  background-color: transparent;
+  color: var(--brand-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btnLinkExterno:hover {
+  background-color: var(--brand-light);
+}
+
+.noResults {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ajudaFiscais {
+  margin-top: 2rem;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+}
