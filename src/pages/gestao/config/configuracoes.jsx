@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './homeg.module.css';
+import styles from './configuracoes.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Bell, ChevronDown, Menu, X, Shield, 
