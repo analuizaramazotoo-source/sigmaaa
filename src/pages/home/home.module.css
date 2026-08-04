@@ -1,273 +1,228 @@
-* { 
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* CONTAINER FULL */
 .container {
-  width: 100%;
   min-height: 100vh;
-  background: url("/fundo.jpg") no-repeat center center;
-  background-size: cover;
-  position: relative;
-}
-
-/* OVERLAY */
-.container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(2px);
-}
-
-/* BARRA VERDE DO TOPO */
-.topbar {
   width: 100%;
-  background: linear-gradient(90deg, #2f6f3e, #3d8b4e);
-  padding: 3px 0;
+  background: linear-gradient(rgba(20, 60, 30, 0.75), rgba(20, 60, 30, 0.75)),
+              url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
 }
 
 /* HEADER */
 .header {
-  position: relative;
-  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 50px;
-  color: #e6ffe6;
+  padding: 15px 40px;
+  background-color: rgba(20, 60, 30, 0.85);
 }
 
-.headerLogos {
+.logoArea {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 15px;
 }
 
-.logo {
-  display: flex;
-  gap: 4px;
-  font-weight: 500;
-  align-items: center;
+.logoPrefeitura {
+  height: 45px;
+  width: auto;
 }
 
-.logoImg {
-  width: 200px;  
-  height: 65px;
-  object-fit: contain;
+.logoSecretaria {
+  height: 40px;
+  width: auto;
 }
 
-.logos {
-  width: 220px;  
-  height: 75px;
-  position: relative;
-  right: 45px;
-  object-fit: contain;
-}
-
-/* NOVAS INFORMAÇÕES DO HEADER */
 .headerInfo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 0.85rem;
+  gap: 15px;
 }
 
-.infoTime {
-  font-weight: 500;
+.horario {
+  color: #ffffff;
+  font-size: 12px;
   background-color: rgba(255, 255, 255, 0.15);
-  color: #e6ffe6;
   padding: 6px 14px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
 }
 
-.infoBadge {
-  background-color: #c8facc;
-  color: #1e4d2b;
-  font-weight: 700;
+.btnPortal {
+  color: #ffffff;
+  border: 1px solid #ffffff;
   padding: 6px 14px;
   border-radius: 20px;
-  font-size: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-/* MAIN */
-.main {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  color: white;
-  min-height: calc(100vh - 80px);
+.btnPortal:hover {
+  background-color: #ffffff;
+  color: #1e5631;
+}
+
+/* MAIN CONTENT */
+.mainContent {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 20px 0;
+  padding: 40px 20px;
 }
 
-.main h1 {
-  font-size: 16px;
-  opacity: 0.8;
+/* HERO SECTION */
+.heroSection {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 25px;
 }
 
-.main h2 {
-  font-size: 28px;
-  margin: 10px 0;
-  color: #c8facc;
+.mainTitle {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-.sub {
-  font-size: 13px;
+.description {
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* CARD DE PERFIS */
+.profilesCard {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 35px 40px;
+  width: 100%;
+  max-width: 850px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.profilesTitle {
+  color: #ffffff;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+}
+
+.profilesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .profilesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profileBox {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.profileBox:hover {
+  transform: translateY(-4px);
+}
+
+.iconCircle {
+  color: #2e7d32;
+  margin-bottom: 12px;
+}
+
+.profileBox h3 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.profileBox p {
+  font-size: 12px;
+  color: #666;
   margin-bottom: 20px;
 }
 
-/* BOTÃO PRINCIPAL */
-.btnPrimary {
-  background: linear-gradient(135deg, #c8facc, #a4e8a6);
-  color: #1e4d2b;
-  border: none;
-  padding: 8px 18px;
-  font-size: 13px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  display: inline-block;
-  width: auto;
-  margin: 0 auto;
-  transition: 0.2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.btnPrimary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.login {
-  margin-top: 10px;
-  font-size: 13px;
-}
-
-.login a {
-  color: #c8facc;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.login a:hover {
-  text-decoration: underline;
-}
-
-/* WRAPPER DOS CARDS */
-.cardsWrapper {
-  margin-top: 40px;
-  padding: 25px 30px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(6px);
-  max-width: 900px;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.perfilTitle {
-  font-size: 13px;
-  margin-bottom: 15px;
-  color: #d2f5d6;
-  letter-spacing: 1px;
-  font-weight: 600;
-}
-
-/* CARDS */
-.cards {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.card {
-  background: rgba(255, 255, 255, 0.95);
-  width: 230px;
-  flex: 0 0 230px;
-  padding: 18px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-}
-
-.cardImg {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  margin-bottom: 8px;
-}
-
-.card h3 {
-  margin-bottom: 5px;
-  color: #2c3e2c;
-  font-size: 16px;
-}
-
-.card span {
-  font-size: 12px;
-  display: block;
-  margin-bottom: 12px;
-  color: #555;
-}
-
-/* BOTÃO CARD */
-.card button {
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
+.btnSelecionar {
+  background-color: #2e7d32;
   color: white;
   border: none;
-  padding: 6px 14px;
-  font-size: 12px;
-  border-radius: 15px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  transition: 0.2s;
+  transition: background-color 0.2s;
+  width: 100%;
 }
 
-.card button:hover {
-  background: linear-gradient(135deg, #43a047, #1b5e20);
+.btnSelecionar:hover {
+  background-color: #1b5e20;
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px 20px;
-  }
+/* PARTE INFERIOR: ENTRAR */
+.loginBottomSection {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .logos {
-    right: 0;
-  }
+.loginDivider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 20px;
+}
 
-  .headerInfo {
-    flex-direction: column;
-    gap: 6px;
-  }
+.loginContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  font-size: 14px;
+}
 
-  .cards {
-    flex-direction: column;
-    align-items: center;
-  }
+.loginIcon {
+  color: #a5d6a7;
+}
 
-  .card {
-    width: 100%;
-    max-width: 280px;
-    flex: none;
-  }
+.btnLoginLink {
+  background-color: #ffffff;
+  color: #1e5631;
+  padding: 8px 22px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btnLoginLink:hover {
+  background-color: #e8f5e9;
+  transform: scale(1.05);
 }

@@ -1,88 +1,119 @@
+import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./home.module.css";
-import { Link } from "react-router-dom";
+import { Users, User, ShieldCheck, LogIn } from "lucide-react";
 
-export default function Home() {
+function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.container}>
+      {/* TOPO / HEADER */}
+      <header className={styles.header}>
+        <div className={styles.logoArea}>
+          <img
+            src="/logotupa.png"
+            alt="Prefeitura de Tupã"
+            className={styles.logoPrefeitura}
+          />
+          <img
+            src="/secretaria meio ambiente.png"
+            alt="Secretaria do Meio Ambiente"
+            className={styles.logoSecretaria}
+          />
+        </div>
 
-      <header className={styles.topbar}>
-        <div className={styles.header}>
-
-          <div className={styles.headerLogos}>
-            <div className={styles.logo}>
-              <img src="/logotupa.png" className={styles.logoImg} alt="Logo Tupã" />
-              <img src="/secre.png" className={styles.logos} alt="Secretaria do Meio Ambiente" />
-            </div>
-          </div>
-
-          {/* Substituição dos botões pelas informações de atendimento */}
-          <div className={styles.headerInfo}>
-            <span className={styles.infoTime}>
-              🕒 Atendimento: Seg a Sex • 07h30 às 17h00
-            </span>
-            <span className={styles.infoBadge}>
-              ● Portal Online
-            </span>
-          </div>
-
+        <div className={styles.headerInfo}>
+          <span className={styles.horario}>
+            Atendimento: Seg a Sex - 07h30 às 17h00
+          </span>
+          <a
+            href="https://www.tupa.sp.gov.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.btnPortal}
+          >
+            Portal Online
+          </a>
         </div>
       </header>
 
-      <main className={styles.main}>
-
-        <h1>CRIE SUA CONTA NA</h1>
-        <h2>SECRETARIA DO MEIO AMBIENTE</h2>
-
-        <p className={styles.sub}>
-          Registre-se e conecte-se ao portal para solicitar serviços ambientais
-        </p>
-
-        <button className={styles.btnPrimary}>
-          Criar minha conta
-        </button>
-
-        <p className={styles.login}>
-          Já possui conta? <Link to="/login">Entrar</Link>
-        </p>
-
-        <div className={styles.cardsWrapper}>
-
-          <p className={styles.perfilTitle}>
-            SELECIONE SEU PERFIL:
+      {/* CONTEÚDO PRINCIPAL */}
+      <main className={styles.mainContent}>
+        {/* TÍTULO PRINCIPAL */}
+        <div className={styles.heroSection}>
+          <h1 className={styles.mainTitle}>SECRETARIA DO MEIO AMBIENTE</h1>
+          <p className={styles.description}>
+            Selecione seu perfil abaixo para realizar o cadastro ou acesse sua conta.
           </p>
-
-          <div className={styles.cards}>
-
-            <div className={styles.card}>
-              <img src="/equipe.png" className={styles.cardImg} alt="Equipe" />
-              <h3>Equipe</h3>
-              <span>Membros das equipes</span>
-              <button>Selecionar</button>
-            </div>
-
-            <div className={styles.card}>
-              <img src="/cidadao.png" className={styles.cardImg} alt="Cidadão" />
-              <h3>Cidadão</h3>
-              <span>Solicitação de serviços</span>
-
-              <Link to="/cadastro-cidadao">
-                <button>Selecionar</button>
-              </Link>
-            </div>
-
-            <div className={styles.card}>
-              <img src="/gestao.png" className={styles.cardImg} alt="Gestão" />
-              <h3>Gestão</h3>
-              <span>Coordenação</span>
-              <button>Selecionar</button>
-            </div>
-
-          </div>
-
         </div>
 
-      </main>
+        {/* SEÇÃO DE SELEÇÃO DE PERFIL */}
+        <div className={styles.profilesCard}>
+          <h2 className={styles.profilesTitle}>CRIAR CADASTRO POR PERFIL:</h2>
 
+          <div className={styles.profilesGrid}>
+            {/* CARD EQUIPE */}
+            <div className={styles.profileBox}>
+              <div className={styles.iconCircle}>
+                <Users size={36} />
+              </div>
+              <h3>Equipe</h3>
+              <p>Membros das equipes operacionais</p>
+              <button
+                className={styles.btnSelecionar}
+                onClick={() => navigate("/cadastroeq")}
+              >
+                Cadastrar
+              </button>
+            </div>
+
+            {/* CARD CIDADÃO */}
+            <div className={styles.profileBox}>
+              <div className={styles.iconCircle}>
+                <User size={36} />
+              </div>
+              <h3>Cidadão</h3>
+              <p>Solicitação e relatos de serviços</p>
+              <button
+                className={styles.btnSelecionar}
+                onClick={() => navigate("/cadastro")}
+              >
+                Cadastrar
+              </button>
+            </div>
+
+            {/* CARD GESTÃO */}
+            <div className={styles.profileBox}>
+              <div className={styles.iconCircle}>
+                <ShieldCheck size={36} />
+              </div>
+              <h3>Gestão</h3>
+              <p>Coordenação e administração</p>
+              <button
+                className={styles.btnSelecionar}
+                onClick={() => navigate("/cadastrog")}
+              >
+                Cadastrar Gestão
+              </button>
+            </div>
+          </div>
+
+          {/* PARTE INFERIOR: JÁ POSSUI CONTA? ENTRAR */}
+          <div className={styles.loginBottomSection}>
+            <div className={styles.loginDivider}></div>
+            <div className={styles.loginContent}>
+              <LogIn size={20} className={styles.loginIcon} />
+              <span>Já possui uma conta cadastrada?</span>
+              <Link to="/login" className={styles.btnLoginLink}>
+                ENTRAR
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
+
+export default Home;

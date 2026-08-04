@@ -1,82 +1,150 @@
-import styles from "./login.module.css"
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import styles from "./login.module.css";
+import {
+  LayoutDashboard,
+  ClipboardList,
+  HelpCircle,
+  Phone,
+  ArrowLeft,
+  LogIn,
+  Lock
+} from "lucide-react";
 
 function Login() {
   const navigate = useNavigate();
+  const [cpfOuEmail, setCpfOuEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
-  function voltarPagina() {
-    navigate("/");
-  }
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Redireciona para o painel do cidadão (ou altere conforme o fluxo)
+    navigate("/cidadao");
+  };
 
   return (
-    <div className="container">
+    <div className={styles.container}>
+      {/* SIDEBAR / MENU LATERAL */}
+      <aside className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>
+          <div className={styles.logoArea}>
+            <span className={styles.logoIcon}>🌱</span>
+            <div className={styles.logoText}>
+              <h2>CADASTRO</h2>
+              <p>SEGURO AMBIENTAL</p>
+            </div>
+          </div>
+        </div>
 
-      <header className="topbar">
-        <div className="header">
+        <nav className={styles.navMenu}>
+          <Link to="/" className={styles.navItem}>
+            <LayoutDashboard size={20} />
+            <span>Início</span>
+          </Link>
+          <Link to="/login" className={`${styles.navItem} ${styles.active}`}>
+            <LogIn size={20} />
+            <span>Login</span>
+          </Link>
+          <Link to="/cadastro" className={styles.navItem}>
+            <ClipboardList size={20} />
+            <span>Cadastro</span>
+          </Link>
+          <Link to="/" className={styles.navItem}>
+            <HelpCircle size={20} />
+            <span>Orientações</span>
+          </Link>
+        </nav>
 
-          <div className="logo">
-            <img src="/logotupa.png" alt="Prefeitura" className="logo-img" />
+        <div className={styles.sidebarFooter}>
+          <div className={styles.ajudaCard}>
+            <Phone size={18} />
+            <div>
+              <strong>Precisa de ajuda?</strong>
+              <p>Fale conosco</p>
+            </div>
+          </div>
+        </div>
+      </aside>
 
-            <div className="logo-text">
-              <div className="secretaria">
-                <img src="/secre.png" alt="Meio Ambiente" />
-              </div>
+      {/* CONTEÚDO PRINCIPAL */}
+      <main className={styles.mainContent}>
+        {/* CABEÇALHO SUPERIOR */}
+        <header className={styles.topHeader}>
+          <div className={styles.headerLeft}>
+            <div>
+              <h1 className={styles.pageTitle}>Cadastro Seguro Ambiental</h1>
+              <p className={styles.subTitle}>Secretaria do Meio Ambiente</p>
             </div>
           </div>
 
-          <div className="actions">
-            <button
-              className="btn-outline"
-              onClick={voltarPagina}
-            >
-              Voltar
+          <div className={styles.headerRight}>
+            <button className={styles.btnVoltar} onClick={() => navigate("/")}>
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
             </button>
           </div>
+        </header>
 
-        </div>
-      </header>
+        {/* CORPO DA PÁGINA (CARD DE LOGIN) */}
+        <div className={styles.contentBody}>
+          <div className={styles.cardLogin}>
+            <h2 className={styles.cardTitle}>Acesse sua Conta</h2>
+            <p className={styles.cardSub}>
+              Informe os seus dados para entrar no sistema.
+            </p>
 
-      {/* MAIN */}
-      <main className="main">
+            <form onSubmit={handleLogin} className={styles.formGrid}>
+              {/* ÁREA DOS INPUTS */}
+              <div className={styles.inputsArea}>
+                <input
+                  type="text"
+                  placeholder="CPF ou E-mail"
+                  className={styles.inputField}
+                  value={cpfOuEmail}
+                  onChange={(e) => setCpfOuEmail(e.target.value)}
+                  required
+                />
 
-        <h1>ENTRE NA</h1>
-        <h2>SECRETARIA DO MEIO AMBIENTE</h2>
+                <input
+                  type="password"
+                  placeholder="Senha"
+                  className={styles.inputField}
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  required
+                />
 
-        <div className="cards-wrapper">
+                <div className={styles.esqueciSenhaArea}>
+                  <Link to="/esqueci-senha" className={styles.esqueciSenhaLink}>
+                    Esqueceu a senha?
+                  </Link>
+                </div>
 
-          <p className="perfil-title">
-            SELECIONE SEU PERFIL:
-          </p>
+                <div className={styles.btnArea}>
+                  <button className={styles.btnLogin} type="submit">
+                    ENTRAR
+                  </button>
+                </div>
 
-          <div className="cards">
+                <div className={styles.criarContaArea}>
+                  <span>Ainda não tem conta? </span>
+                  <Link to="/cadastro" className={styles.criarContaLink}>
+                    Cadastre-se
+                  </Link>
+                </div>
+              </div>
 
-            <div className="card">
-              <img src="/equipe.png" className="card-img" alt="Equipe" />
-              <h3>Equipe</h3>
-              <span>Membros das equipes</span>
-              <button>Selecionar</button>
-            </div>
-
-            <div className="card">
-              <img src="/cidadao.png" className="card-img" alt="Cidadão" />
-              <h3>Cidadão</h3>
-              <span>Solicitação de serviços</span>
-              <Link to = "/logincidadao"><button>Selecionar</button></Link>
-            </div>
-
-            <div className="card">
-              <img src="/equipe.png" className="card-img" alt="Equipe" />
-              <h3>Equipe</h3>
-              <span>Membros das equipes</span>
-              <button>Selecionar</button>
-            </div>
-
+              {/* ÁREA DA ILUSTRAÇÃO/ÍCONE */}
+              <div className={styles.ilustrationArea}>
+                <div className={styles.badgeSeguranca}>
+                  <Lock size={80} className={styles.iconLock} />
+                  <p>Acesso Seguro e Protegido</p>
+                </div>
+              </div>
+            </form>
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 }
