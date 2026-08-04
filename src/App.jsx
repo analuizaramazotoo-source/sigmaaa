@@ -21,7 +21,7 @@ import Homeg from "./pages/gestao/homeg/homeg";
 import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
 import Perfilg from "./pages/gestao/perfil/perfil"
 import Configuracoes from "./pages/gestao/config/configuracoes";
-
+import Cadastroeq from "./pages/equipe/cadastroequipe/cadastroeq";
 
 
 function App() {
