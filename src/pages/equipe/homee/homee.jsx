@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
 
 // CAMINHOS DE IMPORTAÇÃO (Ajustados para subir 4 pastas até 'src/assets')
-import prefeituraLogo from '../../../../assets/prefeitura.png';
-import arvoreLogo from '../../../../assets/arvore.png';
+import prefeituraLogo from "../../../assets/prefeitura.png";
+import arvoreLogo from "../../../assets/arvore.png";
 
 import { 
   MapPin, 

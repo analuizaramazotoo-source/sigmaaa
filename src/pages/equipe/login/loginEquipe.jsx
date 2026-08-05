@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './loginEquipe.module.css';
 
-import prefeituraLogo from "../../../../assets/prefeitura.png";
-import arvoreLogo from "../../../../assets/arvore.png";
+import prefeituraLogo from "../../../assets/prefeitura.png";
+import arvoreLogo from "../../../assets/arvore.png";
 
 import { 
   Users, Mail, Lock, Eye, EyeOff, ShieldCheck, 

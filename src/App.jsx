@@ -21,10 +21,10 @@ import Homeg from "./pages/gestao/homeg/homeg";
 import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
 import Perfilg from "./pages/gestao/perfil/perfil";
 import Configuracoes from "./pages/gestao/config/configuracoes";
-import HomeE from "./pages/auth/equipe/homee/homeE";
+import HomeE from "./pages/equipe/homee/homee";
 
 // IMPORTAÇÃO CORRIGIDA COM O CAMINHO REAL DA PASTA DE EQUIPE
-import LoginEquipe from "./pages/auth/equipe/login/loginEquipe";
+import LoginEquipe from "./pages/equipe/login/loginEquipe";
 
 function App() {
   return (
