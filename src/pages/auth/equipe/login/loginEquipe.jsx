@@ -28,7 +28,8 @@ export default function LoginEquipe() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate('/home');
+    // Redireciona diretamente para a Home da Equipe (/homee)
+    navigate('/homee');
   };
 
   return (
@@ -71,7 +72,7 @@ export default function LoginEquipe() {
 
       {/* ÁREA PRINCIPAL DA EQUIPE */}
       <div className={styles.mainWrapper}>
-        {/* CABEÇALHO SUPERIOR (IGUAL AO DO CIDADÃO) */}
+        {/* CABEÇALHO SUPERIOR */}
         <header className={styles.topHeader}>
           <div className={styles.headerLeft}>
             <div>
@@ -84,7 +85,7 @@ export default function LoginEquipe() {
             <button 
               type="button" 
               className={styles.btnVoltar} 
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/')}
             >
               <ArrowLeft size={16} />
               <span>Voltar</span>

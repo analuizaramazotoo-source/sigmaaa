@@ -24,8 +24,8 @@ export default function Cadastrog() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Navega diretamente para o painel após o login
-    navigate('/home');
+    // Redireciona diretamente para a Home da Gestão (/homeg)
+    navigate('/homeg');
   };
 
   return (
@@ -55,7 +55,7 @@ export default function Cadastrog() {
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>
-        {/* CABEÇALHO COM O BOTÃO VOLTAR (IGUAL AO CIDADÃO) */}
+        {/* CABEÇALHO COM O BOTÃO VOLTAR */}
         <header className={styles.topHeader}>
           <div className={styles.headerLeft}>
             <div>
@@ -68,7 +68,7 @@ export default function Cadastrog() {
             <button 
               type="button" 
               className={styles.btnVoltar} 
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/')}
             >
               <ArrowLeft size={16} />
               <span>Voltar</span>
