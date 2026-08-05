@@ -19,10 +19,12 @@ import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
 import Homeg from "./pages/gestao/homeg/homeg";
 import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
-import Perfilg from "./pages/gestao/perfil/perfil"
+import Perfilg from "./pages/gestao/perfil/perfil";
 import Configuracoes from "./pages/gestao/config/configuracoes";
 import HomeE from "./pages/auth/equipe/homee/homeE";
 
+// IMPORTAÇÃO CORRIGIDA COM O CAMINHO REAL DA PASTA DE EQUIPE
+import LoginEquipe from "./pages/auth/equipe/login/loginEquipe";
 
 function App() {
   return (
@@ -41,10 +43,20 @@ function App() {
           element={<RelatarProblema />}
         />
 
-        {/* CADASTRO */}
+        {/* CADASTROS */}
         <Route
           path="/cadastro"
           element={<CadastroCidadao />}
+        />
+        <Route
+          path="/cadastrog"
+          element={<Cadastrog />}
+        />
+
+        {/* ROTA DA EQUIPE (Redireciona para loginEquipe) */}
+        <Route
+          path="/cadastroeq"
+          element={<LoginEquipe />}
         />
 
         {/* SOLICITAR */}
@@ -65,10 +77,10 @@ function App() {
           element={<Status />}
         />
 
-          {/* DENUNCIA URGENTE */}
-         <Route
-         path="/denuncia"
-         element={<DenunciaUrgente />}
+        {/* DENUNCIA URGENTE */}
+        <Route
+          path="/denuncia"
+          element={<DenunciaUrgente />}
         />
 
         {/* ALTERAR */}
@@ -77,48 +89,35 @@ function App() {
           element={<Alterar />}
         />
 
-        {/* LOGIN */}
+        {/* LOGINS */}
         <Route
           path="/login"
           element={<Login />}
         />
-
-        {/* LOGIN CIDADÃO */}
         <Route
           path="/logincidadao"
           element={<LoginCidadao />}
         />
-        {/* LOGIN GESTOR */}
-       <Route
-          path="/cadastrog"
-          element={<Cadastrog />}
-       />
-        {/* HOME GESTOR */}
-      <Route
-     path="/homeg"
-     element={<Homeg />}
-        />
- 
-         {/* PERFIL GESTOR */}
-      <Route
-         path="/perfilg"
-        element={<Perfilg />}
-        />
 
-        {/* CONFIG */}
+        {/* GESTÃO */}
+        <Route
+          path="/homeg"
+          element={<Homeg />}
+        />
+        <Route
+          path="/perfilg"
+          element={<Perfilg />}
+        />
         <Route
           path="/config"
           element={<Configuracoes />}
         />
-      
+
         {/* HOME EQUIPE */}
         <Route
           path="/homee"
           element={<HomeE />}
         />
-
-
-
 
       </Routes>
     </Router>

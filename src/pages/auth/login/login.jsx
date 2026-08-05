@@ -8,18 +8,31 @@ import {
   Phone,
   ArrowLeft,
   LogIn,
-  Lock
+  Lock,
+  User,
+  Users,
+  ShieldCheck
 } from "lucide-react";
 
 function Login() {
   const navigate = useNavigate();
+
+  // Estado para controlar o perfil ativo (padrao: cidadao)
+  const [perfil, setPerfil] = useState("cidadao");
   const [cpfOuEmail, setCpfOuEmail] = useState("");
   const [senha, setSenha] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Redireciona para o painel do cidadão (ou altere conforme o fluxo)
-    navigate("/cidadao");
+
+    // Redireciona para a home de acordo com o perfil selecionado
+    if (perfil === "cidadao") {
+      navigate("/cidadao");
+    } else if (perfil === "equipe") {
+      navigate("/homee");
+    } else if (perfil === "gestao") {
+      navigate("/homeg");
+    }
   };
 
   return (
@@ -90,8 +103,38 @@ function Login() {
           <div className={styles.cardLogin}>
             <h2 className={styles.cardTitle}>Acesse sua Conta</h2>
             <p className={styles.cardSub}>
-              Informe os seus dados para entrar no sistema.
+              Selecione seu perfil e informe seus dados para entrar no sistema.
             </p>
+
+            {/* BOTÕES DE SELEÇÃO DE PERFIL */}
+            <div className={styles.perfilSelectorGroup}>
+              <button
+                type="button"
+                className={`${styles.btnPerfil} ${perfil === "cidadao" ? styles.btnPerfilActive : ""}`}
+                onClick={() => setPerfil("cidadao")}
+              >
+                <User size={16} />
+                <span>Cidadão</span>
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.btnPerfil} ${perfil === "equipe" ? styles.btnPerfilActive : ""}`}
+                onClick={() => setPerfil("equipe")}
+              >
+                <Users size={16} />
+                <span>Equipe</span>
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.btnPerfil} ${perfil === "gestao" ? styles.btnPerfilActive : ""}`}
+                onClick={() => setPerfil("gestao")}
+              >
+                <ShieldCheck size={16} />
+                <span>Gestão</span>
+              </button>
+            </div>
 
             <form onSubmit={handleLogin} className={styles.formGrid}>
               {/* ÁREA DOS INPUTS */}

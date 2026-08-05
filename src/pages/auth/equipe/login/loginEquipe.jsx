@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './loginEquipe.module.css';
 
-import prefeituraLogo from '../../../assets/prefeitura.png';
-import arvoreLogo from '../../../assets/arvore.png';
+import prefeituraLogo from "../../../../assets/prefeitura.png";
+import arvoreLogo from "../../../../assets/arvore.png";
 
 import { 
   Users, Mail, Lock, Eye, EyeOff, ShieldCheck, 
@@ -28,7 +28,6 @@ export default function LoginEquipe() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Navega para a tela principal de gestão
     navigate('/home');
   };
 
@@ -70,13 +69,31 @@ export default function LoginEquipe() {
         </div>
       </aside>
 
-      {/* ÁREA DO FORMULÁRIO DE LOGIN */}
-      <main className={styles.mainWrapper}>
-        <div className={styles.loginContainer}>
-          <button className={styles.btnBackNav} onClick={() => navigate('/')}>
-            <ArrowLeft size={16} /> Início
-          </button>
+      {/* ÁREA PRINCIPAL DA EQUIPE */}
+      <div className={styles.mainWrapper}>
+        {/* CABEÇALHO SUPERIOR (IGUAL AO DO CIDADÃO) */}
+        <header className={styles.topHeader}>
+          <div className={styles.headerLeft}>
+            <div>
+              <h1 className={styles.pageTitle}>Portal da Equipe Ambiental</h1>
+              <p className={styles.subTitle}>Secretaria do Meio Ambiente</p>
+            </div>
+          </div>
 
+          <div className={styles.headerRight}>
+            <button 
+              type="button" 
+              className={styles.btnVoltar} 
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
+          </div>
+        </header>
+
+        {/* ÁREA DO FORMULÁRIO DE LOGIN */}
+        <main className={styles.mainContent}>
           <div className={styles.loginCard}>
             <div className={styles.cardHeader}>
               <h2>Acesso de Equipes</h2>
@@ -84,10 +101,9 @@ export default function LoginEquipe() {
             </div>
 
             <form onSubmit={handleLogin} className={styles.formLogin}>
-              {/* SELEÇÃO DE SETOR E TURNO */}
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="setor">Setor / Modulo</label>
+                  <label htmlFor="setor">Setor / Módulo</label>
                   <select 
                     id="setor" 
                     name="setor"
@@ -116,7 +132,6 @@ export default function LoginEquipe() {
                 </div>
               </div>
 
-              {/* IDENTIFICADOR */}
               <div className={styles.formGroup}>
                 <label htmlFor="identificador">E-mail Institucional ou Matrícula *</label>
                 <div className={styles.inputWithIcon}>
@@ -133,7 +148,6 @@ export default function LoginEquipe() {
                 </div>
               </div>
 
-              {/* SENHA DE ACESSO */}
               <div className={styles.formGroup}>
                 <label htmlFor="senha">Senha Funcional *</label>
                 <div className={styles.inputWithIcon}>
@@ -168,12 +182,12 @@ export default function LoginEquipe() {
               </button>
             </form>
           </div>
+        </main>
 
-          <footer className={styles.loginFooter}>
-            <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Exclusivo da Equipe Credenciada.</p>
-          </footer>
-        </div>
-      </main>
+        <footer className={styles.loginFooter}>
+          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Exclusivo da Equipe Credenciada.</p>
+        </footer>
+      </div>
     </div>
   );
 }

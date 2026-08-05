@@ -6,7 +6,7 @@ import styles from "./cadastrog.module.css";
 import prefeituraLogo from "../../../assets/prefeitura.png";
 import arvoreLogo from "../../../assets/arvore.png";
 
-import { Mail, Lock, Key, Shield, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Key, Shield, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 export default function Cadastrog() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function Cadastrog() {
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR COMPACTA (Apenas identidade visual) */}
+      {/* SIDEBAR COMPACTA */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
@@ -53,8 +53,30 @@ export default function Cadastrog() {
         </div>
       </aside>
 
-      {/* ÁREA PRINCIPAL - CARD DE LOGIN */}
+      {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>
+        {/* CABEÇALHO COM O BOTÃO VOLTAR (IGUAL AO CIDADÃO) */}
+        <header className={styles.topHeader}>
+          <div className={styles.headerLeft}>
+            <div>
+              <h1 className={styles.pageTitle}>Autenticação de Servidor</h1>
+              <p className={styles.subTitle}>Secretaria do Meio Ambiente</p>
+            </div>
+          </div>
+
+          <div className={styles.headerRight}>
+            <button 
+              type="button" 
+              className={styles.btnVoltar} 
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
+          </div>
+        </header>
+
+        {/* CONTEÚDO PRINCIPAL - CARD DE LOGIN */}
         <main className={styles.mainContent}>
           <div className={styles.loginCard}>
             <div className={styles.loginCardHeader}>

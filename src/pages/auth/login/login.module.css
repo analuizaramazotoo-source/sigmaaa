@@ -173,7 +173,46 @@
   text-align: center;
   color: #666;
   font-size: 13px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+
+/* SELETOR DE PERFIL ADICIONADO */
+.perfilSelectorGroup {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+.btnPerfil {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #c8e6c9;
+  background-color: #f1f8e9;
+  color: #2e7d32;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnPerfil:hover {
+  background-color: #e8f5e9;
+}
+
+.btnPerfilActive {
+  background-color: #2e7d32;
+  color: #ffffff;
+  border-color: #2e7d32;
+}
+
+.btnPerfilActive:hover {
+  background-color: #1b5e20;
 }
 
 .formGrid {

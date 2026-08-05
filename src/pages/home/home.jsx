@@ -54,7 +54,11 @@ function Home() {
 
           <div className={styles.profilesGrid}>
             {/* CARD EQUIPE */}
-            <div className={styles.profileBox}>
+            <div 
+              className={styles.profileBox}
+              onClick={() => navigate("/cadastroeq")}
+              style={{ cursor: "pointer" }}
+            >
               <div className={styles.iconCircle}>
                 <Users size={36} />
               </div>
@@ -62,14 +66,21 @@ function Home() {
               <p>Membros das equipes operacionais</p>
               <button
                 className={styles.btnSelecionar}
-                onClick={() => navigate("/cadastroeq")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/cadastroeq");
+                }}
               >
                 Cadastrar
               </button>
             </div>
 
             {/* CARD CIDADÃO */}
-            <div className={styles.profileBox}>
+            <div 
+              className={styles.profileBox}
+              onClick={() => navigate("/cadastro")}
+              style={{ cursor: "pointer" }}
+            >
               <div className={styles.iconCircle}>
                 <User size={36} />
               </div>
@@ -77,14 +88,21 @@ function Home() {
               <p>Solicitação e relatos de serviços</p>
               <button
                 className={styles.btnSelecionar}
-                onClick={() => navigate("/cadastro")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/cadastro");
+                }}
               >
                 Cadastrar
               </button>
             </div>
 
             {/* CARD GESTÃO */}
-            <div className={styles.profileBox}>
+            <div 
+              className={styles.profileBox}
+              onClick={() => navigate("/cadastrog")}
+              style={{ cursor: "pointer" }}
+            >
               <div className={styles.iconCircle}>
                 <ShieldCheck size={36} />
               </div>
@@ -92,7 +110,10 @@ function Home() {
               <p>Coordenação e administração</p>
               <button
                 className={styles.btnSelecionar}
-                onClick={() => navigate("/cadastrog")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/cadastrog");
+                }}
               >
                 Cadastrar Gestão
               </button>
