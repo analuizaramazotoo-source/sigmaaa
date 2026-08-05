@@ -123,7 +123,7 @@ export default function HomeE() {
             <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
           </div>
           <div className={styles.brandText}>
-            <strong>EQUIPE DE CAMPO</strong>
+            <strong>EQUIPEeeeee DE CAMPO</strong>
             <span>PAINEL OPERACIONAL</span>
           </div>
         </div>
