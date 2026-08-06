@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "./homec.module.css";
 
-// Ícones para o menu lateral e a página
 import {
   FileWarning,
   MapPin,
@@ -29,91 +28,155 @@ export default function Homec() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Função para checar rota ativa no menu
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className={styles.layoutContainer || "layoutContainer"}>
+    <div style={{ display: "flex", minHeight: "100vh" }}>
       
-      {/* SIDEBAR EMBUTIDA DIRETO NA PÁGINA */}
-      <aside className={styles.sidebar || "sidebar"}>
-        <div className={styles.sidebarHeader || "sidebarHeader"}>
-          <span className={styles.logoIcon || "logoIcon"}>🌱</span>
-          <div className={styles.logoText || "logoText"}>
-            <h2>CADASTRO</h2>
-            <p>SEGURO AMBIENTAL</p>
+      {/* BARRA LATERAL (SIDEBAR) */}
+      <aside
+        style={{
+          width: "260px",
+          backgroundColor: "#1a4d33",
+          color: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          padding: "24px 16px",
+          flexShrink: 0
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px", padding: "0 8px" }}>
+          <span style={{ fontSize: "24px" }}>🌱</span>
+          <div>
+            <h2 style={{ fontSize: "14px", margin: 0, fontWeight: "bold", color: "#fff" }}>CADASTRO</h2>
+            <p style={{ fontSize: "10px", margin: 0, opacity: 0.8, color: "#e6f4ea" }}>SEGURO AMBIENTAL</p>
           </div>
         </div>
 
-        <nav className={styles.navMenu || "navMenu"}>
-          {/* DASHBOARD */}
+        <nav style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
           <Link
             to="/cidadao"
-            className={`${styles.navItem} ${isActive("/cidadao") ? styles.active : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "14px",
+              backgroundColor: isActive("/cidadao") ? "rgba(255, 255, 255, 0.15)" : "transparent",
+              fontWeight: isActive("/cidadao") ? "bold" : "normal"
+            }}
           >
             <LayoutDashboard size={20} />
             <span>Dashboard</span>
           </Link>
 
-          {/* OCORRÊNCIAS / RELATAR */}
           <Link
             to="/relatar-problema"
-            className={`${styles.navItem} ${isActive("/relatar-problema") ? styles.active : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "14px",
+              backgroundColor: isActive("/relatar-problema") ? "rgba(255, 255, 255, 0.15)" : "transparent"
+            }}
           >
             <AlertTriangle size={20} />
             <span>Relatar Problema</span>
           </Link>
 
-          {/* SOLICITAR SERVIÇO */}
           <Link
             to="/solicitar"
-            className={`${styles.navItem} ${isActive("/solicitar") ? styles.active : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "14px",
+              backgroundColor: isActive("/solicitar") ? "rgba(255, 255, 255, 0.15)" : "transparent"
+            }}
           >
             <FileText size={20} />
             <span>Solicitar Serviço</span>
           </Link>
 
-          {/* MINHAS SOLICITAÇÕES / STATUS */}
           <Link
             to="/status"
-            className={`${styles.navItem} ${isActive("/status") ? styles.active : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "14px",
+              backgroundColor: isActive("/status") ? "rgba(255, 255, 255, 0.15)" : "transparent"
+            }}
           >
             <FileText size={20} />
             <span>Minhas Solicitações</span>
           </Link>
 
-          {/* DENÚNCIA URGENTE */}
           <Link
             to="/denuncia"
-            className={`${styles.navItem} ${isActive("/denuncia") ? styles.active : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "14px",
+              backgroundColor: isActive("/denuncia") ? "rgba(255, 255, 255, 0.15)" : "transparent"
+            }}
           >
             <AlertCircle size={20} />
             <span>Denúncia Urgente</span>
           </Link>
 
-          {/* PERFIL */}
           <Link
             to="/perfil"
-            className={`${styles.navItem} ${isActive("/perfil") ? styles.active : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "14px",
+              backgroundColor: isActive("/perfil") ? "rgba(255, 255, 255, 0.15)" : "transparent"
+            }}
           >
             <User size={20} />
             <span>Perfil</span>
           </Link>
         </nav>
 
-        <div className={styles.sidebarFooter || "sidebarFooter"}>
-          <div className={styles.ajudaCard || "ajudaCard"}>
+        <div style={{ marginTop: "auto", paddingTop: "16px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "rgba(255,255,255,0.08)", borderRadius: "8px" }}>
             <Phone size={18} />
             <div>
-              <strong>Precisa de ajuda?</strong>
-              <p>Fale conosco</p>
+              <strong style={{ display: "block", fontSize: "12px" }}>Precisa de ajuda?</strong>
+              <span style={{ fontSize: "11px", opacity: 0.8 }}>Fale conosco</span>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* CONTEÚDO PRINCIPAL */}
-      <main className={styles.mainWrapper || "mainWrapper"}>
+      {/* CONTEÚDO PRINCIPAL DA PÁGINA */}
+      <main style={{ flex: 1, overflowY: "auto", backgroundColor: "#f4f7f5" }}>
         <div className={styles.pageContainer}>
           
           {/* BANNER PRINCIPAL */}
@@ -163,7 +226,7 @@ export default function Homec() {
               <p>EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.</p>
               <button
                 className={styles.btnEmergencia}
-                onClick={() => navigate("/denuncia")}
+                onClick={() => navigate("/relatar-problema")}
               >
                 RELATAR EMERGÊNCIA
               </button>
