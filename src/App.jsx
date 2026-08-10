@@ -21,7 +21,14 @@ import Homeg from "./pages/gestao/homeg/homeg";
 import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
 import Perfilg from "./pages/gestao/perfil/perfil";
 import Configuracoes from "./pages/gestao/config/configuracoes";
+
+//equipe
 import HomeE from "./pages/equipe/homee/homee";
+import AutosNotificacoes from "./pages/equipe/auto/autosnotificacoes"
+import FilaVistorias from "./pages/equipe/fila/filavistorias"
+import Leis from "./pages/equipe/leis/leis"
+import RelatoriosTecnicos from "./pages/equipe/relatorio/relatoriostecnicos"
+
 
 // IMPORTAÇÃO CORRIGIDA COM O CAMINHO REAL DA PASTA DE EQUIPE
 import LoginEquipe from "./pages/equipe/login/loginEquipe";
@@ -113,10 +120,37 @@ function App() {
           element={<Configuracoes />}
         />
 
+
+
+
         {/* HOME EQUIPE */}
         <Route
           path="/homee"
           element={<HomeE />}
+        />
+
+        {/* AUTO EQUIPE */}
+        <Route
+          path="/autoe"
+          element={<AutosNotificacoes />}
+        />
+
+        {/* FILA EQUIPE */}
+        <Route
+          path="/filae"
+          element={<FilaVistorias />}
+        />
+
+        {/* LEIS EQUIPE */}
+        <Route
+          path="/leise"
+          element={<Leis />}
+        />
+
+        {/* RELATORIO EQUIPE */}
+        <Route
+          path="/relatorioe"
+          element={<RelatoriosTecnicos />}
         />
 
       </Routes>
