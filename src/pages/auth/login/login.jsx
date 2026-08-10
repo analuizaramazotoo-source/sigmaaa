@@ -35,6 +35,13 @@ function Login() {
     }
   };
 
+  // Função auxiliar para definir para qual rota de cadastro redirecionar
+  const getRotaCadastro = () => {
+    if (perfil === "equipe") return "/cadastroeq";
+    if (perfil === "gestao") return "/cadastrog";
+    return "/cadastro";
+  };
+
   return (
     <div className={styles.container}>
       {/* SIDEBAR / MENU LATERAL */}
@@ -58,7 +65,7 @@ function Login() {
             <LogIn size={20} />
             <span>Login</span>
           </Link>
-          <Link to="/cadastro" className={styles.navItem}>
+          <Link to={getRotaCadastro()} className={styles.navItem}>
             <ClipboardList size={20} />
             <span>Cadastro</span>
           </Link>
@@ -171,7 +178,7 @@ function Login() {
 
                 <div className={styles.criarContaArea}>
                   <span>Ainda não tem conta? </span>
-                  <Link to="/cadastro" className={styles.criarContaLink}>
+                  <Link to={getRotaCadastro()} className={styles.criarContaLink}>
                     Cadastre-se
                   </Link>
                 </div>
