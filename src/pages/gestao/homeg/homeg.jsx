@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homeg.module.css';
 import { 
-  Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
+  Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Bell, ChevronDown, Plus, ClipboardCheck, 
   Clock, Settings, CheckCircle2, Filter, Trash2, Flame, 
-  Droplet, Volume2, Leaf, Menu, X, Shield, ArrowUpRight, LogOut, User, Edit3
+  Droplet, Volume2, Leaf, Menu, X, Shield, ArrowUpRight, LogOut, User, Edit3, ArrowLeft
 } from 'lucide-react';
 
 const STATS_DATA = [
@@ -84,6 +84,7 @@ const INITIAL_FILA = [
 
 export default function Homeg() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(5);
@@ -96,23 +97,21 @@ export default function Homeg() {
   const [modalViewAll, setModalViewAll] = useState(false);
   const [selectedOcorrencia, setSelectedOcorrencia] = useState(null);
 
-  // Lista Dinâmica de Ocorrências com Persistência
+  // Lista Dinâmica de Ocorrências
   const [fila, setFila] = useState([]);
   const [activeFilter, setActiveFilter] = useState('todos');
 
-  // Formulário de Nova Ocorrência
+  // Formulário
   const [formData, setFormData] = useState({
     title: '',
     address: '',
     category: 'descarte'
   });
 
-  // 1. CARREGAR E ESCUTAR SINCRONIZAÇÃO DO LOCALSTORAGE
   const carregarFila = () => {
     const dadosSalvos = localStorage.getItem('ocorrencias_mapa');
     if (dadosSalvos) {
       const dados = JSON.parse(dadosSalvos);
-      // Mapeia os ícones conforme a categoria/título
       const dadosComIcones = dados.map(item => ({
         ...item,
         icon: item.iconName === 'flame' ? Flame : item.iconName === 'droplet' ? Droplet : item.iconName === 'volume' ? Volume2 : Trash2
@@ -127,7 +126,6 @@ export default function Homeg() {
   useEffect(() => {
     carregarFila();
 
-    // Escuta quando a tela da Equipe atualizar status (ex: marcar como concluído)
     const handleStorageChange = () => {
       carregarFila();
     };
@@ -136,14 +134,12 @@ export default function Homeg() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Auxiliar para salvar no localStorage e notificar outras abas/telas
   const salvarEAtualizar = (novaFila) => {
     setFila(novaFila);
     localStorage.setItem('ocorrencias_mapa', JSON.stringify(novaFila));
     window.dispatchEvent(new Event('storage'));
   };
 
-  // 2. CRIAR NOVA OCORRÊNCIA PELA GESTÃO E ENVIAR PARA A EQUIPE
   const handleCreateRecord = (e) => {
     e.preventDefault();
     if (!formData.title || !formData.address) return;
@@ -153,7 +149,6 @@ export default function Homeg() {
     if (formData.category === 'agua') iconName = 'droplet';
     if (formData.category === 'som') iconName = 'volume';
 
-    // Gerar posições aleatórias dentro do mapa simulado para exibição do ponto na Equipe
     const topRand = Math.floor(Math.random() * 50 + 25) + '%';
     const leftRand = Math.floor(Math.random() * 50 + 25) + '%';
 
@@ -181,7 +176,6 @@ export default function Homeg() {
     setModalNewRecord(false);
   };
 
-  // 3. ATUALIZAR STATUS PELA GESTÃO
   const handleUpdateStatus = (newStatus, newStatusType, newCor) => {
     if (!selectedOcorrencia) return;
 
@@ -206,6 +200,8 @@ export default function Homeg() {
     return item.statusType === activeFilter;
   });
 
+  const isActive = (path) => location.pathname === path;
+
   return (
     <div className={styles.appContainer}>
       {sidebarOpen && (
@@ -216,7 +212,7 @@ export default function Homeg() {
         />
       )}
 
-      {/* SIDEBAR COM REACT ROUTER LINK */}
+      {/* MENU LATERAL / SIDEBAR */}
       <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
@@ -236,22 +232,38 @@ export default function Homeg() {
         </div>
 
         <nav className={styles.navigation}>
-          <Link to="/home" className={styles.navItemActive}>
-            <Home size={18} /> Painel Geral
-          </Link>
-          <Link to="/geoprocessamento" className={styles.navItem}>
+          <Link
+            to="/geoprocessamento"
+            className={isActive("/geoprocessamento") ? styles.navItemActive : styles.navItem}
+          >
             <MapIcon size={18} /> Geoprocessamento
           </Link>
-          <Link to="/fila-fiscalizacao" className={styles.navItem}>
+
+          <Link
+            to="/fila-fiscalizacao"
+            className={isActive("/fila-fiscalizacao") ? styles.navItemActive : styles.navItem}
+          >
             <ClipboardList size={18} /> Fila de Fiscalização
           </Link>
-          <Link to="/autos-notificacoes" className={styles.navItem}>
+
+          <Link
+            to="/autos-notificacoes-gestao"
+            className={isActive("/autos-notificacoes-gestao") ? styles.navItemActive : styles.navItem}
+          >
             <FileText size={18} /> Autos e Notificações
           </Link>
-          <Link to="/relatorios-tecnicos" className={styles.navItem}>
+
+          <Link
+            to="/relatorios-tecnicos-gestao"
+            className={isActive("/relatorios-tecnicos-gestao") ? styles.navItemActive : styles.navItem}
+          >
             <BarChart2 size={18} /> Relatórios Técnicos
           </Link>
-          <Link to="/legislacao" className={styles.navItem}>
+
+          <Link
+            to="/legislacao"
+            className={isActive("/legislacao") ? styles.navItemActive : styles.navItem}
+          >
             <HelpCircle size={18} /> Legislação
           </Link>
         </nav>
@@ -275,7 +287,6 @@ export default function Homeg() {
           </div>
 
           <div className={styles.headerRight}>
-            {/* NOTIFICAÇÕES */}
             <div className={styles.popoverContainer}>
               <button 
                 className={styles.iconButton} 
@@ -311,7 +322,6 @@ export default function Homeg() {
 
             <div className={styles.dividerVertical} />
 
-            {/* USUÁRIO DROPDOWN COM NAVEGAÇÃO */}
             <div className={styles.popoverContainer}>
               <button 
                 className={styles.userDropdown}
@@ -336,11 +346,11 @@ export default function Homeg() {
                   </div>
                   <div className={styles.menuDivider} />
                   
-                  <Link to="/perfil" className={styles.menuItemBtn}>
+                  <Link to="/perfilg" className={styles.menuItemBtn}>
                     <User size={16} /> Meu Perfil
                   </Link>
 
-                  <Link to="/configuracoes" className={styles.menuItemBtn}>
+                  <Link to="/config" className={styles.menuItemBtn}>
                     <Settings size={16} /> Configurações
                   </Link>
 
@@ -355,11 +365,32 @@ export default function Homeg() {
                 </div>
               )}
             </div>
+
+            {/* BOTÃO AMARELO DIRECIONANDO PARA A TELA INICIAL ( / ) */}
+            <button 
+              onClick={() => navigate('/')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
           </div>
         </header>
 
         <main className={styles.mainContent}>
-          {/* BANNER BOAS-VINDAS */}
           <section className={styles.welcomeCard}>
             <div className={styles.welcomeText}>
               <h2>Painel de Controle - Fiscalização</h2>
@@ -373,7 +404,6 @@ export default function Homeg() {
             </button>
           </section>
 
-          {/* ESTATÍSTICAS */}
           <section className={styles.statsGrid}>
             {STATS_DATA.map((stat) => {
               const IconComponent = stat.icon;
@@ -392,7 +422,6 @@ export default function Homeg() {
             })}
           </section>
 
-          {/* GRID: MAPA E FILA */}
           <section className={styles.contentGrid}>
             <div className={styles.cardSection}>
               <div className={styles.cardHeader}>
@@ -467,7 +496,6 @@ export default function Homeg() {
             </div>
           </section>
 
-          {/* INFORMATIVO OPERACIONAL */}
           <section className={styles.infoBanner}>
             <div className={styles.infoContent}>
               <div className={styles.infoIcon}>
@@ -489,11 +517,7 @@ export default function Homeg() {
         </footer>
       </div>
 
-      {/* ==========================================================================
-          MODAIS E DIÁLOGOS INTERATIVOS
-          ========================================================================== */}
-      
-      {/* MODAL: ALTERAR STATUS DA OCORRÊNCIA */}
+      {/* MODAIS INTERATIVOS */}
       {selectedOcorrencia && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -539,7 +563,6 @@ export default function Homeg() {
         </div>
       )}
 
-      {/* MODAL: NOVO REGISTRO INTERNO */}
       {modalNewRecord && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -592,7 +615,6 @@ export default function Homeg() {
         </div>
       )}
 
-      {/* MODAL: FILTRAR MAPA */}
       {modalFilter && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -633,7 +655,6 @@ export default function Homeg() {
         </div>
       )}
 
-      {/* MODAL: VER FILA COMPLETA */}
       {modalViewAll && (
         <div className={styles.modalOverlay}>
           <div className={`${styles.modalContent} ${styles.modalLarge}`}>

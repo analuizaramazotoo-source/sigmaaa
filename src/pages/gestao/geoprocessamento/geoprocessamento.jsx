@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './geoprocessamento.module.css';
-import { ArrowLeft, Map as MapIcon, Layers, Filter, Search, Navigation } from 'lucide-react';
+import { ArrowLeft, Map as MapIcon, Layers, Filter, Navigation } from 'lucide-react';
 
 export default function Geoprocessamento() {
   const navigate = useNavigate();
@@ -9,15 +9,36 @@ export default function Geoprocessamento() {
   return (
     <div className={styles.appContainer}>
       <div className={styles.mainWrapper}>
-        <header className={styles.header}>
+        
+        {/* CABEÇALHO COM O BOTÃO AMARELO NO CANTO DIREITO */}
+        <header className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className={styles.headerLeft}>
-            <button className={styles.btnBack} onClick={() => navigate('/home')}>
-              <ArrowLeft size={18} /> Voltar ao Painel
-            </button>
             <div>
               <h1 className={styles.headerTitle}>Módulo de Geoprocessamento</h1>
               <span className={styles.headerSubtitle}>Mapeamento espacial e zonas ambientais</span>
             </div>
+          </div>
+
+          <div className={styles.headerRight}>
+            <button 
+              onClick={() => navigate('/homeg')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
           </div>
         </header>
 

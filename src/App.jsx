@@ -1,158 +1,81 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-
+// Telas Gerais e Cidadão
 import Home from "./pages/home/home";
-import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
-import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Homec from "./pages/cidadao/homec/homec";
+import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
 import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
+import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
+
+// Autenticação
 import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
+import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
+import LoginEquipe from "./pages/equipe/login/loginEquipe";
+
+// MÓDULO GESTÃO (Com os nomes EXATOS da sua árvore de arquivos)
 import Homeg from "./pages/gestao/homeg/homeg";
-import DenunciaUrgente from "./pages/cidadao/denuncia/denunciaurgente";
 import Perfilg from "./pages/gestao/perfil/perfil";
 import Configuracoes from "./pages/gestao/config/configuracoes";
 
-//equipe
+import Geoprocessamento from "./pages/gestao/geoprocessamento/geoprocessamento"; 
+import FilaFiscalizacao from "./pages/gestao/fiscalizacao/filaFiscalizacao"; // Pasta "fiscalizacao"
+import AutosNotificacoesGestao from "./pages/gestao/autos/autosNotificacoes"; // Pasta "autos"
+import RelatoriosTecnicosGestao from "./pages/gestao/relatorio/relatoriosTecnicos"; // Pasta "relatorio"
+import Legislacao from "./pages/gestao/legislacao/legislacao"; // Pasta "legislacao"
+
+// MÓDULO EQUIPE
 import HomeE from "./pages/equipe/homee/homee";
-import AutosNotificacoes from "./pages/equipe/auto/autosnotificacoes"
-import FilaVistorias from "./pages/equipe/fila/filavistorias"
-import Leis from "./pages/equipe/leis/leis"
-import RelatoriosTecnicos from "./pages/equipe/relatorio/relatoriostecnicos"
-
-
-// IMPORTAÇÃO CORRIGIDA COM O CAMINHO REAL DA PASTA DE EQUIPE
-import LoginEquipe from "./pages/equipe/login/loginEquipe";
+import AutosNotificacoes from "./pages/equipe/auto/autosnotificacoes";
+import FilaVistorias from "./pages/equipe/fila/filavistorias";
+import Leis from "./pages/equipe/leis/leis";
+import RelatoriosTecnicos from "./pages/equipe/relatorio/relatoriostecnicos";
 
 function App() {
   return (
     <Router>
       <Routes>
-
-        {/* HOME */}
+        {/* HOME INSTITUCIONAL */}
         <Route path="/" element={<Home />} />
-
-        {/* HOME CIDADÃO */}
-        <Route path="/cidadao" element={<Homec />} />
-
-        {/* RELATAR PROBLEMA */}
-        <Route
-          path="/relatar-problema"
-          element={<RelatarProblema />}
-        />
-
-        {/* CADASTROS */}
-        <Route
-          path="/cadastro"
-          element={<CadastroCidadao />}
-        />
-        <Route
-          path="/cadastrog"
-          element={<Cadastrog />}
-        />
-
-        {/* ROTA DA EQUIPE (Redireciona para loginEquipe) */}
-        <Route
-          path="/cadastroeq"
-          element={<LoginEquipe />}
-        />
-
-        {/* SOLICITAR */}
-        <Route
-          path="/solicitar"
-          element={<Solicitar />}
-        />
-
-        {/* PERFIL */}
-        <Route
-          path="/perfil"
-          element={<Perfil />}
-        />
-
-        {/* STATUS */}
-        <Route
-          path="/status"
-          element={<Status />}
-        />
-
-        {/* DENUNCIA URGENTE */}
-        <Route
-          path="/denuncia"
-          element={<DenunciaUrgente />}
-        />
-
-        {/* ALTERAR */}
-        <Route
-          path="/alterar"
-          element={<Alterar />}
-        />
-
+        
         {/* LOGINS */}
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/logincidadao"
-          element={<LoginCidadao />}
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logincidadao" element={<LoginCidadao />} />
+        <Route path="/cadastroeq" element={<LoginEquipe />} />
 
-        {/* GESTÃO */}
-        <Route
-          path="/homeg"
-          element={<Homeg />}
-        />
-        <Route
-          path="/perfilg"
-          element={<Perfilg />}
-        />
-        <Route
-          path="/config"
-          element={<Configuracoes />}
-        />
+        {/* ROTAS CIDADÃO */}
+        <Route path="/cidadao" element={<Homec />} />
+        <Route path="/relatar-problema" element={<RelatarProblema />} />
+        <Route path="/solicitar" element={<Solicitar />} />
+        <Route path="/status" element={<Status />} />
+        <Route path="/denuncia" element={<DenunciaUrgente />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/alterar" element={<Alterar />} />
+        <Route path="/cadastro" element={<CadastroCidadao />} />
 
+        {/* ROTAS GESTÃO */}
+        <Route path="/homeg" element={<Homeg />} />
+        <Route path="/geoprocessamento" element={<Geoprocessamento />} />
+        <Route path="/fila-fiscalizacao" element={<FilaFiscalizacao />} />
+        <Route path="/autos-notificacoes-gestao" element={<AutosNotificacoesGestao />} />
+        <Route path="/relatorios-tecnicos-gestao" element={<RelatoriosTecnicosGestao />} />
+        <Route path="/legislacao" element={<Legislacao />} />
+        <Route path="/perfilg" element={<Perfilg />} />
+        <Route path="/cadastrog" element={<Cadastrog />} />
+        <Route path="/config" element={<Configuracoes />} />
 
-
-
-        {/* HOME EQUIPE */}
-        <Route
-          path="/homee"
-          element={<HomeE />}
-        />
-
-        {/* AUTO EQUIPE */}
-        <Route
-          path="/autoe"
-          element={<AutosNotificacoes />}
-        />
-
-        {/* FILA EQUIPE */}
-        <Route
-          path="/filae"
-          element={<FilaVistorias />}
-        />
-
-        {/* LEIS EQUIPE */}
-        <Route
-          path="/leise"
-          element={<Leis />}
-        />
-
-        {/* RELATORIO EQUIPE */}
-        <Route
-          path="/relatorioe"
-          element={<RelatoriosTecnicos />}
-        />
-
+        {/* ROTAS EQUIPE */}
+        <Route path="/homee" element={<HomeE />} />
+        <Route path="/autoe" element={<AutosNotificacoes />} />
+        <Route path="/filae" element={<FilaVistorias />} />
+        <Route path="/leise" element={<Leis />} />
+        <Route path="/relatorioe" element={<RelatoriosTecnicos />} />
       </Routes>
     </Router>
   );

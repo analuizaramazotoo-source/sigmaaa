@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './filaFiscalizacao.module.css'; // Apontando para o CSS da própria tela
-import { ArrowLeft, ClipboardList, Flame, Trash2, Clock, CheckCircle2 } from 'lucide-react';
+import styles from './filaFiscalizacao.module.css';
+import { ArrowLeft, ClipboardList, Flame, Trash2, Clock } from 'lucide-react';
 
 export default function FilaFiscalizacao() {
   const navigate = useNavigate();
@@ -33,15 +33,36 @@ export default function FilaFiscalizacao() {
   return (
     <div className={styles.appContainer}>
       <div className={styles.mainWrapper}>
-        <header className={styles.header}>
+        
+        {/* CABEÇALHO REORGANIZADO COM O BOTÃO AMARELO À DIREITA */}
+        <header className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className={styles.headerLeft}>
-            <button className={styles.btnBack} onClick={() => navigate('/home')}>
-              <ArrowLeft size={18} /> Voltar ao Painel
-            </button>
             <div>
               <h1 className={styles.headerTitle}>Fila de Fiscalização</h1>
               <span className={styles.headerSubtitle}>Chamados pendentes para vistoria em campo</span>
             </div>
+          </div>
+
+          <div className={styles.headerRight}>
+            <button 
+              onClick={() => navigate('/homeg')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
           </div>
         </header>
 
