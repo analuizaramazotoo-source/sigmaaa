@@ -19,8 +19,8 @@ import {
   Upload,
   CheckCircle2,
   Clock,
-  FileSpreadsheet,
-  Download
+  Download,
+  ArrowLeft
 } from 'lucide-react';
 
 export default function RelatoriosTecnicos() {
@@ -30,7 +30,7 @@ export default function RelatoriosTecnicos() {
   const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState('');
   const [tituloRelatorio, setTituloRelatorio] = useState('');
   const [tipoRelatorio, setTipoRelatorio] = useState('Vistoria de Campo');
-  const [observacoesTécnicas, setObservacoesTecnicas] = useState('');
+  const [observacoesTecnicas, setObservacoesTecnicas] = useState('');
   const [parecerTecnico, setParecerTecnico] = useState('Procedente - Requer Medidas Corretivas');
   const [mensagemSucesso, setMensagemSucesso] = useState(false);
 
@@ -99,18 +99,18 @@ export default function RelatoriosTecnicos() {
     }, 3000);
   };
 
-  // MENU LATERAL
+  // MENU LATERAL PADRONIZADO DA EQUIPE
   const menuModulos = [
     { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee' },
-    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/fila-fiscalizacao' },
-    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autos-notificacoes' },
-    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorios-tecnicos', ativo: true },
-    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/legislacao' }
+    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae' },
+    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe' },
+    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe', ativo: true },
+    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' }
   ];
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR PADRÃO */}
+      {/* SIDEBAR PADRÃO DA EQUIPE */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
@@ -154,7 +154,7 @@ export default function RelatoriosTecnicos() {
               <Bell size={20} />
             </button>
 
-            <div className={styles.userProfile} onClick={() => navigate('/perfil')} style={{ cursor: 'pointer' }}>
+            <div className={styles.userProfile}>
               <div className={styles.userAvatar}>
                 <Users size={18} />
               </div>
@@ -164,8 +164,30 @@ export default function RelatoriosTecnicos() {
               </div>
             </div>
 
-            <button className={styles.btnLogout} onClick={() => navigate('/')} title="Sair do Sistema">
+            <button className={styles.btnLogout} onClick={() => navigate('/login')} title="Sair do Sistema">
               <LogOut size={18} />
+            </button>
+
+            {/* BOTÃO AMARELO DE VOLTAR PARA A HOME DA EQUIPE */}
+            <button 
+              onClick={() => navigate('/homee')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
             </button>
           </div>
         </header>
@@ -238,7 +260,7 @@ export default function RelatoriosTecnicos() {
                   <textarea 
                     rows={4}
                     placeholder="Descreva detalhadamente o estado do local, equipamentos utilizados, condições ambientais e depoimentos..."
-                    value={observacoesTécnicas}
+                    value={observacoesTecnicas}
                     onChange={(e) => setObservacoesTecnicas(e.target.value)}
                     required
                   />
@@ -253,7 +275,7 @@ export default function RelatoriosTecnicos() {
                   </div>
                 </div>
 
-                {/* BOTAO DE ACAO */}
+                {/* BOTÃO DE AÇÃO */}
                 <div className={styles.formActions}>
                   <button type="submit" className={styles.btnEnviar}>
                     <Send size={16} /> Enviar Relatório à Gestão

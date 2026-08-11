@@ -19,8 +19,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Search,
-  Filter,
-  ChevronRight
+  ChevronRight,
+  ArrowLeft
 } from 'lucide-react';
 
 export default function FilaVistorias() {
@@ -71,13 +71,13 @@ export default function FilaVistorias() {
     window.dispatchEvent(new Event('storage'));
   };
 
-  // NAVEGAÇÃO DA SIDEBAR
+  // NAVEGAÇÃO DA SIDEBAR PADRONIZADA (IGUAL À HOME DA EQUIPE)
   const menuModulos = [
     { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee' },
-    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/fila-fiscalizacao', ativo: true },
-    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autos-notificacoes' },
-    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorios-tecnicos' },
-    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/legislacao' }
+    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae', ativo: true },
+    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe' },
+    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe' },
+    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' }
   ];
 
   // FILTRAGEM E BUSCA
@@ -95,7 +95,7 @@ export default function FilaVistorias() {
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR PADRÃO */}
+      {/* SIDEBAR PADRÃO DA EQUIPE */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
@@ -139,7 +139,7 @@ export default function FilaVistorias() {
               <Bell size={20} />
             </button>
 
-            <div className={styles.userProfile} onClick={() => navigate('/perfil')} style={{ cursor: 'pointer' }}>
+            <div className={styles.userProfile}>
               <div className={styles.userAvatar}>
                 <Users size={18} />
               </div>
@@ -149,8 +149,30 @@ export default function FilaVistorias() {
               </div>
             </div>
 
-            <button className={styles.btnLogout} onClick={() => navigate('/')} title="Sair do Sistema">
+            <button className={styles.btnLogout} onClick={() => navigate('/login')} title="Sair do Sistema">
               <LogOut size={18} />
+            </button>
+
+            {/* BOTÃO AMARELO DE VOLTAR PARA A HOME DA EQUIPE */}
+            <button 
+              onClick={() => navigate('/homee')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
             </button>
           </div>
         </header>
@@ -160,8 +182,6 @@ export default function FilaVistorias() {
             
             {/* PAINEL ESQUERDO: CONTROLES E LISTA DE VISTORIAS */}
             <section className={styles.listCardSection}>
-              
-              {/* BARRA DE PESQUISA E FILTROS */}
               <div className={styles.filterBar}>
                 <div className={styles.searchBox}>
                   <Search size={16} className={styles.searchIcon} />
@@ -201,7 +221,6 @@ export default function FilaVistorias() {
                 </div>
               </div>
 
-              {/* LISTA DE VISTORIAS */}
               <div className={styles.vistoriasList}>
                 {vistoriasFiltradas.length === 0 ? (
                   <div className={styles.emptyState}>
@@ -273,7 +292,6 @@ export default function FilaVistorias() {
                     </div>
                   </div>
 
-                  {/* AÇÕES DE MUDANÇA DE STATUS */}
                   <div className={styles.detailActions}>
                     <button 
                       className={styles.btnAcaoAmarelo}
@@ -291,7 +309,7 @@ export default function FilaVistorias() {
 
                     <button 
                       className={styles.btnAcaoRelatorio}
-                      onClick={() => navigate('/relatorios-tecnicos')}
+                      onClick={() => navigate('/relatorioe')}
                     >
                       Emitir Relatório de Campo
                     </button>

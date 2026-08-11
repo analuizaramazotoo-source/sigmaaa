@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
 
-// CAMINHOS DE IMPORTAÇÃO (Ajustados para subir 4 pastas até 'src/assets')
+// CAMINHOS DE IMPORTAÇÃO (Ajustados para os assets do seu projeto)
 import prefeituraLogo from "../../../assets/prefeitura.png";
 import arvoreLogo from "../../../assets/arvore.png";
 
@@ -15,13 +15,14 @@ import {
   Users, 
   LogOut, 
   Bell, 
-  Clock 
+  Clock,
+  ArrowLeft
 } from 'lucide-react';
 
 export default function HomeE() {
   const navigate = useNavigate();
 
-  // PONTOS PADRÃO (Caso o localStorage ainda não tenha sido populado)
+  // PONTOS PADRÃO
   const pontosPadrao = [
     {
       id: 1,
@@ -61,7 +62,6 @@ export default function HomeE() {
   const [ocorrenciasGestao, setOcorrenciasGestao] = useState([]);
   const [ocorrenciaSelecionada, setOcorrenciaSelecionada] = useState(null);
 
-  // 1. CARREGAR E ESCUTAR MUDANÇAS EM TEMPO REAL DA GESTÃO
   const carregarOcorrencias = () => {
     const salvas = localStorage.getItem('ocorrencias_mapa');
     if (salvas) {
@@ -88,7 +88,6 @@ export default function HomeE() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // 2. MARCAR OCORRÊNCIA COMO CONCLUÍDA E SALVAR
   const handleMarcarConcluido = (id) => {
     const listaAtualizada = ocorrenciasGestao.map(item => {
       if (item.id === id) {
@@ -106,24 +105,25 @@ export default function HomeE() {
     window.dispatchEvent(new Event('storage'));
   };
 
+  // ROTAS CORRETAS DAS TELAS DA EQUIPE
   const menuModulos = [
     { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee', ativo: true },
-    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/fila-fiscalizacao' },
-    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autos-notificacoes' },
-    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorios-tecnicos' },
-    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/legislacao' }
+    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae' },
+    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe' },
+    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe' },
+    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' }
   ];
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR PADRÃO */}
+      {/* SIDEBAR DA EQUIPE */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
           </div>
           <div className={styles.brandText}>
-            <strong>EQUIPEeeeee DE CAMPO</strong>
+            <strong>EQUIPE DE CAMPO</strong>
             <span>PAINEL OPERACIONAL</span>
           </div>
         </div>
@@ -172,10 +172,32 @@ export default function HomeE() {
 
             <button 
               className={styles.btnLogout} 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login')}
               title="Sair do Sistema"
             >
               <LogOut size={18} />
+            </button>
+
+            {/* BOTÃO AMARELO DE VOLTAR PARA A TELA INICIAL */}
+            <button 
+              onClick={() => navigate('/')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
             </button>
           </div>
         </header>
@@ -183,7 +205,6 @@ export default function HomeE() {
         <main className={styles.mainContent}>
           <div className={styles.mapGridContainer}>
             
-            {/* PAINEL DE LEGENDA E LISTA DE OCORRÊNCIAS */}
             <section className={styles.listSection}>
               <div className={styles.legendaBox}>
                 <h3>Legenda do Mapa</h3>
@@ -219,17 +240,15 @@ export default function HomeE() {
               </div>
             </section>
 
-            {/* MAPA DA CIDADE */}
             <section className={styles.mapSection}>
               <div className={styles.mapControlsHeader}>
                 <h2>VISÃO GERAL DA CIDADE:</h2>
-                <button className={styles.btnEnviarRelatorio} onClick={() => navigate('/relatorios-tecnicos')}>
+                <button className={styles.btnEnviarRelatorio} onClick={() => navigate('/relatorioe')}>
                   Enviar Relatório
                 </button>
               </div>
 
               <div className={styles.mapCanvas}>
-                {/* PINOS/PONTOS NO MAPA */}
                 {ocorrenciasGestao.map((ponto) => (
                   <div 
                     key={ponto.id}
@@ -239,7 +258,6 @@ export default function HomeE() {
                   />
                 ))}
 
-                {/* CARD DE DETALHES FIXO NO CANTO INFERIOR DIREITO */}
                 {ocorrenciaSelecionada && (
                   <div className={styles.mapPopupCard}>
                     <h4>{ocorrenciaSelecionada.titulo}</h4>

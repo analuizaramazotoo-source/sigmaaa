@@ -21,7 +21,7 @@ import {
   Upload,
   CheckCircle2,
   Clock,
-  Search
+  ArrowLeft
 } from 'lucide-react';
 
 export default function AutosNotificacoes() {
@@ -109,18 +109,18 @@ export default function AutosNotificacoes() {
     }, 3000);
   };
 
-  // MENU LATERAL
+  // MENU LATERAL PADRONIZADO DA EQUIPE
   const menuModulos = [
     { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee' },
-    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/fila-fiscalizacao' },
-    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autos-notificacoes', ativo: true },
-    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorios-tecnicos' },
-    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/legislacao' }
+    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae' },
+    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe', ativo: true },
+    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe' },
+    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' }
   ];
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR PADRÃO */}
+      {/* SIDEBAR PADRÃO DA EQUIPE */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
@@ -164,7 +164,7 @@ export default function AutosNotificacoes() {
               <Bell size={20} />
             </button>
 
-            <div className={styles.userProfile} onClick={() => navigate('/perfil')} style={{ cursor: 'pointer' }}>
+            <div className={styles.userProfile}>
               <div className={styles.userAvatar}>
                 <Users size={18} />
               </div>
@@ -174,8 +174,30 @@ export default function AutosNotificacoes() {
               </div>
             </div>
 
-            <button className={styles.btnLogout} onClick={() => navigate('/')} title="Sair do Sistema">
+            <button className={styles.btnLogout} onClick={() => navigate('/login')} title="Sair do Sistema">
               <LogOut size={18} />
+            </button>
+
+            {/* BOTÃO AMARELO DE VOLTAR PARA A HOME DA EQUIPE */}
+            <button 
+              onClick={() => navigate('/homee')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
             </button>
           </div>
         </header>
