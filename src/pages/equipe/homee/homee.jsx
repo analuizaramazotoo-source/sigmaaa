@@ -1,149 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homee.module.css';
-
-// CAMINHOS DE IMPORTAÇÃO (Ajustados para os assets do seu projeto)
-import prefeituraLogo from "../../../assets/prefeitura.png";
-import arvoreLogo from "../../../assets/arvore.png";
-
 import { 
-  MapPin, 
-  ClipboardList, 
-  FileText, 
-  BarChart2, 
-  BookOpen, 
-  Users, 
-  LogOut, 
-  Bell, 
-  Clock,
-  ArrowLeft
+  Eye, ClipboardList, FileText, BarChart2, HelpCircle, 
+  Bell, ChevronDown, CheckCircle2, Clock, 
+  Shield, LogOut 
 } from 'lucide-react';
 
 export default function HomeE() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // PONTOS PADRÃO
-  const pontosPadrao = [
-    {
-      id: 1,
-      titulo: 'Manutenção de Parques',
-      descricao: 'Lixar e pintar bancos; vistoria no playground',
-      prioridade: 'Médio',
-      status: 'Em Andamento',
-      corStatus: 'amarelo',
-      data: 'Hoje, 10:30',
-      posicaoTop: '45%',
-      posicaoLeft: '48%'
-    },
-    {
-      id: 2,
-      titulo: 'Corte Irregular de Árvore',
-      descricao: 'Fiscalizar denúncia na área urbana',
-      prioridade: 'Alta',
-      status: 'Não Visitado',
-      corStatus: 'vermelho',
-      data: 'Hoje, 09:15',
-      posicaoTop: '58%',
-      posicaoLeft: '28%'
-    },
-    {
-      id: 3,
-      titulo: 'Poda Concluída',
-      descricao: 'Limpeza de galhos após tempestade',
-      prioridade: 'Baixa',
-      status: 'Já Visitado',
-      corStatus: 'verde',
-      data: 'Ontem, 16:40',
-      posicaoTop: '32%',
-      posicaoLeft: '62%'
-    }
-  ];
+  const [unreadNotifications, setUnreadNotifications] = useState(3);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [modalLogout, setModalLogout] = useState(false);
 
-  const [ocorrenciasGestao, setOcorrenciasGestao] = useState([]);
-  const [ocorrenciaSelecionada, setOcorrenciaSelecionada] = useState(null);
-
-  const carregarOcorrencias = () => {
-    const salvas = localStorage.getItem('ocorrencias_mapa');
-    if (salvas) {
-      const dados = JSON.parse(salvas);
-      setOcorrenciasGestao(dados);
-      if (dados.length > 0 && !ocorrenciaSelecionada) {
-        setOcorrenciaSelecionada(dados[0]);
-      }
-    } else {
-      localStorage.setItem('ocorrencias_mapa', JSON.stringify(pontosPadrao));
-      setOcorrenciasGestao(pontosPadrao);
-      setOcorrenciaSelecionada(pontosPadrao[0]);
-    }
+  const handleConfirmLogout = () => {
+    setModalLogout(false);
+    navigate('/login');
   };
 
-  useEffect(() => {
-    carregarOcorrencias();
-
-    const handleStorageChange = () => {
-      carregarOcorrencias();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const handleMarcarConcluido = (id) => {
-    const listaAtualizada = ocorrenciasGestao.map(item => {
-      if (item.id === id) {
-        return { ...item, status: 'Já Visitado', corStatus: 'verde' };
-      }
-      return item;
-    });
-
-    setOcorrenciasGestao(listaAtualizada);
-    
-    const selecionadoAtualizado = listaAtualizada.find(i => i.id === id);
-    setOcorrenciaSelecionada(selecionadoAtualizado);
-
-    localStorage.setItem('ocorrencias_mapa', JSON.stringify(listaAtualizada));
-    window.dispatchEvent(new Event('storage'));
-  };
-
-  // ROTAS CORRETAS DAS TELAS DA EQUIPE
-  const menuModulos = [
-    { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee', ativo: true },
-    { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae' },
-    { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe' },
-    { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe' },
-    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' }
-  ];
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div className={styles.appContainer}>
-      {/* SIDEBAR DA EQUIPE */}
+      
+      {/* SIDEBAR */}
       <aside className={styles.sidebar}>
-        <div className={styles.brandHeader}>
-          <div className={styles.logoIcon}>
-            <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
+        <div>
+          <div className={styles.brandHeader}>
+            <div className={styles.logoIcon}>
+              <Shield size={22} />
+            </div>
+            <div className={styles.brandText}>
+              <strong>EQUIPE DE CAMPO</strong>
+              <span>PAINEL OPERACIONAL</span>
+            </div>
           </div>
-          <div className={styles.brandText}>
-            <strong>EQUIPE DE CAMPO</strong>
-            <span>PAINEL OPERACIONAL</span>
-          </div>
+
+          <nav className={styles.sidebarNav}>
+            <span className={styles.navCategory}>
+              MENU DO SERVIDOR
+            </span>
+
+            <Link
+              to="/homee"
+              className={isActive('/homee') ? styles.navItemActive : styles.navItem}
+            >
+              <Eye size={18} /> Visão Geral da Cidade
+            </Link>
+
+            <Link
+              to="/filae"
+              className={isActive('/filae') ? styles.navItemActive : styles.navItem}
+            >
+              <ClipboardList size={18} /> Fila de Vistorias
+            </Link>
+
+            <Link
+              to="/autoe"
+              className={isActive('/autoe') ? styles.navItemActive : styles.navItem}
+            >
+              <FileText size={18} /> Emitir Auto / Notificação
+            </Link>
+
+            <Link
+              to="/relatorioe"
+              className={isActive('/relatorioe') ? styles.navItemActive : styles.navItem}
+            >
+              <BarChart2 size={18} /> Enviar Relatório
+            </Link>
+
+            <Link
+              to="/leise"
+              className={isActive('/leise') ? styles.navItemActive : styles.navItem}
+            >
+              <HelpCircle size={18} /> Consulta a Leis
+            </Link>
+          </nav>
         </div>
 
-        <nav className={styles.sidebarNav}>
-          <span className={styles.navCategory}>Menu do Servidor</span>
-          {menuModulos.map(item => (
-            <button 
-              key={item.id} 
-              className={`${styles.navItem} ${item.ativo ? styles.navItemActive : ''}`} 
-              onClick={() => navigate(item.rota)}
-            >
-              <span className={styles.navIcon}>{item.icon}</span>
-              <span className={styles.navTitle}>{item.titulo}</span>
-            </button>
-          ))}
-        </nav>
-
         <div className={styles.sidebarFooter}>
-          <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
+          <div className={styles.footerTitle}>Prefeitura Municipal</div>
+          <div className={styles.footerSubtitle}>Secretaria do Meio Ambiente</div>
         </div>
       </aside>
 
@@ -151,43 +91,92 @@ export default function HomeE() {
       <div className={styles.mainWrapper}>
         <header className={styles.header}>
           <div className={styles.headerLeft}>
-            <h1 className={styles.headerTitle}>Olá, Equipe Ambiental!</h1>
-            <span className={styles.headerSubtitle}>Pontos e vistorias atribuídos em tempo real pela Gestão</span>
+            <div>
+              <h1 className={styles.headerTitle}>Painel Operacional de Campo</h1>
+              <span className={styles.headerSubtitle}>Fiscalização e Execução de Vistorias Ambientais</span>
+            </div>
           </div>
 
           <div className={styles.headerRight}>
-            <button className={styles.iconBtn} title="Notificações">
-              <Bell size={20} />
-            </button>
+            <div className={styles.popoverContainer}>
+              <button 
+                className={styles.iconButton} 
+                onClick={() => {
+                  setShowNotifications(!showNotifications);
+                  setShowUserDropdown(false);
+                }}
+                aria-label="Notificações Internas"
+              >
+                <Bell size={18} />
+                {unreadNotifications > 0 && <span className={styles.badge}>{unreadNotifications}</span>}
+              </button>
 
-            <div className={styles.userProfile}>
-              <div className={styles.userAvatar}>
-                <Users size={18} />
-              </div>
-              <div className={styles.userInfo}>
-                <strong className={styles.userName}>Equipe de Campo</strong>
-                <span className={styles.userRole}>Operacional</span>
-              </div>
+              {showNotifications && (
+                <div className={styles.popoverMenu}>
+                  <div className={styles.popoverHeader}>
+                    <strong>Notificações de Campo</strong>
+                    <button 
+                      onClick={() => setUnreadNotifications(0)}
+                      className={styles.textBtn}
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                  <ul className={styles.notificationList}>
+                    <li>📌 Nova ordem de vistoria atribuída ao seu setor.</li>
+                    <li>⚠️ Alerta de queimada recorrente na Zona Norte.</li>
+                    <li>📋 Atualização na norma de podas disponível.</li>
+                  </ul>
+                </div>
+              )}
             </div>
 
-            <button 
-              className={styles.btnLogout} 
-              onClick={() => navigate('/login')}
-              title="Sair do Sistema"
-            >
-              <LogOut size={18} />
-            </button>
+            <div className={styles.dividerVertical} />
 
-            {/* BOTÃO AMARELO DE VOLTAR PARA A TELA INICIAL */}
+            <div className={styles.popoverContainer}>
+              <button 
+                className={styles.userDropdown}
+                onClick={() => {
+                  setShowUserDropdown(!showUserDropdown);
+                  setShowNotifications(false);
+                }}
+              >
+                <div className={styles.avatar}>EC</div>
+                <div className={styles.userInfo}>
+                  <span className={styles.userName}>Equipe de Campo</span>
+                  <span className={styles.userRole}>Operacional</span>
+                </div>
+                <ChevronDown size={16} />
+              </button>
+
+              {showUserDropdown && (
+                <div className={styles.popoverMenuRight}>
+                  <div className={styles.userMenuHeader}>
+                    <strong>Equipe Operacional</strong>
+                    <span>Fiscal de Campo</span>
+                  </div>
+
+                  <button 
+                    onClick={() => setModalLogout(true)} 
+                    className={`${styles.menuItemBtn} ${styles.dangerText}`}
+                  >
+                    <LogOut size={16} /> Sair da Conta
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* BOTÃO DE DESLOGAR */}
             <button 
-              onClick={() => navigate('/')} 
+              onClick={() => setModalLogout(true)} 
+              title="Sair do Sistema"
               style={{
-                backgroundColor: '#fbc02d',
-                color: '#000',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                fontWeight: 'bold',
+                backgroundColor: '#fee2e2',
+                color: '#dc2626',
+                border: '1px solid #fecaca',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                fontWeight: '600',
                 fontSize: '13px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -196,90 +185,98 @@ export default function HomeE() {
                 marginLeft: '10px'
               }}
             >
-              <ArrowLeft size={16} />
-              <span>Voltar</span>
+              <LogOut size={16} />
+              <span>Sair</span>
             </button>
           </div>
         </header>
 
         <main className={styles.mainContent}>
-          <div className={styles.mapGridContainer}>
-            
-            <section className={styles.listSection}>
-              <div className={styles.legendaBox}>
-                <h3>Legenda do Mapa</h3>
-                <ul className={styles.legendaList}>
-                  <li><span className={`${styles.dot} ${styles.dotRed}`}></span> Não Visitado</li>
-                  <li><span className={`${styles.dot} ${styles.dotYellow}`}></span> Em Ação</li>
-                  <li><span className={`${styles.dot} ${styles.dotGreen}`}></span> Já Visitado</li>
-                </ul>
+          <section className={styles.welcomeCard}>
+            <div className={styles.welcomeText}>
+              <h2>Visão Geral da Cidade</h2>
+              <p>Acompanhe e execute as vistorias atribuídas à sua equipe em tempo real.</p>
+            </div>
+          </section>
+
+          <section className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={`${styles.statIcon} ${styles.statIcon_info}`}>
+                <ClipboardList size={22} />
               </div>
-
-              <div className={styles.listHeader}>
-                <h3>Tarefas da Gestão ({ocorrenciasGestao.length})</h3>
+              <div className={styles.statData}>
+                <span className={styles.statTitle}>Vistorias Atribuídas</span>
+                <strong className={styles.statValue}>12</strong>
+                <span className={styles.statSubtitle}>Na sua fila de trabalho</span>
               </div>
+            </div>
 
-              <div className={styles.ocorrenciasList}>
-                {ocorrenciasGestao.map((item) => (
-                  <div 
-                    key={item.id} 
-                    className={`${styles.cardOcorrencia} ${ocorrenciaSelecionada?.id === item.id ? styles.cardSelected : ''}`}
-                    onClick={() => setOcorrenciaSelecionada(item)}
-                  >
-                    <div className={styles.cardHeaderTop}>
-                      <span className={`${styles.badgeStatus} ${styles['status_' + item.corStatus]}`}>
-                        ● {item.status}
-                      </span>
-                      <span className={styles.timeText}><Clock size={12} /> {item.data}</span>
-                    </div>
-
-                    <h4 className={styles.ocorrenciaTitle}>{item.titulo}</h4>
-                    <p className={styles.ocorrenciaDesc}>{item.descricao}</p>
-                  </div>
-                ))}
+            <div className={styles.statCard}>
+              <div className={`${styles.statIcon} ${styles.statIcon_warning}`}>
+                <Clock size={22} />
               </div>
-            </section>
-
-            <section className={styles.mapSection}>
-              <div className={styles.mapControlsHeader}>
-                <h2>VISÃO GERAL DA CIDADE:</h2>
-                <button className={styles.btnEnviarRelatorio} onClick={() => navigate('/relatorioe')}>
-                  Enviar Relatório
-                </button>
+              <div className={styles.statData}>
+                <span className={styles.statTitle}>Pendentes</span>
+                <strong className={styles.statValue}>5</strong>
+                <span className={styles.statSubtitle}>Aguardando ida a campo</span>
               </div>
+            </div>
 
-              <div className={styles.mapCanvas}>
-                {ocorrenciasGestao.map((ponto) => (
-                  <div 
-                    key={ponto.id}
-                    className={`${styles.mapDotPin} ${styles['dot_' + ponto.corStatus]} ${ocorrenciaSelecionada?.id === ponto.id ? styles.dotActive : ''}`}
-                    style={{ top: ponto.posicaoTop, left: ponto.posicaoLeft }}
-                    onClick={() => setOcorrenciaSelecionada(ponto)}
-                  />
-                ))}
-
-                {ocorrenciaSelecionada && (
-                  <div className={styles.mapPopupCard}>
-                    <h4>{ocorrenciaSelecionada.titulo}</h4>
-                    <p>{ocorrenciaSelecionada.descricao}</p>
-                    <small>PRIORIDADE: {ocorrenciaSelecionada.prioridade}</small>
-
-                    <div className={styles.popupFooter}>
-                      <button 
-                        className={styles.btnConcluir}
-                        onClick={() => handleMarcarConcluido(ocorrenciaSelecionada.id)}
-                      >
-                        Marcar como Concluído
-                      </button>
-                    </div>
-                  </div>
-                )}
+            <div className={styles.statCard}>
+              <div className={`${styles.statIcon} ${styles.statIcon_success}`}>
+                <CheckCircle2 size={22} />
               </div>
-            </section>
-
-          </div>
+              <div className={styles.statData}>
+                <span className={styles.statTitle}>Concluídas Hoje</span>
+                <strong className={styles.statValue}>7</strong>
+                <span className={styles.statSubtitle}>Relatórios finalizados</span>
+              </div>
+            </div>
+          </section>
         </main>
+
+        <footer className={styles.footer}>
+          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+        </footer>
       </div>
+
+      {/* MODAL DE CONFIRMAÇÃO DE DESLOGAR */}
+      {modalLogout && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent} style={{ textAlign: 'center', padding: '2rem' }}>
+            <div style={{ backgroundColor: '#fee2e2', color: '#dc2626', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem auto' }}>
+              <LogOut size={24} />
+            </div>
+            <h3 style={{ margin: '0 0 0.5rem 0', color: '#065f46', fontSize: '1.2rem' }}>Encerrar Sessão</h3>
+            <p style={{ color: '#047857', fontSize: '0.95rem', margin: '0 0 1.5rem 0' }}>
+              Tem certeza que quer sair?
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+              <button 
+                onClick={() => setModalLogout(false)} 
+                className={styles.btnCancel}
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={handleConfirmLogout} 
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: 'var(--radius-sm)',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Sim, Quero Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
