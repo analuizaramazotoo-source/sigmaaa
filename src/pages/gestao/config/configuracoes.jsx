@@ -4,7 +4,7 @@ import styles from './configuracoes.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Bell, ChevronDown, Menu, X, Shield, 
-  LogOut, User, Settings, UserPlus, Sliders, Lock, CheckCircle2
+  LogOut, User, UserPlus, Sliders, Lock, CheckCircle2, ArrowLeft
 } from 'lucide-react';
 
 export default function Configuracoes() {
@@ -12,6 +12,7 @@ export default function Configuracoes() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [modalLogout, setModalLogout] = useState(false);
   
   // Aba ativa nas configurações (Geral, Notificações, Cadastrar Gestor)
   const [activeTabConfig, setActiveTabConfig] = useState('gestores');
@@ -51,6 +52,11 @@ export default function Configuracoes() {
     setTimeout(() => setSuccessMessage(''), 4000);
   };
 
+  const handleConfirmLogout = () => {
+    setModalLogout(false);
+    navigate('/login');
+  };
+
   return (
     <div className={styles.appContainer}>
       {/* OVERLAY PARA MOBILE */}
@@ -82,7 +88,7 @@ export default function Configuracoes() {
         </div>
 
         <nav className={styles.navigation}>
-          <Link to="/home" className={styles.navItem}>
+          <Link to="/homeg" className={styles.navItem}>
             <Home size={18} /> Painel Geral
           </Link>
           <Link to="/geoprocessamento" className={styles.navItem}>
@@ -91,10 +97,10 @@ export default function Configuracoes() {
           <Link to="/fila-fiscalizacao" className={styles.navItem}>
             <ClipboardList size={18} /> Fila de Fiscalização
           </Link>
-          <Link to="/autos-notificacoes" className={styles.navItem}>
+          <Link to="/autos-notificacoes-gestao" className={styles.navItem}>
             <FileText size={18} /> Autos e Notificações
           </Link>
-          <Link to="/relatorios-tecnicos" className={styles.navItem}>
+          <Link to="/relatorios-tecnicos-gestao" className={styles.navItem}>
             <BarChart2 size={18} /> Relatórios Técnicos
           </Link>
           <Link to="/legislacao" className={styles.navItem}>
@@ -121,8 +127,10 @@ export default function Configuracoes() {
           </div>
 
           <div className={styles.headerRight}>
+            {/* NOTIFICAÇÕES */}
             <div className={styles.popoverContainer}>
               <button 
+                type="button"
                 className={styles.iconButton} 
                 onClick={() => {
                   setShowNotifications(!showNotifications);
@@ -147,8 +155,10 @@ export default function Configuracoes() {
 
             <div className={styles.dividerVertical} />
 
+            {/* DROPDOWN USUÁRIO */}
             <div className={styles.popoverContainer}>
               <button 
+                type="button"
                 className={styles.userDropdown}
                 onClick={() => {
                   setShowUserDropdown(!showUserDropdown);
@@ -170,15 +180,22 @@ export default function Configuracoes() {
                     <span>Fiscal Ambiental Senior</span>
                   </div>
                   <div className={styles.menuDivider} />
-                  <Link to="/perfil" className={styles.menuItemBtn}>
-                    <User size={16} /> Meu Perfil
-                  </Link>
-                  <Link to="/configuracoes" className={styles.menuItemBtn}>
-                    <Settings size={16} /> Configurações
-                  </Link>
-                  <div className={styles.menuDivider} />
+                  
+                  {/* MEU PERFIL -> NAVEGA PARA /PERFILG */}
                   <button 
-                    onClick={() => navigate('/login')} 
+                    type="button" 
+                    onClick={() => { setShowUserDropdown(false); navigate('/perfilg'); }} 
+                    className={styles.menuItemBtn}
+                  >
+                    <User size={16} /> Meu Perfil
+                  </button>
+
+                  <div className={styles.menuDivider} />
+
+                  {/* SAIR DA CONTA -> ABRE MODAL */}
+                  <button 
+                    type="button"
+                    onClick={() => { setShowUserDropdown(false); setModalLogout(true); }} 
                     className={`${styles.menuItemBtn} ${styles.dangerText}`}
                   >
                     <LogOut size={16} /> Sair da Conta
@@ -186,6 +203,29 @@ export default function Configuracoes() {
                 </div>
               )}
             </div>
+
+            {/* BOTÃO AMARELO DE VOLTAR */}
+            <button 
+              type="button"
+              onClick={() => navigate('/homeg')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
           </div>
         </header>
 
@@ -211,6 +251,7 @@ export default function Configuracoes() {
               </div>
               <div className={styles.filterOptions} style={{ flexDirection: 'column' }}>
                 <button 
+                  type="button"
                   className={activeTabConfig === 'gestores' ? styles.filterChipActive : styles.filterChip}
                   onClick={() => setActiveTabConfig('gestores')}
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}
@@ -218,6 +259,7 @@ export default function Configuracoes() {
                   <UserPlus size={16} /> Cadastrar Novo Gestor
                 </button>
                 <button 
+                  type="button"
                   className={activeTabConfig === 'geral' ? styles.filterChipActive : styles.filterChip}
                   onClick={() => setActiveTabConfig('geral')}
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}
@@ -225,6 +267,7 @@ export default function Configuracoes() {
                   <Sliders size={16} /> Preferências do Sistema
                 </button>
                 <button 
+                  type="button"
                   className={activeTabConfig === 'seguranca' ? styles.filterChipActive : styles.filterChip}
                   onClick={() => setActiveTabConfig('seguranca')}
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}
@@ -399,7 +442,7 @@ export default function Configuracoes() {
                         <strong>Hoje, às 08:30 via IP 192.168.1.45</strong>
                       </div>
                     </div>
-                    <button className={styles.btnSecondary} style={{ width: 'fit-content' }}>
+                    <button type="button" className={styles.btnSecondary} style={{ width: 'fit-content' }}>
                       Exportar Logs de Auditoria (.CSV)
                     </button>
                   </div>
@@ -413,6 +456,80 @@ export default function Configuracoes() {
           <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
         </footer>
       </div>
+
+      {/* MODAL DE CONFIRMAÇÃO DE SAÍDA */}
+      {modalLogout && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            width: '90%',
+            maxWidth: '380px',
+            textAlign: 'center',
+            padding: '2rem',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)'
+          }}>
+            <div style={{
+              backgroundColor: '#fee2e2',
+              color: '#dc2626',
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem auto'
+            }}>
+              <LogOut size={24} />
+            </div>
+            <h3 style={{ margin: '0 0 0.5rem 0', color: '#065f46', fontSize: '1.2rem' }}>Encerrar Sessão</h3>
+            <p style={{ color: '#047857', fontSize: '0.95rem', margin: '0 0 1.5rem 0' }}>
+              Tem certeza que quer sair?
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+              <button 
+                type="button"
+                onClick={() => setModalLogout(false)} 
+                style={{
+                  backgroundColor: '#f1f5f9',
+                  color: '#475569',
+                  border: 'none',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button"
+                onClick={handleConfirmLogout} 
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Sim, Quero Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

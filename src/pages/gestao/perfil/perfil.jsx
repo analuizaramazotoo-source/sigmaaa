@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './perfil.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, Bell, ChevronDown, Leaf, Menu, X, Shield, 
-  LogOut, User, Settings, Save, Key, Mail, Phone, BadgeCheck, Camera
+  HelpCircle, Bell, ChevronDown, Menu, X, Shield, 
+  LogOut, Settings, Save, Key, Mail, Phone, BadgeCheck, Camera, ArrowLeft
 } from 'lucide-react';
 
 export default function Perfil() {
@@ -12,6 +12,7 @@ export default function Perfil() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [modalLogout, setModalLogout] = useState(false);
 
   // Estado dos dados do Perfil
   const [userData, setUserData] = useState({
@@ -30,6 +31,11 @@ export default function Perfil() {
     e.preventDefault();
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 3000);
+  };
+
+  const handleConfirmLogout = () => {
+    setModalLogout(false);
+    navigate('/login');
   };
 
   return (
@@ -63,7 +69,7 @@ export default function Perfil() {
         </div>
 
         <nav className={styles.navigation}>
-          <Link to="/home" className={styles.navItem}>
+          <Link to="/homeg" className={styles.navItem}>
             <Home size={18} /> Painel Geral
           </Link>
           <Link to="/geoprocessamento" className={styles.navItem}>
@@ -72,10 +78,10 @@ export default function Perfil() {
           <Link to="/fila-fiscalizacao" className={styles.navItem}>
             <ClipboardList size={18} /> Fila de Fiscalização
           </Link>
-          <Link to="/autos-notificacoes" className={styles.navItem}>
+          <Link to="/autos-notificacoes-gestao" className={styles.navItem}>
             <FileText size={18} /> Autos e Notificações
           </Link>
-          <Link to="/relatorios-tecnicos" className={styles.navItem}>
+          <Link to="/relatorios-tecnicos-gestao" className={styles.navItem}>
             <BarChart2 size={18} /> Relatórios Técnicos
           </Link>
           <Link to="/legislacao" className={styles.navItem}>
@@ -105,6 +111,7 @@ export default function Perfil() {
             {/* NOTIFICAÇÕES */}
             <div className={styles.popoverContainer}>
               <button 
+                type="button"
                 className={styles.iconButton} 
                 onClick={() => {
                   setShowNotifications(!showNotifications);
@@ -132,6 +139,7 @@ export default function Perfil() {
             {/* DROPDOWN USUÁRIO */}
             <div className={styles.popoverContainer}>
               <button 
+                type="button"
                 className={styles.userDropdown}
                 onClick={() => {
                   setShowUserDropdown(!showUserDropdown);
@@ -153,15 +161,22 @@ export default function Perfil() {
                     <span>{userData.cargo}</span>
                   </div>
                   <div className={styles.menuDivider} />
-                  <Link to="/perfil" className={styles.menuItemBtn}>
-                    <User size={16} /> Meu Perfil
-                  </Link>
-                  <Link to="/configuracoes" className={styles.menuItemBtn}>
-                    <Settings size={16} /> Configurações
-                  </Link>
-                  <div className={styles.menuDivider} />
+                  
+                  {/* OPÇÃO CONFIGURAÇÕES -> NAVEGA PARA /CONFIG */}
                   <button 
-                    onClick={() => navigate('/login')} 
+                    type="button" 
+                    onClick={() => { setShowUserDropdown(false); navigate('/config'); }} 
+                    className={styles.menuItemBtn}
+                  >
+                    <Settings size={16} /> Configurações
+                  </button>
+
+                  <div className={styles.menuDivider} />
+
+                  {/* OPÇÃO SAIR DA CONTA -> ABRE MODAL */}
+                  <button 
+                    type="button"
+                    onClick={() => { setShowUserDropdown(false); setModalLogout(true); }} 
                     className={`${styles.menuItemBtn} ${styles.dangerText}`}
                   >
                     <LogOut size={16} /> Sair da Conta
@@ -169,6 +184,29 @@ export default function Perfil() {
                 </div>
               )}
             </div>
+
+            {/* BOTÃO AMARELO DE VOLTAR */}
+            <button 
+              type="button"
+              onClick={() => navigate('/homeg')} 
+              style={{
+                backgroundColor: '#fbc02d',
+                color: '#000',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginLeft: '10px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Voltar</span>
+            </button>
           </div>
         </header>
 
@@ -196,7 +234,7 @@ export default function Perfil() {
               <div className={styles.profileBadgeWrapper}>
                 <div className={styles.profileAvatarWrapper}>
                   <div className={styles.profileAvatar}>AL</div>
-                  <button className={styles.avatarChangeBtn} title="Alterar Foto">
+                  <button type="button" className={styles.avatarChangeBtn} title="Alterar Foto">
                     <Camera size={14} />
                   </button>
                 </div>
@@ -295,6 +333,80 @@ export default function Perfil() {
           <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
         </footer>
       </div>
+
+      {/* MODAL DE CONFIRMAÇÃO DE SAÍDA */}
+      {modalLogout && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            width: '90%',
+            maxWidth: '380px',
+            textAlign: 'center',
+            padding: '2rem',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)'
+          }}>
+            <div style={{
+              backgroundColor: '#fee2e2',
+              color: '#dc2626',
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem auto'
+            }}>
+              <LogOut size={24} />
+            </div>
+            <h3 style={{ margin: '0 0 0.5rem 0', color: '#065f46', fontSize: '1.2rem' }}>Encerrar Sessão</h3>
+            <p style={{ color: '#047857', fontSize: '0.95rem', margin: '0 0 1.5rem 0' }}>
+              Tem certeza que quer sair?
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+              <button 
+                type="button"
+                onClick={() => setModalLogout(false)} 
+                style={{
+                  backgroundColor: '#f1f5f9',
+                  color: '#475569',
+                  border: 'none',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button"
+                onClick={handleConfirmLogout} 
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Sim, Quero Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
