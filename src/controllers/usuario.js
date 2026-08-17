@@ -3,6 +3,7 @@ const db = require('../database/connection');
 module.exports = {
   async listarUsuarios(request, response) {
     try {
+      // throw new Error('EU causei o erro);
       return response.status(200).json({
         sucesso: true,
         mensagem: 'Lista de usuários.',
@@ -15,5 +16,5 @@ module.exports = {
         dados: error.message
       });
     }
-  }
+  },
 }
