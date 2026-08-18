@@ -1,73 +1,43 @@
-import React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./cadastrocidadao.module.css";
 import {
-  LayoutDashboard,
-  ClipboardList,
-  HelpCircle,
-  Phone,
   ArrowLeft,
-  ShieldCheck
+  ShieldCheck,
+  UserPlus
 } from "lucide-react";
 
 function CadastroCidadao() {
   const navigate = useNavigate();
 
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [celular, setCelular] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+
   // Permite apenas números nos campos de Celular e CPF
-  const handleOnlyNumbers = (e) => {
-    e.target.value = e.target.value.replace(/\D/g, "");
+  const handleOnlyNumbers = (e, setter) => {
+    const valorNumerico = e.target.value.replace(/\D/g, "");
+    setter(valorNumerico);
   };
 
-  // Ao cadastrar, vai para a área do cidadão
-  const handleCadastrar = () => {
+  // Ao cadastrar, valida e vai para a área do cidadão
+  const handleCadastrar = (e) => {
+    e.preventDefault();
+
+    if (senha !== confirmarSenha) {
+      alert("As senhas não coincidem. Verifique e tente novamente.");
+      return;
+    }
+
     navigate("/cidadao");
   };
 
   return (
     <div className={styles.container}>
-      {/* SIDEBAR / MENU LATERAL */}
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
-          <div className={styles.logoArea}>
-            <span className={styles.logoIcon}>🌱</span>
-            <div className={styles.logoText}>
-              <h2>CADASTRO</h2>
-              <p>SEGURO AMBIENTAL</p>
-            </div>
-          </div>
-        </div>
-
-        <nav className={styles.navMenu}>
-          <Link to="/" className={styles.navItem}>
-            <LayoutDashboard size={20} />
-            <span>Início</span>
-          </Link>
-          <Link to="/login" className={styles.navItem}>
-            <Phone size={20} />
-            <span>Login</span>
-          </Link>
-          <Link to="/cadastro" className={`${styles.navItem} ${styles.active}`}>
-            <ClipboardList size={20} />
-            <span>Cadastro</span>
-          </Link>
-          <Link to="/" className={styles.navItem}>
-            <HelpCircle size={20} />
-            <span>Orientações</span>
-          </Link>
-        </nav>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.ajudaCard}>
-            <Phone size={18} />
-            <div>
-              <strong>Precisa de ajuda?</strong>
-              <p>Fale conosco</p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* CONTEÚDO PRINCIPAL */}
+      {/* ÁREA PRINCIPAL SEM SIDEBAR */}
       <main className={styles.mainContent}>
         {/* CABEÇALHO SUPERIOR */}
         <header className={styles.topHeader}>
@@ -79,73 +49,125 @@ function CadastroCidadao() {
           </div>
 
           <div className={styles.headerRight}>
-            <button className={styles.btnVoltar} onClick={() => navigate("/")}>
+            <button type="button" className={styles.btnVoltar} onClick={() => navigate("/")}>
               <ArrowLeft size={16} />
               <span>Voltar</span>
             </button>
           </div>
         </header>
 
-        {/* CORPO DA PÁGINA (CARD DE CADASTRO) */}
+        {/* CORPO DA PÁGINA (CARD DE CADASTRO CENTRALIZADO) */}
         <div className={styles.contentBody}>
           <div className={styles.cardCadastro}>
-            <h2 className={styles.cardTitle}>Cadastro do Cidadão</h2>
-            <p className={styles.cardSub}>
-              Crie sua conta para relatar problemas ou solicitar serviços de meio ambiente na sua cidade.
-            </p>
+            <div className={styles.cardHeaderArea}>
+              <div className={styles.headerBadgeIcon}>
+                <UserPlus size={22} color="#059669" />
+              </div>
+              <div>
+                <h2 className={styles.cardTitle}>Cadastro do Cidadão</h2>
+                <p className={styles.cardSub}>
+                  Crie sua conta para relatar problemas ou solicitar serviços de meio ambiente na sua cidade.
+                </p>
+              </div>
+            </div>
 
-            <div className={styles.formGrid}>
-              {/* ÁREA DOS INPUTS */}
+            <form onSubmit={handleCadastrar} className={styles.formGrid}>
+              {/* ÁREA DOS INPUTS OBRIGATÓRIOS */}
               <div className={styles.inputsArea}>
-                <input type="text" placeholder="Nome Completo" className={styles.inputField} />
-                <input type="email" placeholder="E-mail" className={styles.inputField} />
-
-                <input
-                  type="tel"
-                  placeholder="Celular"
-                  onInput={handleOnlyNumbers}
-                  className={styles.inputField}
-                />
-                <input
-                  type="text"
-                  placeholder="CPF"
-                  maxLength={11}
-                  onInput={handleOnlyNumbers}
-                  className={styles.inputField}
-                />
-
-                <div className={styles.senhaGroup}>
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Nome Completo *</label>
                   <input
-                    type="password"
-                    placeholder="Senha"
+                    type="text"
+                    placeholder="Digite seu nome completo"
                     className={styles.inputField}
-                  />
-                  <input
-                    type="password"
-                    placeholder="Confirmar Senha"
-                    className={styles.inputField}
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    required
                   />
                 </div>
 
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>E-mail *</label>
+                  <input
+                    type="email"
+                    placeholder="seu.email@exemplo.com"
+                    className={styles.inputField}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputRow}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Celular *</label>
+                    <input
+                      type="tel"
+                      placeholder="(00) 00000-0000"
+                      maxLength={11}
+                      value={celular}
+                      onInput={(e) => handleOnlyNumbers(e, setCelular)}
+                      className={styles.inputField}
+                      required
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>CPF *</label>
+                    <input
+                      type="text"
+                      placeholder="000.000.000-00"
+                      maxLength={11}
+                      value={cpf}
+                      onInput={(e) => handleOnlyNumbers(e, setCpf)}
+                      className={styles.inputField}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.senhaGroup}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Senha *</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      className={styles.inputField}
+                      value={senha}
+                      onChange={(e) => setSenha(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Confirmar Senha *</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      className={styles.inputField}
+                      value={confirmarSenha}
+                      onChange={(e) => setConfirmarSenha(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
                 <div className={styles.btnArea}>
-                  <button
-                    className={styles.btnCadastrar}
-                    onClick={handleCadastrar}
-                    type="button"
-                  >
-                    CADASTRAR
+                  <button className={styles.btnCadastrar} type="submit">
+                    FINALIZAR CADASTRO
                   </button>
                 </div>
               </div>
 
-              {/* ÁREA DA ILUSTRAÇÃO */}
+              {/* ÁREA DA ILUSTRAÇÃO/INFORMAÇÃO */}
               <div className={styles.ilustrationArea}>
                 <div className={styles.badgeSeguranca}>
-                  <ShieldCheck size={80} className={styles.iconShield} />
-                  <p>Seus dados estão protegidos</p>
+                  <ShieldCheck size={64} className={styles.iconShield} />
+                  <strong>Seus dados estão protegidos</strong>
+                  <p>Cadastro oficial para acompanhamento e atendimento a solicitações ambientais.</p>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </main>

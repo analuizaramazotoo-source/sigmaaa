@@ -4,223 +4,126 @@ import styles from './legislacao.module.css';
 import { 
   ArrowLeft, HelpCircle, BookOpen, Search, 
   FileText, ExternalLink, Scale, ShieldCheck,
-  Shield, Map as MapIcon, ClipboardList, BarChart2, Home as HomeIcon 
+  Shield, Map as MapIcon, ClipboardList, BarChart2, Home as HomeIcon,
+  X, CheckCircle2, Copy
 } from 'lucide-react';
+
+const DOCUMENTOS_BASE = [
+  {
+    id: 1,
+    titulo: "Lei Municipal nº 4.502/2021",
+    categoria: "Código Ambiental",
+    descricao: "Dispõe sobre a Política Municipal de Meio Ambiente e o Código de Proteção Ambiental.",
+    data: "15/01/2021",
+    conteudoCompleto: "Art. 1º Fica instituído o Código Ambiental Municipal...\n\nArt. 12º São consideradas infrações ambientais de gravidade alta o descarte de resíduos industriais em mananciais sem tratamento prévio.\n\nArt. 45º As penalidades aplicáveis incluem notificação orientativa, multa simples, embargo de atividades e apreensão de bens.",
+    linkDiario: "https://diariooficial.prefeitura.gov.br/atos/lei-4502-2021"
+  },
+  {
+    id: 2,
+    titulo: "Decreto nº 1.209/2023",
+    categoria: "Queimadas Urbanas",
+    descricao: "Regulamenta a fiscalização, penalidades e ritos de apuração para queimadas em áreas urbanas.",
+    data: "10/05/2023",
+    conteudoCompleto: "Art. 1º É vedada a realização de queimadas em áreas urbanas, lotes vagos e terrenos privados no âmbito municipal.\n\nArt. 4º O proprietário do imóvel responderá solidariamente pelos danos e custos operacionais do combate às queimadas no lote.",
+    linkDiario: "https://diariooficial.prefeitura.gov.br/atos/decreto-1209-2023"
+  },
+  {
+    id: 3,
+    titulo: "Instrução Normativa SEMMA 04/2024",
+    categoria: "Poda e Supressão",
+    descricao: "Estabelece critérios técnicos para autorização de poda e supressão de vegetação nativa.",
+    data: "02/02/2024",
+    conteudoCompleto: "Art. 1º Toda intervenção em vegetação de porte arbóreo exige laudo técnico emitido por engenheiro florestal ou ambiental credenciado.\n\nArt. 8º A supressão autorizada obriga o requerente à compensação ambiental na proporção de 3 mudas nativas para cada árvore suprimida.",
+    linkDiario: "https://diariooficial.prefeitura.gov.br/atos/in-semma-04-2024"
+  },
+  {
+    id: 4,
+    titulo: "Lei Federal nº 9.605/1998",
+    categoria: "Crimes Ambientais",
+    descricao: "Lei de Crimes Ambientais - Sanções penais e administrativas derivadas de condutas lesivas ao meio ambiente.",
+    data: "12/02/1998",
+    conteudoCompleto: "Art. 54º Causar poluição de qualquer natureza em níveis tais que resultem ou possam resultar em danos à saúde humana, ou que provoquem a mortandade de animais ou a destruição significativa da flora.\n\nPena: reclusão, de um a quatro anos, e multa.",
+    linkDiario: "https://www.planalto.gov.br/ccivil_03/leis/l9605.htm"
+  }
+];
 
 export default function Legislacao() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [busca, setBusca] = useState('');
+  const [docSelecionado, setDocSelecionado] = useState(null);
+  const [notificationMsg, setNotificationMsg] = useState('');
 
   const isActive = (path) => location.pathname === path;
 
-  const documentos = [
-    {
-      id: 1,
-      titulo: "Lei Municipal nº 4.502/2021",
-      categoria: "Código Ambiental",
-      descricao: "Dispõe sobre a Política Municipal de Meio Ambiente e o Código de Proteção Ambiental.",
-      data: "15/01/2021"
-    },
-    {
-      id: 2,
-      titulo: "Decreto nº 1.209/2023",
-      categoria: "Queimadas Urbanas",
-      descricao: "Regulamenta a fiscalização, penalidades e ritos de apuração para queimadas em áreas urbanas.",
-      data: "10/05/2023"
-    },
-    {
-      id: 3,
-      titulo: "Instrução Normativa SEMMA 04/2024",
-      categoria: "Poda e Supressão",
-      descricao: "Estabelece critérios técnicos para autorização de poda e supressão de vegetação nativa.",
-      data: "02/02/2024"
-    },
-    {
-      id: 4,
-      titulo: "Lei Federal nº 9.605/1998",
-      categoria: "Crimes Ambientais",
-      descricao: "Lei de Crimes Ambientais - Sanções penais e administrativas derivadas de condutas lesivas ao meio ambiente.",
-      data: "12/02/1998"
-    }
-  ];
-
-  const docsFiltrados = documentos.filter(doc => 
+  const docsFiltrados = DOCUMENTOS_BASE.filter(doc => 
     doc.titulo.toLowerCase().includes(busca.toLowerCase()) || 
-    doc.categoria.toLowerCase().includes(busca.toLowerCase())
+    doc.categoria.toLowerCase().includes(busca.toLowerCase()) ||
+    doc.descricao.toLowerCase().includes(busca.toLowerCase())
   );
 
+  const handleCopiarTrecho = (texto) => {
+    navigator.clipboard.writeText(texto);
+    setNotificationMsg("Trecho do artigo copiado para a área de transferência!");
+    setTimeout(() => setNotificationMsg(''), 3000);
+  };
+
   return (
-    <div style={{ display: 'flex', width: '100vw', minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
+    <div className={styles.appContainer}>
       
       {/* SIDEBAR FIXA */}
-      <aside 
-        style={{ 
-          width: '260px', 
-          minWidth: '260px', 
-          backgroundColor: '#ffffff', 
-          borderRight: '1px solid #e2e8f0',
-          display: 'flex', 
-          flexDirection: 'column', 
-          justifyContent: 'space-between',
-          height: '100vh',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100
-        }}
-      >
+      <aside className={styles.sidebar}>
         <div>
-          {/* TOPO DA SIDEBAR */}
-          <div style={{ padding: '20px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #f1f5f9' }}>
-            <div style={{ backgroundColor: '#059669', color: '#fff', padding: '8px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className={styles.brandHeader}>
+            <div className={styles.logoIcon}>
               <Shield size={22} />
             </div>
-            <div>
-              <strong style={{ fontSize: '13px', color: '#047857', display: 'block', lineHeight: '1.2' }}>SISTEMA DE GESTÃO</strong>
-              <span style={{ fontSize: '11px', color: '#059669', fontWeight: 'bold' }}>MUNICIPAL AMBIENTAL</span>
+            <div className={styles.brandText}>
+              <strong>SISTEMA DE GESTÃO</strong>
+              <span>MUNICIPAL AMBIENTAL</span>
             </div>
           </div>
 
-          {/* MENU DE NAVEGAÇÃO */}
-          <nav style={{ padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#059669', letterSpacing: '0.5px', marginBottom: '8px', paddingLeft: '8px' }}>
-              MENU DO GESTOR
-            </span>
+          <nav className={styles.navigation}>
+            <span className={styles.navCategory}>MENU DO GESTOR</span>
 
-            {/* HOME */}
-            <Link
-              to="/homeg"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/homeg') ? '#059669' : 'transparent',
-                color: isActive('/homeg') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
+            <Link to="/homeg" className={isActive('/homeg') ? styles.navItemActive : styles.navItem}>
               <HomeIcon size={18} /> Home
             </Link>
 
-            {/* GEOPROCESSAMENTO */}
-            <Link
-              to="/geoprocessamento"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/geoprocessamento') ? '#059669' : 'transparent',
-                color: isActive('/geoprocessamento') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
+            <Link to="/geoprocessamento" className={isActive('/geoprocessamento') ? styles.navItemActive : styles.navItem}>
               <MapIcon size={18} /> Geoprocessamento
             </Link>
 
-            {/* FILA DE FISCALIZAÇÃO */}
-            <Link
-              to="/fila-fiscalizacao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/fila-fiscalizacao') ? '#059669' : 'transparent',
-                color: isActive('/fila-fiscalizacao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
+            <Link to="/fila-fiscalizacao" className={isActive('/fila-fiscalizacao') ? styles.navItemActive : styles.navItem}>
               <ClipboardList size={18} /> Fila de Fiscalização
             </Link>
 
-            {/* AUTOS E NOTIFICAÇÕES */}
-            <Link
-              to="/autos-notificacoes-gestao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/autos-notificacoes-gestao') ? '#059669' : 'transparent',
-                color: isActive('/autos-notificacoes-gestao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
+            <Link to="/autos-notificacoes-gestao" className={isActive('/autos-notificacoes-gestao') ? styles.navItemActive : styles.navItem}>
               <FileText size={18} /> Autos e Notificações
             </Link>
 
-            {/* RELATÓRIOS TÉCNICOS */}
-            <Link
-              to="/relatorios-tecnicos-gestao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/relatorios-tecnicos-gestao') ? '#059669' : 'transparent',
-                color: isActive('/relatorios-tecnicos-gestao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
+            <Link to="/relatorios-tecnicos-gestao" className={isActive('/relatorios-tecnicos-gestao') ? styles.navItemActive : styles.navItem}>
               <BarChart2 size={18} /> Relatórios Técnicos
             </Link>
 
-            {/* LEGISLAÇÃO */}
-            <Link
-              to="/legislacao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/legislacao') ? '#059669' : 'transparent',
-                color: isActive('/legislacao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
+            <Link to="/legislacao" className={isActive('/legislacao') ? styles.navItemActive : styles.navItem}>
               <HelpCircle size={18} /> Legislação
             </Link>
           </nav>
         </div>
 
-        {/* RODAPÉ DA SIDEBAR */}
-        <div style={{ padding: '16px', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
-          <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 'bold' }}>Prefeitura Municipal</div>
-          <div style={{ fontSize: '10px', color: '#94a3b8' }}>Secretaria do Meio Ambiente</div>
+        <div className={styles.sidebarFooter}>
+          <div className={styles.footerTitle}>Prefeitura Municipal</div>
+          <div className={styles.footerSubtitle}>Secretaria do Meio Ambiente</div>
         </div>
       </aside>
 
       {/* CONTEÚDO PRINCIPAL DA TELA */}
-      <div className={styles.mainWrapper} style={{ flex: 1, minWidth: 0 }}>
+      <div className={styles.mainWrapper}>
         
-        {/* CABEÇALHO COM O BOTÃO AMARELO À DIREITA */}
-        <header className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <header className={styles.header}>
           <div className={styles.headerLeft}>
             <div>
               <h1 className={styles.headerTitle}>Biblioteca de Legislação</h1>
@@ -230,20 +133,9 @@ export default function Legislacao() {
 
           <div className={styles.headerRight}>
             <button 
+              type="button"
               onClick={() => navigate('/homeg')} 
-              style={{
-                backgroundColor: '#fbc02d',
-                color: '#000',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                fontWeight: 'bold',
-                fontSize: '13px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
+              className={styles.btnVoltarAmarelo}
             >
               <ArrowLeft size={16} />
               <span>Voltar</span>
@@ -252,6 +144,18 @@ export default function Legislacao() {
         </header>
 
         <main className={styles.mainContent}>
+          {notificationMsg && (
+            <div className={`${styles.infoBanner} ${styles.status_success}`}>
+              <div className={styles.infoContent}>
+                <CheckCircle2 size={24} />
+                <div>
+                  <strong>Copiado!</strong>
+                  <p>{notificationMsg}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className={styles.cardPrincipal}>
             <div className={styles.cardHeader}>
               <div className={styles.headerIconBadge}>
@@ -292,12 +196,21 @@ export default function Legislacao() {
                       <h3 className={styles.docTitulo}>{doc.titulo}</h3>
                       <p className={styles.docDescricao}>{doc.descricao}</p>
                       <div className={styles.docActions}>
-                        <button className={styles.btnVisualizar}>
+                        <button 
+                          type="button"
+                          className={styles.btnVisualizar}
+                          onClick={() => setDocSelecionado(doc)}
+                        >
                           <FileText size={16} /> Ler Documento
                         </button>
-                        <button className={styles.btnLinkExterno}>
+                        <a 
+                          href={doc.linkDiario} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className={styles.btnLinkExterno}
+                        >
                           <ExternalLink size={16} /> Ver no Diário Oficial
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -312,11 +225,54 @@ export default function Legislacao() {
           </div>
 
           <div className={styles.ajudaFiscais}>
-             <ShieldCheck size={20} />
-             <span>Dica: Sempre fundamente seus autos com base no artigo específico da <strong>Lei nº 4.502/2021</strong>.</span>
+            <ShieldCheck size={20} />
+            <span>Dica: Sempre fundamente seus autos com base no artigo específico da <strong>Lei nº 4.502/2021</strong>.</span>
           </div>
         </main>
+
+        <footer className={styles.footer}>
+          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+        </footer>
       </div>
+
+      {/* MODAL DE LEITURA DO DOCUMENTO */}
+      {docSelecionado && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <div>
+                <span className={styles.badgeCategoria}>{docSelecionado.categoria}</span>
+                <h3 style={{ margin: '0.4rem 0 0 0', color: '#065f46' }}>{docSelecionado.titulo}</h3>
+              </div>
+              <button type="button" onClick={() => setDocSelecionado(null)} className={styles.closeBtnModal}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className={styles.modalBody}>
+              <p style={{ fontSize: '0.85rem', color: '#047857' }}>{docSelecionado.descricao}</p>
+              
+              <div className={styles.textContainerDoc}>
+                <pre>{docSelecionado.conteudoCompleto}</pre>
+              </div>
+            </div>
+
+            <div className={styles.modalActions}>
+              <button 
+                type="button" 
+                onClick={() => handleCopiarTrecho(docSelecionado.conteudoCompleto)}
+                className={styles.btnLinkExterno}
+              >
+                <Copy size={16} /> Copiar Fundamentação
+              </button>
+              <button type="button" onClick={() => setDocSelecionado(null)} className={styles.btnCancel}>
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
