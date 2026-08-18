@@ -17,18 +17,18 @@ import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
-import LoginEquipe from "./pages/equipe/login/loginEquipe";
+import CadastroEquipe from "./pages/equipe/login/CadastroEquipe"; // Nome atualizado
 
-// MÓDULO GESTÃO (Com os nomes EXATOS da sua árvore de arquivos)
+// MÓDULO GESTÃO
 import Homeg from "./pages/gestao/homeg/homeg";
 import Perfilg from "./pages/gestao/perfil/perfil";
 import Configuracoes from "./pages/gestao/config/configuracoes";
 
 import Geoprocessamento from "./pages/gestao/geoprocessamento/geoprocessamento"; 
-import FilaFiscalizacao from "./pages/gestao/fiscalizacao/filaFiscalizacao"; // Pasta "fiscalizacao"
-import AutosNotificacoesGestao from "./pages/gestao/autos/autosNotificacoes"; // Pasta "autos"
-import RelatoriosTecnicosGestao from "./pages/gestao/relatorio/relatoriosTecnicos"; // Pasta "relatorio"
-import Legislacao from "./pages/gestao/legislacao/legislacao"; // Pasta "legislacao"
+import FilaFiscalizacao from "./pages/gestao/fiscalizacao/filaFiscalizacao";
+import AutosNotificacoesGestao from "./pages/gestao/autos/autosNotificacoes";
+import RelatoriosTecnicosGestao from "./pages/gestao/relatorio/relatoriosTecnicos";
+import Legislacao from "./pages/gestao/legislacao/legislacao";
 
 // MÓDULO EQUIPE
 import HomeE from "./pages/equipe/homee/homee";
@@ -44,10 +44,10 @@ function App() {
         {/* HOME INSTITUCIONAL */}
         <Route path="/" element={<Home />} />
         
-        {/* LOGINS */}
+        {/* LOGINS E CADASTROS DE AUTENTICAÇÃO */}
         <Route path="/login" element={<Login />} />
         <Route path="/logincidadao" element={<LoginCidadao />} />
-        <Route path="/cadastroeq" element={<LoginEquipe />} />
+        <Route path="/cadastroeq" element={<CadastroEquipe />} /> {/* Elemento atualizado */}
 
         {/* ROTAS CIDADÃO */}
         <Route path="/cidadao" element={<Homec />} />
