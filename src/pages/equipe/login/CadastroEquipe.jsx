@@ -13,10 +13,8 @@ import {
   ArrowLeft, 
   Eye, 
   EyeOff, 
-  Briefcase, 
   FileBadge,
-  HardHat,
-  Building2
+  HardHat
 } from 'lucide-react';
 
 export default function CadastroEquipe() {
@@ -29,15 +27,28 @@ export default function CadastroEquipe() {
     nome: '',
     email: '',
     cpfMatricula: '',
-    cargo: '',
-    setor: 'fiscalizacao',
     senha: '',
     confirmarSenha: ''
   });
 
+  const formatarCpfOuMatricula = (value) => {
+    const apenasNumeros = value.replace(/\D/g, '');
+    if (apenasNumeros.length <= 11) {
+      return apenasNumeros
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+    return value.toUpperCase().slice(0, 20);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'cpfMatricula') {
+      setFormData((prev) => ({ ...prev, [name]: formatarCpfOuMatricula(value) }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleCadastro = (e) => {
@@ -49,7 +60,7 @@ export default function CadastroEquipe() {
     }
 
     if (formData.senha !== formData.confirmarSenha) {
-      alert('As senhas informadas não coincidem. Por favor, verifique.');
+      alert('As senhas informadas não coincidem.');
       return;
     }
 
@@ -80,10 +91,7 @@ export default function CadastroEquipe() {
             <HardHat size={32} />
           </div>
           <h2>Portal de Operações</h2>
-          <p>
-            Credenciamento oficial para equipes de campo, analistas de licenciamento e fiscais
-            ambientais.
-          </p>
+          <p>Credenciamento simplificado para agentes e fiscais ambientais de campo.</p>
         </div>
 
         <div className={styles.sidebarFooter}>
@@ -110,7 +118,7 @@ export default function CadastroEquipe() {
           </div>
         </header>
 
-        {/* CARD DE CADASTRO DA EQUIPE */}
+        {/* CARD DE CADASTRO SIMPLIFICADO */}
         <main className={styles.mainContent}>
           <div className={styles.loginCard}>
             <div className={styles.cardHeader}>
@@ -153,59 +161,20 @@ export default function CadastroEquipe() {
                 </div>
               </div>
 
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="cpfMatricula">CPF ou Matrícula Funcional *</label>
-                  <div className={styles.inputWithIcon}>
-                    <FileBadge size={18} className={styles.inputIcon} />
-                    <input
-                      id="cpfMatricula"
-                      name="cpfMatricula"
-                      type="text"
-                      placeholder="Digite o CPF ou nº de matrícula"
-                      value={formData.cpfMatricula}
-                      onChange={handleChange}
-                      maxLength={18}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="cargo">Cargo / Função *</label>
-                  <div className={styles.inputWithIcon}>
-                    <Briefcase size={18} className={styles.inputIcon} />
-                    <input
-                      id="cargo"
-                      name="cargo"
-                      type="text"
-                      placeholder="Ex: Fiscal Ambiental"
-                      value={formData.cargo}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* SELEÇÃO DO SETOR OPERACIONAL (SEM BUG VISUAL) */}
               <div className={styles.formGroup}>
-                <label htmlFor="setor">Setor Operacional *</label>
+                <label htmlFor="cpfMatricula">CPF ou Matrícula Funcional *</label>
                 <div className={styles.inputWithIcon}>
-                  <Building2 size={18} className={styles.inputIcon} />
-                  <select
-                    id="setor"
-                    name="setor"
-                    className={styles.selectInput}
-                    value={formData.setor}
+                  <FileBadge size={18} className={styles.inputIcon} />
+                  <input
+                    id="cpfMatricula"
+                    name="cpfMatricula"
+                    type="text"
+                    placeholder="Digite o CPF ou nº de matrícula"
+                    value={formData.cpfMatricula}
                     onChange={handleChange}
+                    maxLength={18}
                     required
-                  >
-                    <option value="fiscalizacao">Fiscalização de Campo</option>
-                    <option value="licenciamento">Licenciamento Ambiental</option>
-                    <option value="monitoramento">Monitoramento Urbano</option>
-                    <option value="gestao">Gestão / Coordenação</option>
-                  </select>
+                  />
                 </div>
               </div>
 

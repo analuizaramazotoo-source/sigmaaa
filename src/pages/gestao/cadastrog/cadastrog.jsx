@@ -15,8 +15,6 @@ import {
   ArrowLeft, 
   Eye, 
   EyeOff, 
-  Building2, 
-  Briefcase, 
   FileBadge 
 } from 'lucide-react';
 
@@ -30,29 +28,23 @@ export default function Cadastrog() {
     nome: '',
     email: '',
     cpfMatricula: '',
-    cargo: 'diretor',
-    secretaria: 'meio_ambiente',
-    setor: 'fiscalizacao',
     senha: '',
     confirmarSenha: ''
   });
 
   const formatarCpfOuMatricula = (value) => {
     const apenasNumeros = value.replace(/\D/g, '');
-    
     if (apenasNumeros.length <= 11) {
       return apenasNumeros
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
     }
-    
     return value.toUpperCase().slice(0, 20);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
     if (name === 'cpfMatricula') {
       setFormData(prev => ({ ...prev, [name]: formatarCpfOuMatricula(value) }));
     } else {
@@ -63,19 +55,13 @@ export default function Cadastrog() {
   const handleCadastro = (e) => {
     e.preventDefault();
 
-    const emailLower = formData.email.trim().toLowerCase();
-    if (emailLower.includes('@gmail.') || emailLower.includes('@hotmail.') || emailLower.includes('@yahoo.')) {
-      alert("Atenção: Por questões de segurança, utilize o seu e-mail institucional corporativo ou governamental (@prefeitura.gov.br).");
-      return;
-    }
-
     if (formData.senha.length < 8) {
-      alert("A senha deve conter no mínimo 8 caracteres para garantir a segurança da conta.");
+      alert("A senha deve conter no mínimo 8 caracteres.");
       return;
     }
 
     if (formData.senha !== formData.confirmarSenha) {
-      alert("As senhas informadas não coincidem. Por favor, verifique e tente novamente.");
+      alert("As senhas informadas não coincidem.");
       return;
     }
 
@@ -103,7 +89,7 @@ export default function Cadastrog() {
         <div className={styles.sidebarInfo}>
           <ShieldCheck size={48} className={styles.shieldIcon} />
           <h2>Credenciamento de Gestão</h2>
-          <p>Cadastro oficial para gestores e administradores da Secretaria do Meio Ambiente.</p>
+          <p>Cadastro simplificado para gestores e administradores do sistema.</p>
         </div>
 
         <div className={styles.sidebarFooterLogo}>
@@ -140,7 +126,7 @@ export default function Cadastrog() {
               </div>
               <div>
                 <h2>Solicitação de Cadastro</h2>
-                <p>Preencha os dados abaixo para registrar sua conta de gestor ambiental.</p>
+                <p>Informe seus dados básicos para registrar seu acesso.</p>
               </div>
             </div>
 
@@ -179,90 +165,26 @@ export default function Cadastrog() {
                 </div>
               </div>
 
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="cpfMatricula">CPF ou Matrícula Funcional *</label>
-                  <div className={styles.inputWithIcon}>
-                    <FileBadge size={18} className={styles.fieldIcon} />
-                    <input 
-                      id="cpfMatricula"
-                      name="cpfMatricula"
-                      type="text" 
-                      placeholder="Digite o CPF ou nº de matrícula"
-                      value={formData.cpfMatricula}
-                      onChange={handleChange}
-                      maxLength={18}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* CARGO COMO SELECT */}
-                <div className={styles.formGroup}>
-                  <label htmlFor="cargo">Cargo / Função *</label>
-                  <div className={styles.inputWithIcon}>
-                    <Briefcase size={18} className={styles.fieldIcon} />
-                    <select 
-                      id="cargo"
-                      name="cargo"
-                      value={formData.cargo}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="diretor">Diretor de Fiscalização</option>
-                      <option value="coordenador">Coordenador Ambiental</option>
-                      <option value="analista">Analista Ambiental</option>
-                      <option value="chefe_setor">Chefe de Setor</option>
-                      <option value="secretario">Secretário Adjunto</option>
-                    </select>
-                  </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="cpfMatricula">CPF ou Matrícula Funcional *</label>
+                <div className={styles.inputWithIcon}>
+                  <FileBadge size={18} className={styles.fieldIcon} />
+                  <input 
+                    id="cpfMatricula"
+                    name="cpfMatricula"
+                    type="text" 
+                    placeholder="Digite o CPF ou nº de matrícula"
+                    value={formData.cpfMatricula}
+                    onChange={handleChange}
+                    maxLength={18}
+                    required
+                  />
                 </div>
               </div>
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="secretaria">Secretaria Municipal *</label>
-                  <div className={styles.inputWithIcon}>
-                    <Building2 size={18} className={styles.fieldIcon} />
-                    <select 
-                      id="secretaria"
-                      name="secretaria"
-                      value={formData.secretaria}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="meio_ambiente">Secretaria do Meio Ambiente</option>
-                      <option value="obras">Secretaria de Obras e Serviços</option>
-                      <option value="planejamento">Secretaria de Planejamento Urbano</option>
-                      <option value="administracao">Secretaria de Administração</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* SETOR / DEPARTAMENTO COMO SELECT */}
-                <div className={styles.formGroup}>
-                  <label htmlFor="setor">Setor / Departamento *</label>
-                  <div className={styles.inputWithIcon}>
-                    <Building2 size={18} className={styles.fieldIcon} />
-                    <select 
-                      id="setor"
-                      name="setor"
-                      value={formData.setor}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="fiscalizacao">Fiscalização e Licenciamento</option>
-                      <option value="monitoramento">Monitoramento e Controle</option>
-                      <option value="gestao">Gestão de Recursos Naturais</option>
-                      <option value="projetos">Projetos e Programas Ambientais</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="senha">Criar Senha de Acesso *</label>
+                  <label htmlFor="senha">Criar Senha *</label>
                   <div className={styles.inputWithIcon}>
                     <Lock size={18} className={styles.fieldIcon} />
                     <input 

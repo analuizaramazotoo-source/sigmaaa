@@ -1,274 +1,311 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "./homec.module.css";
 
 import {
-  FileWarning,
   MapPin,
-  Search,
-  AlertTriangle,
-  HelpCircle,
-  LayoutDashboard,
+  FileWarning,
   FileText,
+  Search,
+  AlertCircle,
   User,
-  Phone,
-  AlertCircle
+  LogOut,
+  Bell,
+  HelpCircle,
+  ChevronDown,
+  ChevronRight,
+  ShieldAlert,
+  Trees
 } from "lucide-react";
 
+import prefeituraLogo from "../../../assets/prefeitura.png";
 import bannerFundo from "../../../assets/banner.png";
 
 const duvidasFrequentes = [
-  "Como denunciar lixo irregular?",
-  "Quanto tempo demora para resolver?",
-  "Posso enviar fotos do problema?",
-  "Como acompanhar minha solicitação?",
+  {
+    pergunta: "Como denunciar descarte irregular de lixo ou entulho?",
+    resposta: "Você pode utilizar a opção 'Relatar Problema' ou 'Denúncia Urgente'. Anexe fotos e informe o endereço exato para que a equipe de fiscalização vá até o local."
+  },
+  {
+    pergunta: "Qual o prazo médio para atendimento das solicitações?",
+    resposta: "O prazo varia de acordo com a gravidade e o tipo de serviço, sendo de 24h a 48h para casos urgentes e até 7 dias úteis para solicitações convencionais."
+  },
+  {
+    pergunta: "Posso anexar fotos e localização GPS no relato?",
+    resposta: "Sim! Ao preencher um relato ou solicitação, você pode enviar imagens do local e permitir que o sistema capture sua localização exata."
+  },
+  {
+    pergunta: "Como acompanhar o andamento dos meus protocolos?",
+    resposta: "Acesse 'Minhas Solicitações' através dos cards de acesso rápido ou pelo menu lateral para visualizar o status em tempo real."
+  }
 ];
 
 export default function Homec() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [duvidaAberta, setDuvidaAberta] = useState(null);
+  const [modalSairAberto, setModalSairAberto] = useState(false);
+
   const isActive = (path) => location.pathname === path;
 
+  const toggleDuvida = (index) => {
+    setDuvidaAberta(duvidaAberta === index ? null : index);
+  };
+
+  const handleConfirmarSair = () => {
+    navigate("/");
+  };
+
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div className={styles.appContainer}>
       
-      {/* BARRA LATERAL (SIDEBAR) */}
-      <aside
-        style={{
-          width: "260px",
-          backgroundColor: "#1a4d33",
-          color: "#fff",
-          display: "flex",
-          flexDirection: "column",
-          padding: "24px 16px",
-          flexShrink: 0
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px", padding: "0 8px" }}>
-          <span style={{ fontSize: "24px" }}>🌱</span>
-          <div>
-            <h2 style={{ fontSize: "14px", margin: 0, fontWeight: "bold", color: "#fff" }}>CADASTRO</h2>
-            <p style={{ fontSize: "10px", margin: 0, opacity: 0.8, color: "#e6f4ea" }}>SEGURO AMBIENTAL</p>
+      {/* SIDEBAR INSTITUCIONAL */}
+      <aside className={styles.sidebar}>
+        <div className={styles.brandHeader}>
+          <div className={styles.logoIcon}>
+            <Trees size={22} color="#ffffff" />
+          </div>
+          <div className={styles.brandText}>
+            <strong>PAINEL DO CIDADÃO</strong>
+            <span>SEGURO AMBIENTAL</span>
           </div>
         </div>
 
-        <nav style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
+        <nav className={styles.navMenu}>
+          <span className={styles.navCategory}>Menu do Cidadão</span>
+
           <Link
             to="/cidadao"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "14px",
-              backgroundColor: isActive("/cidadao") ? "rgba(255, 255, 255, 0.15)" : "transparent",
-              fontWeight: isActive("/cidadao") ? "bold" : "normal"
-            }}
+            className={`${styles.navItem} ${isActive("/cidadao") ? styles.navItemActive : ""}`}
           >
-            <LayoutDashboard size={20} />
-            <span>Dashboard</span>
+            <MapPin size={18} />
+            <span>Visão Geral do Portal</span>
           </Link>
 
           <Link
             to="/relatar-problema"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "14px",
-              backgroundColor: isActive("/relatar-problema") ? "rgba(255, 255, 255, 0.15)" : "transparent"
-            }}
+            className={`${styles.navItem} ${isActive("/relatar-problema") ? styles.navItemActive : ""}`}
           >
-            <AlertTriangle size={20} />
+            <FileWarning size={18} />
             <span>Relatar Problema</span>
           </Link>
 
           <Link
             to="/solicitar"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "14px",
-              backgroundColor: isActive("/solicitar") ? "rgba(255, 255, 255, 0.15)" : "transparent"
-            }}
+            className={`${styles.navItem} ${isActive("/solicitar") ? styles.navItemActive : ""}`}
           >
-            <FileText size={20} />
+            <FileText size={18} />
             <span>Solicitar Serviço</span>
           </Link>
 
           <Link
             to="/status"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "14px",
-              backgroundColor: isActive("/status") ? "rgba(255, 255, 255, 0.15)" : "transparent"
-            }}
+            className={`${styles.navItem} ${isActive("/status") ? styles.navItemActive : ""}`}
           >
-            <FileText size={20} />
+            <Search size={18} />
             <span>Minhas Solicitações</span>
           </Link>
 
           <Link
             to="/denuncia"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "14px",
-              backgroundColor: isActive("/denuncia") ? "rgba(255, 255, 255, 0.15)" : "transparent"
-            }}
+            className={`${styles.navItem} ${isActive("/denuncia") ? styles.navItemActive : ""}`}
           >
-            <AlertCircle size={20} />
+            <AlertCircle size={18} />
             <span>Denúncia Urgente</span>
           </Link>
 
           <Link
             to="/perfil"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "14px",
-              backgroundColor: isActive("/perfil") ? "rgba(255, 255, 255, 0.15)" : "transparent"
-            }}
+            className={`${styles.navItem} ${isActive("/perfil") ? styles.navItemActive : ""}`}
           >
-            <User size={20} />
-            <span>Perfil</span>
+            <User size={18} />
+            <span>Meu Perfil</span>
           </Link>
         </nav>
 
-        <div style={{ marginTop: "auto", paddingTop: "16px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "rgba(255,255,255,0.08)", borderRadius: "8px" }}>
-            <Phone size={18} />
-            <div>
-              <strong style={{ display: "block", fontSize: "12px" }}>Precisa de ajuda?</strong>
-              <span style={{ fontSize: "11px", opacity: 0.8 }}>Fale conosco</span>
-            </div>
-          </div>
+        <div className={styles.sidebarFooterLogo}>
+          <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
       </aside>
 
-      {/* CONTEÚDO PRINCIPAL DA PÁGINA */}
-      <main style={{ flex: 1, overflowY: "auto", backgroundColor: "#f4f7f5" }}>
-        <div className={styles.pageContainer}>
-          
-          {/* BANNER PRINCIPAL */}
-          <section
-            className={styles.banner}
-            style={{ backgroundImage: `url(${bannerFundo})` }}
-          >
-            <div className={styles.overlayBanner}>
-              <h1>Bem-vindo!</h1>
-              <p>Colabore com o Meio Ambiente!</p>
+      {/* ÁREA PRINCIPAL */}
+      <div className={styles.mainWrapper}>
+        
+        {/* CABEÇALHO SUPERIOR */}
+        <header className={styles.topHeader}>
+          <div className={styles.headerLeft}>
+            <div>
+              <h1 className={styles.pageTitle}>Portal do Cidadão</h1>
+              <p className={styles.subTitle}>Preservação e Atendimento Ambiental Municipal</p>
             </div>
-          </section>
+          </div>
 
-          {/* CARDS DE AÇÃO RÁPIDA */}
-          <section className={styles.cardsContainer}>
-            <div className={`${styles.card} ${styles.cardAzul}`}>
-              <div className={styles.cardIcon}><FileWarning size={28} /></div>
-              <h2>Relatar um Problema</h2>
-              <p>Utilize este espaço para descrever detalhadamente qualquer problema encontrado.</p>
-              <Link to="/relatar-problema" className={styles.cardBtn}>ENVIAR RELATO</Link>
+          <div className={styles.headerRight}>
+            <div className={styles.notificationBadge}>
+              <Bell size={18} />
+              <span className={styles.badgeCount}>2</span>
             </div>
 
-            <div className={`${styles.card} ${styles.cardVerde}`}>
-              <div className={styles.cardIcon}><MapPin size={28} /></div>
-              <h2>Solicitar Serviço</h2>
-              <p>Faça solicitações ambientais e acompanhe todo o andamento.</p>
-              <Link to="/solicitar" className={styles.cardBtn}>PREENCHER SOLICITAÇÃO</Link>
-            </div>
+            <Link to="/perfil" className={styles.userInfoBox}>
+              <div className={styles.userAvatarIcon}>
+                <User size={18} />
+              </div>
+              <div className={styles.userDetails}>
+                <strong>Ana Luiza Silva</strong>
+                <span>Cidadão • Ativo</span>
+              </div>
+            </Link>
 
-            <div className={`${styles.card} ${styles.cardLaranja}`}>
-              <div className={styles.cardIcon}><Search size={28} /></div>
-              <h2>Acompanhar Solicitação</h2>
-              <p>Consulte o andamento das suas solicitações em tempo real.</p>
-              <Link to="/status" className={styles.cardBtn}>MINHAS SOLICITAÇÕES</Link>
-            </div>
-          </section>
+            <button 
+              className={styles.btnSairTopo} 
+              onClick={() => setModalSairAberto(true)} 
+              type="button"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        </header>
 
-          {/* ÁREA INFERIOR: EMERGÊNCIA E FAQ */}
-          <div className={styles.bottomGrid}>
+        {/* CONTEÚDO PRINCIPAL */}
+        <main className={styles.mainContent}>
+          <div className={styles.pageContainer}>
             
-            {/* DENÚNCIA URGENTE */}
-            <div className={styles.cardUrgente}>
-              <div className={styles.cardUrgenteHeader}>
-                <AlertTriangle size={24} />
-                <h3>Denúncia Urgente</h3>
-              </div>
-              <p>EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.</p>
-              <button
-                className={styles.btnEmergencia}
-                onClick={() => navigate("/relatar-problema")}
-              >
-                RELATAR EMERGÊNCIA
-              </button>
-            </div>
+            {/* CARD BANNER PRINCIPAL */}
+            <section className={styles.bannerCard}>
+              <h2>Visão Geral do Portal</h2>
+              <p>Acompanhe e solicite serviços ambientais no seu município em tempo real.</p>
+            </section>
 
-            {/* DÚVIDAS FREQUENTES */}
-            <div className={styles.cardDuvidas}>
-              <div className={styles.cardDuvidasHeader}>
-                <HelpCircle size={24} />
-                <h3>Dúvidas Frequentes</h3>
+            {/* CARDS DE MÉTRICAS / AÇÕES RÁPIDAS */}
+            <section className={styles.cardsGrid}>
+              <div className={styles.metricCard}>
+                <div className={`${styles.metricIcon} ${styles.iconBlue}`}>
+                  <FileWarning size={22} />
+                </div>
+                <div className={styles.metricInfo}>
+                  <span>Relatar Ocorrência</span>
+                  <strong>Enviar Relato</strong>
+                  <p>Informe irregularidades na cidade</p>
+                </div>
+                <Link to="/relatar-problema" className={styles.cardLink} />
               </div>
-              <div className={styles.listaDuvidas}>
-                {duvidasFrequentes.map((duvida, index) => (
-                  <button key={index} className={styles.itemDuvida}>
-                    {duvida}
-                  </button>
-                ))}
+
+              <div className={styles.metricCard}>
+                <div className={`${styles.metricIcon} ${styles.iconYellow}`}>
+                  <MapPin size={22} />
+                </div>
+                <div className={styles.metricInfo}>
+                  <span>Serviços Urbanos</span>
+                  <strong>Solicitar Serviço</strong>
+                  <p>Poda, coleta e vistorias</p>
+                </div>
+                <Link to="/solicitar" className={styles.cardLink} />
               </div>
-              <button className={styles.btnVerTodas}>Ver todas as perguntas</button>
+
+              <div className={styles.metricCard}>
+                <div className={`${styles.metricIcon} ${styles.iconGreen}`}>
+                  <Search size={22} />
+                </div>
+                <div className={styles.metricInfo}>
+                  <span>Acompanhamento</span>
+                  <strong>Minhas Solicitações</strong>
+                  <p>Consulte seus protocolos ativos</p>
+                </div>
+                <Link to="/status" className={styles.cardLink} />
+              </div>
+            </section>
+
+            {/* ÁREA INFERIOR DE CONTEÚDO */}
+            <div className={styles.bottomGrid}>
+              
+              {/* CARD DE DENÚNCIA URGENTE */}
+              <div className={styles.cardUrgente}>
+                <div className={styles.cardUrgenteHeader}>
+                  <ShieldAlert size={28} />
+                  <div>
+                    <h3>Denúncia Urgente</h3>
+                    <p className={styles.urgenteSubtitle}>Emergências ambientais em tempo real</p>
+                  </div>
+                </div>
+                <p className={styles.urgenteDesc}>
+                  Utilize para relatar imediatamente situações graves de queimadas, contaminação de mananciais ou descarte de produtos perigosos.
+                </p>
+                <button
+                  className={styles.btnEmergencia}
+                  onClick={() => navigate("/denuncia")}
+                >
+                  RELATAR EMERGÊNCIA AMBIENTAL
+                </button>
+              </div>
+
+              {/* CARD DE DÚVIDAS FREQUENTES */}
+              <div className={styles.cardDuvidas}>
+                <div className={styles.cardDuvidasHeader}>
+                  <HelpCircle size={22} />
+                  <h3>Dúvidas Frequentes</h3>
+                </div>
+                <div className={styles.listaDuvidas}>
+                  {duvidasFrequentes.map((item, index) => (
+                    <div key={index} className={styles.duvidaBox}>
+                      <button 
+                        className={styles.itemDuvida}
+                        onClick={() => toggleDuvida(index)}
+                        type="button"
+                      >
+                        <span>{item.pergunta}</span>
+                        <ChevronDown 
+                          size={18} 
+                          className={`${styles.chevronDuvida} ${duvidaAberta === index ? styles.chevronOpen : ""}`} 
+                        />
+                      </button>
+                      {duvidaAberta === index && (
+                        <div className={styles.respostaDuvida}>
+                          <p>{item.resposta}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
 
           </div>
+        </main>
 
-          {/* RODAPÉ ESPECÍFICO DA PÁGINA */}
-          <footer className={styles.footer}>
-            <div className={styles.footerColuna}>
-              <h4>Prefeitura do Meio Ambiente</h4>
-              <p>Rua Verde, 123, Centro, Cidade - UF</p>
-              <p>Atendimento: Segunda a Sexta, 8h - 17h</p>
-              <p>email@meioambiente.gov.br</p>
-              <p>(00) 1234-5678</p>
-            </div>
+        <footer className={styles.footerGlobal}>
+          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+        </footer>
+      </div>
 
-            <div className={styles.footerColuna}>
-              <h4>Sobre</h4>
-              <a href="#">Política Ambiental</a>
-              <a href="#">Contato</a>
+      {/* MODAL DE CONFIRMAÇÃO DE SAÍDA */}
+      {modalSairAberto && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalCard}>
+            <div className={styles.modalIconBadge}>
+              <LogOut size={28} />
             </div>
-          </footer>
-          
+            <h2>Encerrar Sessão</h2>
+            <p>Tem certeza que quer sair?</p>
+
+            <div className={styles.modalActions}>
+              <button 
+                className={styles.btnModalCancelar} 
+                onClick={() => setModalSairAberto(false)}
+              >
+                Cancelar
+              </button>
+              <button 
+                className={styles.btnModalConfirmar} 
+                onClick={handleConfirmarSair}
+              >
+                Sim, Quero Sair
+              </button>
+            </div>
+          </div>
         </div>
-      </main>
+      )}
     </div>
   );
 }
