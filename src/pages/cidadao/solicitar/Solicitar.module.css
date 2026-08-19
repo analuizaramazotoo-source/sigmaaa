@@ -1,25 +1,220 @@
-.container {
-  padding: 32px 40px;
-  max-width: 1100px;
-  margin: 0 auto;
+:root {
+  --bg-app: #f0fdf4;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #f4fbf7;
+  --border-color: #d1fae5;
+
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
+  --text-muted: #6b7280;
+
+  --brand-primary: #059669;
+  --brand-primary-hover: #047857;
+  --brand-light: #dcfce7;
+  --brand-dark: #065f46;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-sm: 0 2px 4px rgba(5, 150, 105, 0.05);
+  --shadow-md: 0 4px 12px rgba(5, 150, 105, 0.08);
+
+  --transition-fast: 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.appContainer {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+}
+
+.mainWrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  min-width: 0;
+  width: 100%;
+}
+
+/* TOP HEADER */
+.topHeader {
+  background-color: var(--bg-surface);
+  padding: 1.15rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brandHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoIcon {
+  width: 38px;
+  height: 38px;
+  background-color: var(--brand-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brandText strong {
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  color: var(--brand-dark);
+}
+
+.brandText span {
+  font-size: 0.75rem;
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notificationBadge {
+  position: relative;
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 50%;
+  color: var(--brand-primary);
+  display: flex;
+  cursor: pointer;
+}
+
+.badgeCount {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #dc2626;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userInfoBox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.userInfoBox:hover {
+  background-color: var(--brand-light);
+}
+
+.userAvatarIcon {
+  width: 28px;
+  height: 28px;
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.userDetails strong {
+  font-size: 0.85rem;
+  color: var(--brand-dark);
+}
+
+.userDetails span {
+  font-size: 0.675rem;
+  color: var(--text-secondary);
+}
+
+/* BOTÃO VOLTAR AMARELO NO CANTO DIREITO */
+.btnVoltarTopo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fbc02d;
+  color: #000000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btnVoltarTopo:hover {
+  background-color: #f9a825;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.mainContent {
+  flex: 1;
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 32px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   display: flex;
-  gap: 32px;
+  gap: 2rem;
 }
 
-/* LADO ESQUERDO */
+/* LADO ESQUERDO: FORMULÁRIO */
 .cardEsquerdo {
-  flex: 1;
+  flex: 1.2;
   display: flex;
   flex-direction: column;
 }
@@ -27,71 +222,71 @@
 .cardHeader {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .iconBadge {
-  background-color: #e8f5e9;
-  color: #1a4d33;
-  padding: 12px;
-  border-radius: 10px;
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .cardHeader h2 {
-  font-size: 20px;
-  color: #1a4d33;
-  margin: 0 0 4px 0;
-  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--brand-dark);
+  margin: 0 0 0.25rem 0;
+  font-weight: 700;
 }
 
 .cardHeader p {
-  font-size: 13px;
-  color: #666666;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.15rem;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.4rem;
 }
 
 .formGroup label {
-  font-size: 13px;
+  font-size: 0.825rem;
   font-weight: 600;
-  color: #333333;
+  color: var(--brand-dark);
 }
 
 .formGroup input,
 .formGroup textarea {
   width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #333333;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-primary);
   outline: none;
-  background-color: #ffffff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: var(--bg-surface);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   box-sizing: border-box;
 }
 
 .formGroup input:focus,
 .formGroup textarea:focus {
-  border-color: #1a4d33;
-  box-shadow: 0 0 0 3px rgba(26, 77, 51, 0.12);
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
 .formGroup textarea {
@@ -101,30 +296,30 @@
 /* UPLOAD DE FOTO */
 .fileUpload {
   position: relative;
-  border: 2px dashed #cccccc;
-  border-radius: 8px;
-  padding: 20px 16px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem 1rem;
   text-align: center;
-  background-color: #fafafa;
+  background-color: var(--bg-sidebar);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  transition: background-color 0.2s;
+  gap: 0.5rem;
+  transition: background-color var(--transition-fast);
   cursor: pointer;
 }
 
 .fileUpload:hover {
-  background-color: #f4f6f5;
+  background-color: var(--brand-light);
 }
 
 .fileUpload svg {
-  color: #1a4d33;
+  color: var(--brand-primary);
 }
 
 .fileUpload p {
-  font-size: 13px;
-  color: #666666;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -138,50 +333,50 @@
   cursor: pointer;
 }
 
-/* BOTÕES */
+/* BOTÕES DE AÇÃO */
 .formActions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 12px;
-  padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
 }
 
 .btnPrimary {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background-color: #1a4d33;
+  gap: 0.5rem;
+  background-color: var(--brand-primary);
   color: #ffffff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
 }
 
 .btnPrimary:hover {
-  background-color: #276243;
+  background-color: var(--brand-primary-hover);
 }
 
 .btnSecondary {
   background-color: transparent;
-  color: #666666;
-  border: 1px solid #cccccc;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .btnSecondary:hover {
-  background-color: #f0f0f0;
-  color: #333333;
+  background-color: var(--bg-sidebar);
+  color: var(--brand-dark);
 }
 
 /* LADO DIREITO: MAPA */
@@ -189,27 +384,27 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.85rem;
 }
 
 .mapaHeader {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a4d33;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--brand-dark);
 }
 
 .mapaPlaceholder {
   width: 100%;
   height: 100%;
-  min-height: 280px;
+  min-height: 320px;
   background: #e5eae6;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   position: relative;
   overflow: hidden;
-  border: 1px solid #d0d7d2;
+  border: 1px solid var(--border-color);
 }
 
 .mapaPlaceholder::before {
@@ -254,8 +449,8 @@
 }
 
 .mapaPonto {
-  background: #1a4d33;
-  box-shadow: 0 0 0 4px rgba(26, 77, 51, 0.25);
+  background: var(--brand-primary);
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.25);
 }
 
 .mapaPontoLaranja {
@@ -272,12 +467,12 @@
 .aviso {
   background-color: #fef3c7;
   border: 1px solid #fde68a;
-  border-radius: 8px;
-  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.25rem;
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 13px;
+  gap: 0.75rem;
+  font-size: 0.825rem;
   color: #92400e;
 }
 
@@ -286,13 +481,29 @@
   color: #b45309;
 }
 
-/* RESPONSIVO */
+.footerGlobal {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+}
+
 @media (max-width: 900px) {
+  .topHeader {
+    padding: 1rem;
+  }
+
+  .mainContent {
+    padding: 1rem;
+  }
+
   .card {
     flex-direction: column;
   }
 
   .mapaPlaceholder {
-    height: 220px;
+    height: 240px;
   }
 }

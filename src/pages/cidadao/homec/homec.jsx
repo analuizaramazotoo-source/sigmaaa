@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./homec.module.css";
 
 import {
@@ -13,13 +13,9 @@ import {
   Bell,
   HelpCircle,
   ChevronDown,
-  ChevronRight,
   ShieldAlert,
   Trees
 } from "lucide-react";
-
-import prefeituraLogo from "../../../assets/prefeitura.png";
-import bannerFundo from "../../../assets/banner.png";
 
 const duvidasFrequentes = [
   {
@@ -36,18 +32,15 @@ const duvidasFrequentes = [
   },
   {
     pergunta: "Como acompanhar o andamento dos meus protocolos?",
-    resposta: "Acesse 'Minhas Solicitações' através dos cards de acesso rápido ou pelo menu lateral para visualizar o status em tempo real."
+    resposta: "Acesse 'Minhas Solicitações' através dos cards de acesso rápido para visualizar o status em tempo real."
   }
 ];
 
 export default function Homec() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [duvidaAberta, setDuvidaAberta] = useState(null);
   const [modalSairAberto, setModalSairAberto] = useState(false);
-
-  const isActive = (path) => location.pathname === path;
 
   const toggleDuvida = (index) => {
     setDuvidaAberta(duvidaAberta === index ? null : index);
@@ -59,85 +52,18 @@ export default function Homec() {
 
   return (
     <div className={styles.appContainer}>
-      
-      {/* SIDEBAR INSTITUCIONAL */}
-      <aside className={styles.sidebar}>
-        <div className={styles.brandHeader}>
-          <div className={styles.logoIcon}>
-            <Trees size={22} color="#ffffff" />
-          </div>
-          <div className={styles.brandText}>
-            <strong>PAINEL DO CIDADÃO</strong>
-            <span>SEGURO AMBIENTAL</span>
-          </div>
-        </div>
-
-        <nav className={styles.navMenu}>
-          <span className={styles.navCategory}>Menu do Cidadão</span>
-
-          <Link
-            to="/cidadao"
-            className={`${styles.navItem} ${isActive("/cidadao") ? styles.navItemActive : ""}`}
-          >
-            <MapPin size={18} />
-            <span>Visão Geral do Portal</span>
-          </Link>
-
-          <Link
-            to="/relatar-problema"
-            className={`${styles.navItem} ${isActive("/relatar-problema") ? styles.navItemActive : ""}`}
-          >
-            <FileWarning size={18} />
-            <span>Relatar Problema</span>
-          </Link>
-
-          <Link
-            to="/solicitar"
-            className={`${styles.navItem} ${isActive("/solicitar") ? styles.navItemActive : ""}`}
-          >
-            <FileText size={18} />
-            <span>Solicitar Serviço</span>
-          </Link>
-
-          <Link
-            to="/status"
-            className={`${styles.navItem} ${isActive("/status") ? styles.navItemActive : ""}`}
-          >
-            <Search size={18} />
-            <span>Minhas Solicitações</span>
-          </Link>
-
-          <Link
-            to="/denuncia"
-            className={`${styles.navItem} ${isActive("/denuncia") ? styles.navItemActive : ""}`}
-          >
-            <AlertCircle size={18} />
-            <span>Denúncia Urgente</span>
-          </Link>
-
-          <Link
-            to="/perfil"
-            className={`${styles.navItem} ${isActive("/perfil") ? styles.navItemActive : ""}`}
-          >
-            <User size={18} />
-            <span>Meu Perfil</span>
-          </Link>
-        </nav>
-
-        <div className={styles.sidebarFooterLogo}>
-          <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
-        </div>
-      </aside>
-
-      {/* ÁREA PRINCIPAL */}
+      {/* ÁREA PRINCIPAL SEM SIDEBAR */}
       <div className={styles.mainWrapper}>
         
-        {/* CABEÇALHO SUPERIOR */}
+        {/* CABEÇALHO SUPERIOR COM LOGO E PERFIL */}
         <header className={styles.topHeader}>
-          <div className={styles.headerLeft}>
-            <div>
-              <h1 className={styles.pageTitle}>Portal do Cidadão</h1>
-              <p className={styles.subTitle}>Preservação e Atendimento Ambiental Municipal</p>
+          <div className={styles.brandHeader}>
+            <div className={styles.logoIcon}>
+              <Trees size={22} color="#ffffff" />
+            </div>
+            <div className={styles.brandText}>
+              <strong>PAINEL DO CIDADÃO</strong>
+              <span>SEGURO AMBIENTAL</span>
             </div>
           </div>
 
@@ -167,7 +93,7 @@ export default function Homec() {
           </div>
         </header>
 
-        {/* CONTEÚDO PRINCIPAL */}
+        {/* CONTEÚDO PRINCIPAL EXPANDIDO */}
         <main className={styles.mainContent}>
           <div className={styles.pageContainer}>
             
@@ -177,11 +103,11 @@ export default function Homec() {
               <p>Acompanhe e solicite serviços ambientais no seu município em tempo real.</p>
             </section>
 
-            {/* CARDS DE MÉTRICAS / AÇÕES RÁPIDAS */}
+            {/* CARDS DE MÉTRICAS / AÇÕES RÁPIDAS AMPLIADOS */}
             <section className={styles.cardsGrid}>
               <div className={styles.metricCard}>
                 <div className={`${styles.metricIcon} ${styles.iconBlue}`}>
-                  <FileWarning size={22} />
+                  <FileWarning size={24} />
                 </div>
                 <div className={styles.metricInfo}>
                   <span>Relatar Ocorrência</span>
@@ -193,7 +119,7 @@ export default function Homec() {
 
               <div className={styles.metricCard}>
                 <div className={`${styles.metricIcon} ${styles.iconYellow}`}>
-                  <MapPin size={22} />
+                  <MapPin size={24} />
                 </div>
                 <div className={styles.metricInfo}>
                   <span>Serviços Urbanos</span>
@@ -205,7 +131,7 @@ export default function Homec() {
 
               <div className={styles.metricCard}>
                 <div className={`${styles.metricIcon} ${styles.iconGreen}`}>
-                  <Search size={22} />
+                  <Search size={24} />
                 </div>
                 <div className={styles.metricInfo}>
                   <span>Acompanhamento</span>
@@ -216,7 +142,7 @@ export default function Homec() {
               </div>
             </section>
 
-            {/* ÁREA INFERIOR DE CONTEÚDO */}
+            {/* ÁREA INFERIOR DE CONTEÚDO AMPLIADA */}
             <div className={styles.bottomGrid}>
               
               {/* CARD DE DENÚNCIA URGENTE */}
