@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styles from './autosnotificacoes.module.css';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
@@ -165,7 +165,8 @@ export default function AutosNotificacoes() {
               <Bell size={20} />
             </button>
 
-            <div className={styles.userProfile}>
+            {/* PERFIL DA EQUIPE CLICÁVEL (REDIRECIONA PARA /PERFILE) */}
+            <Link to="/perfile" className={styles.userProfile}>
               <div className={styles.userAvatar}>
                 <Users size={18} />
               </div>
@@ -173,7 +174,7 @@ export default function AutosNotificacoes() {
                 <strong className={styles.userName}>Equipe de Campo</strong>
                 <span className={styles.userRole}>Operacional</span>
               </div>
-            </div>
+            </Link>
 
             <button className={styles.btnLogout} onClick={() => navigate('/login')} title="Sair do Sistema">
               <LogOut size={18} />

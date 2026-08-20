@@ -33,7 +33,7 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* SIDEBAR (RIGOROSAMENTE IGUAL À HOMEE) */
+/* SIDEBAR PADRÃO */
 .sidebar {
   width: 280px;
   background-color: var(--bg-sidebar);
@@ -155,7 +155,7 @@
   object-fit: contain;
 }
 
-/* ÁREA PRINCIPAL */
+/* ÁREA PRINCIPAL E CABEÇALHO */
 .mainWrapper {
   flex: 1;
   display: flex;
@@ -205,6 +205,7 @@
   background-color: var(--brand-light);
 }
 
+/* PERFIL CLICÁVEL COM LINK */
 .userProfile {
   display: flex;
   align-items: center;
@@ -213,6 +214,13 @@
   background-color: var(--bg-sidebar);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.userProfile:hover {
+  background-color: var(--brand-light);
 }
 
 .userAvatar {
@@ -261,7 +269,7 @@
   flex-direction: column;
 }
 
-/* GRID DE CONTEÚDO */
+/* GRID DE CONTEÚDO DA FILA DE VISTORIAS */
 .contentGrid {
   display: grid;
   grid-template-columns: 420px 1fr;

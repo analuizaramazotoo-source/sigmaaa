@@ -3,42 +3,36 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./homec.module.css";
 
 import {
-  MapPin,
   FileWarning,
-  FileText,
+  MapPin,
   Search,
-  AlertCircle,
-  User,
-  LogOut,
-  Bell,
   HelpCircle,
   ChevronDown,
+  User,
+  LogOut,
   ShieldAlert,
   Trees
 } from "lucide-react";
 
+import bannerFundo from "../../../assets/banner.png";
+
 const duvidasFrequentes = [
   {
-    pergunta: "Como denunciar descarte irregular de lixo ou entulho?",
-    resposta: "Você pode utilizar a opção 'Relatar Problema' ou 'Denúncia Urgente'. Anexe fotos e informe o endereço exato para que a equipe de fiscalização vá até o local."
+    pergunta: "Como denunciar lixo irregular?",
+    resposta: "Você pode utilizar a opção 'Relatar um Problema' ou 'Denúncia Urgente' anexando fotos e localização exata do ocorrido."
   },
   {
-    pergunta: "Qual o prazo médio para atendimento das solicitações?",
-    resposta: "O prazo varia de acordo com a gravidade e o tipo de serviço, sendo de 24h a 48h para casos urgentes e até 7 dias úteis para solicitações convencionais."
+    pergunta: "Quanto tempo demora para resolver?",
+    resposta: "O prazo varia de acordo com a gravidade, sendo de 24h a 48h para casos urgentes e até 7 dias úteis para solicitações convencionais."
   },
   {
-    pergunta: "Posso anexar fotos e localização GPS no relato?",
-    resposta: "Sim! Ao preencher um relato ou solicitação, você pode enviar imagens do local e permitir que o sistema capture sua localização exata."
-  },
-  {
-    pergunta: "Como acompanhar o andamento dos meus protocolos?",
-    resposta: "Acesse 'Minhas Solicitações' através dos cards de acesso rápido para visualizar o status em tempo real."
+    pergunta: "Posso enviar fotos do problema?",
+    resposta: "Sim! Ao preencher a solicitação ou relato, você pode anexar fotos do local diretamente pelo formulário."
   }
 ];
 
 export default function Homec() {
   const navigate = useNavigate();
-
   const [duvidaAberta, setDuvidaAberta] = useState(null);
   const [modalSairAberto, setModalSairAberto] = useState(false);
 
@@ -52,10 +46,9 @@ export default function Homec() {
 
   return (
     <div className={styles.appContainer}>
-      {/* ÁREA PRINCIPAL SEM SIDEBAR */}
       <div className={styles.mainWrapper}>
         
-        {/* CABEÇALHO SUPERIOR COM LOGO E PERFIL */}
+        {/* CABEÇALHO SUPERIOR PADRONIZADO (BARRA BRANCA) */}
         <header className={styles.topHeader}>
           <div className={styles.brandHeader}>
             <div className={styles.logoIcon}>
@@ -68,11 +61,6 @@ export default function Homec() {
           </div>
 
           <div className={styles.headerRight}>
-            <div className={styles.notificationBadge}>
-              <Bell size={18} />
-              <span className={styles.badgeCount}>2</span>
-            </div>
-
             <Link to="/perfil" className={styles.userInfoBox}>
               <div className={styles.userAvatarIcon}>
                 <User size={18} />
@@ -84,93 +72,103 @@ export default function Homec() {
             </Link>
 
             <button 
+              type="button" 
               className={styles.btnSairTopo} 
-              onClick={() => setModalSairAberto(true)} 
-              type="button"
+              onClick={() => setModalSairAberto(true)}
+              title="Encerrar Sessão"
             >
               <LogOut size={16} />
             </button>
           </div>
         </header>
 
-        {/* CONTEÚDO PRINCIPAL EXPANDIDO */}
+        {/* CONTEÚDO PRINCIPAL */}
         <main className={styles.mainContent}>
           <div className={styles.pageContainer}>
             
-            {/* CARD BANNER PRINCIPAL */}
-            <section className={styles.bannerCard}>
-              <h2>Visão Geral do Portal</h2>
-              <p>Acompanhe e solicite serviços ambientais no seu município em tempo real.</p>
+            {/* BANNER PRINCIPAL */}
+            <section
+              className={styles.banner}
+              style={{ backgroundImage: `url(${bannerFundo})` }}
+            >
+              <div className={styles.overlayBanner}>
+                <h1>Bem-vindo!</h1>
+                <p>Colabore com o Meio Ambiente!</p>
+              </div>
             </section>
 
-            {/* CARDS DE MÉTRICAS / AÇÕES RÁPIDAS AMPLIADOS */}
+            {/* TRÊS CARDS SUPERIORES */}
             <section className={styles.cardsGrid}>
-              <div className={styles.metricCard}>
-                <div className={`${styles.metricIcon} ${styles.iconBlue}`}>
-                  <FileWarning size={24} />
+              
+              <div className={`${styles.cardAction} ${styles.cardAzul}`}>
+                <div className={styles.cardHeaderArea}>
+                  <div className={styles.cardIconBadge}>
+                    <FileWarning size={22} />
+                  </div>
+                  <h3>Relatar um Problema</h3>
                 </div>
-                <div className={styles.metricInfo}>
-                  <span>Relatar Ocorrência</span>
-                  <strong>Enviar Relato</strong>
-                  <p>Informe irregularidades na cidade</p>
-                </div>
-                <Link to="/relatar-problema" className={styles.cardLink} />
+                <p>Utilize este espaço para descrever detalhadamente qualquer problema encontrado.</p>
+                <Link to="/relatar-problema" className={styles.btnCard}>
+                  ENVIAR RELATO
+                </Link>
               </div>
 
-              <div className={styles.metricCard}>
-                <div className={`${styles.metricIcon} ${styles.iconYellow}`}>
-                  <MapPin size={24} />
+              <div className={`${styles.cardAction} ${styles.cardVerde}`}>
+                <div className={styles.cardHeaderArea}>
+                  <div className={styles.cardIconBadge}>
+                    <MapPin size={22} />
+                  </div>
+                  <h3>Solicitar Serviço</h3>
                 </div>
-                <div className={styles.metricInfo}>
-                  <span>Serviços Urbanos</span>
-                  <strong>Solicitar Serviço</strong>
-                  <p>Poda, coleta e vistorias</p>
-                </div>
-                <Link to="/solicitar" className={styles.cardLink} />
+                <p>Faça solicitações ambientais e acompanhe todo o andamento.</p>
+                <Link to="/solicitar" className={styles.btnCard}>
+                  PREENCHER SOLICITAÇÃO
+                </Link>
               </div>
 
-              <div className={styles.metricCard}>
-                <div className={`${styles.metricIcon} ${styles.iconGreen}`}>
-                  <Search size={24} />
+              <div className={`${styles.cardAction} ${styles.cardLaranja}`}>
+                <div className={styles.cardHeaderArea}>
+                  <div className={styles.cardIconBadge}>
+                    <Search size={22} />
+                  </div>
+                  <h3>Acompanhar Solicitação</h3>
                 </div>
-                <div className={styles.metricInfo}>
-                  <span>Acompanhamento</span>
-                  <strong>Minhas Solicitações</strong>
-                  <p>Consulte seus protocolos ativos</p>
-                </div>
-                <Link to="/status" className={styles.cardLink} />
+                <p>Consulte o andamento das suas solicitações em tempo real.</p>
+                <Link to="/status" className={styles.btnCard}>
+                  MINHAS SOLICITAÇÕES
+                </Link>
               </div>
+
             </section>
 
-            {/* ÁREA INFERIOR DE CONTEÚDO AMPLIADA */}
+            {/* ÁREA INFERIOR DE CONTEÚDO */}
             <div className={styles.bottomGrid}>
               
-              {/* CARD DE DENÚNCIA URGENTE */}
               <div className={styles.cardUrgente}>
-                <div className={styles.cardUrgenteHeader}>
-                  <ShieldAlert size={28} />
-                  <div>
-                    <h3>Denúncia Urgente</h3>
-                    <p className={styles.urgenteSubtitle}>Emergências ambientais em tempo real</p>
+                <div className={styles.cardUrgenteContent}>
+                  <div className={styles.urgenteHeaderGroup}>
+                    <ShieldAlert size={24} color="#dc2626" />
+                    <h3 className={styles.urgenteTitle}>Denúncia Urgente</h3>
                   </div>
+                  <p className={styles.urgenteSub}>
+                    EM CASO DE EMERGÊNCIAS AMBIENTAIS, FAÇA UMA DENÚNCIA RÁPIDA.
+                  </p>
                 </div>
-                <p className={styles.urgenteDesc}>
-                  Utilize para relatar imediatamente situações graves de queimadas, contaminação de mananciais ou descarte de produtos perigosos.
-                </p>
                 <button
+                  type="button"
                   className={styles.btnEmergencia}
                   onClick={() => navigate("/denuncia")}
                 >
-                  RELATAR EMERGÊNCIA AMBIENTAL
+                  RELATAR EMERGÊNCIA
                 </button>
               </div>
 
-              {/* CARD DE DÚVIDAS FREQUENTES */}
               <div className={styles.cardDuvidas}>
                 <div className={styles.cardDuvidasHeader}>
                   <HelpCircle size={22} />
                   <h3>Dúvidas Frequentes</h3>
                 </div>
+                
                 <div className={styles.listaDuvidas}>
                   {duvidasFrequentes.map((item, index) => (
                     <div key={index} className={styles.duvidaBox}>
@@ -205,7 +203,7 @@ export default function Homec() {
         </footer>
       </div>
 
-      {/* MODAL DE CONFIRMAÇÃO DE SAÍDA */}
+      {/* MODAL DE SAÍDA */}
       {modalSairAberto && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalCard}>

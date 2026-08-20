@@ -36,17 +36,18 @@
   min-height: 100vh;
   background-color: var(--bg-app);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-/* ÁREA PRINCIPAL COMPLETA */
 .mainWrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
   width: 100%;
+  min-width: 0;
 }
 
+/* TOP HEADER PADRONIZADO */
 .topHeader {
   background-color: var(--bg-surface);
   padding: 1.15rem 3rem;
@@ -54,6 +55,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-color);
+  width: 100%;
 }
 
 .brandHeader {
@@ -94,33 +96,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-.notificationBadge {
-  position: relative;
-  background-color: var(--bg-sidebar);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem;
-  border-radius: 50%;
-  color: var(--brand-primary);
-  display: flex;
-  cursor: pointer;
-}
-
-.badgeCount {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background-color: #dc2626;
-  color: white;
-  font-size: 0.65rem;
-  font-weight: 700;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .userInfoBox {
@@ -183,9 +158,10 @@
   background-color: #fee2e2;
 }
 
+/* CONTEÚDO PRINCIPAL */
 .mainContent {
   flex: 1;
-  padding: 2rem 3rem;
+  padding: 2.5rem 3rem;
   display: flex;
   justify-content: center;
 }
@@ -193,178 +169,209 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  max-width: 1400px;
+  gap: 1.75rem;
+  max-width: 1250px;
   width: 100%;
 }
 
-/* BANNER CARD AMPLIADO */
-.bannerCard {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
+/* BANNER PRINCIPAL */
+.banner {
+  height: 220px;
   border-radius: var(--radius-lg);
-  padding: 1.75rem 2.25rem;
+  background-size: cover;
+  background-position: center 35%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 3rem;
   box-shadow: var(--shadow-sm);
 }
 
-.bannerCard h2 {
-  font-size: 1.35rem;
-  color: var(--brand-dark);
-  margin-bottom: 0.35rem;
+.overlayBanner {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.92) 0%, rgba(4, 120, 87, 0.82) 100%);
+  padding: 1.5rem 2.25rem;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  max-width: 380px;
+  backdrop-filter: blur(4px);
 }
 
-.bannerCard p {
+.overlayBanner h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.overlayBanner p {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  opacity: 0.95;
 }
 
-/* GRID DE MÉTRICAS / AÇÕES AMPLIADAS */
+/* CARDS DE AÇÕES */
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-.metricCard {
-  position: relative;
+.cardAction {
   background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.75rem;
   display: flex;
-  align-items: center;
-  gap: 1.25rem;
+  flex-direction: column;
+  justify-content: space-between;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast);
+  border: 1px solid var(--border-color);
+  border-top: 5px solid var(--brand-primary);
 }
 
-.metricCard:hover {
-  transform: translateY(-2px);
-}
+.cardAzul { border-top-color: #0284c7; }
+.cardVerde { border-top-color: var(--brand-primary); }
+.cardLaranja { border-top-color: #d97706; }
 
-.cardLink {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.metricIcon {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-md);
+.cardHeaderArea {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
 }
 
-.iconBlue { background-color: #e0f2fe; color: #0284c7; }
-.iconYellow { background-color: #fef3c7; color: #d97706; }
-.iconGreen { background-color: var(--brand-light); color: var(--brand-primary); }
-
-.metricInfo span {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  display: block;
+.cardIconBadge {
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  padding: 0.6rem;
+  border-radius: var(--radius-md);
+  display: flex;
 }
 
-.metricInfo strong {
-  font-size: 1rem;
+.cardAzul .cardIconBadge { background-color: #e0f2fe; color: #0284c7; }
+.cardLaranja .cardIconBadge { background-color: #fef3c7; color: #d97706; }
+
+.cardAction h3 {
+  font-size: 1.1rem;
   color: var(--brand-dark);
+  font-weight: 700;
+}
+
+.cardAction p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
+}
+
+.btnCard {
   display: block;
-  margin: 0.15rem 0;
-}
-
-.metricInfo p {
+  text-align: center;
+  background-color: var(--bg-sidebar);
+  color: var(--brand-dark);
+  border: 1px solid var(--border-color);
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
   font-size: 0.8rem;
-  color: var(--text-muted);
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-fast);
 }
 
-/* ÁREA INFERIOR DE CONTEÚDO */
+.btnCard:hover {
+  background-color: var(--brand-primary);
+  color: #ffffff;
+  border-color: var(--brand-primary);
+}
+
+/* ÁREA INFERIOR */
 .bottomGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
+/* DENÚNCIA URGENTE */
 .cardUrgente {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: var(--shadow-sm);
 }
 
-.cardUrgenteHeader {
+.cardUrgenteContent {
+  margin-bottom: 1.5rem;
+}
+
+.urgenteHeaderGroup {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.urgenteTitle {
+  font-size: 1.15rem;
   color: #dc2626;
-  margin-bottom: 0.85rem;
+  font-weight: 700;
 }
 
-.cardUrgenteHeader h3 {
-  font-size: 1.2rem;
-  color: var(--brand-dark);
-}
-
-.urgenteSubtitle {
-  font-size: 0.775rem;
+.urgenteSub {
+  font-size: 0.8rem;
   color: var(--text-secondary);
-}
-
-.urgenteDesc {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
 }
 
 .btnEmergencia {
   background-color: #dc2626;
-  color: white;
+  color: #ffffff;
   border: none;
   padding: 0.95rem;
   border-radius: var(--radius-sm);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: background-color var(--transition-fast);
   width: 100%;
+  transition: background-color var(--transition-fast);
 }
 
 .btnEmergencia:hover {
   background-color: #b91c1c;
 }
 
+/* DÚVIDAS FREQUENTES */
 .cardDuvidas {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .cardDuvidasHeader {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 8px;
   color: var(--brand-primary);
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
 }
 
 .cardDuvidasHeader h3 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: var(--brand-dark);
+  font-weight: 700;
 }
 
 .listaDuvidas {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 
 .duvidaBox {
@@ -386,6 +393,11 @@
   cursor: pointer;
   width: 100%;
   text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.itemDuvida:hover {
+  background-color: var(--brand-light);
 }
 
 .chevronDuvida {
@@ -398,12 +410,12 @@
 }
 
 .respostaDuvida {
-  background-color: white;
-  padding: 1rem 1.15rem;
+  background-color: #ffffff;
+  padding: 0.85rem 1.15rem;
   border-top: 1px solid var(--border-color);
-  font-size: 0.825rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .footerGlobal {
@@ -415,7 +427,7 @@
   margin-top: auto;
 }
 
-/* MODAL DE SAÍDA */
+/* MODAL SAÍDA */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -505,11 +517,11 @@
 }
 
 @media (max-width: 768px) {
-  .mainContent {
+  .topHeader {
     padding: 1rem;
   }
 
-  .topHeader {
-    padding: 1rem;
+  .mainContent {
+    padding: 1.5rem 1rem;
   }
 }

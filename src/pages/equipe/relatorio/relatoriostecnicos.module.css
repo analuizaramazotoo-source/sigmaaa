@@ -205,6 +205,7 @@
   background-color: var(--brand-light);
 }
 
+/* BOX DO PERFIL CLICÁVEL COM ROTEAMENTO */
 .userProfile {
   display: flex;
   align-items: center;
@@ -213,6 +214,13 @@
   background-color: var(--bg-sidebar);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.userProfile:hover {
+  background-color: var(--brand-light);
 }
 
 .userAvatar {
