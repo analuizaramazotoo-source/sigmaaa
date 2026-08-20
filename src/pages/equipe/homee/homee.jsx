@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homee.module.css';
 
-// CAMINHOS DE IMPORTAÇÃO DAS IMAGENS (Ajuste se o caminho da pasta for diferente)
+// CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
 import prefeituraLogo from '../../../assets/prefeitura.png';
 import arvoreLogo from '../../../assets/arvore.png';
 
@@ -22,7 +22,8 @@ import {
   Flame, 
   Trash2, 
   Droplet,
-  Users
+  Users,
+  User
 } from 'lucide-react';
 
 const VISTORIAS_INICIAIS = [
@@ -78,19 +79,20 @@ export default function HomeE() {
 
   const isActive = (path) => location.pathname === path;
 
-  // MENU IGUAL AO DA FILA DE VISTORIAS
+  // MENU LATERAL COM ÍCONE DE PESSOA/EQUIPE CORRIGIDO (<Users size={22} />)
   const menuModulos = [
     { id: 'mapa', titulo: 'Visão Geral da Cidade', icon: <MapPin size={22} />, rota: '/homee', ativo: true },
     { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae' },
     { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe' },
     { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe' },
-    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' }
+    { id: 'legislacao', titulo: 'Consulta a Leis', icon: <BookOpen size={22} />, rota: '/leise' },
+    { id: 'perfil', titulo: 'Perfil da Equipe', icon: <Users size={22} />, rota: '/perfile' },
   ];
 
   return (
     <div className={styles.appContainer}>
       
-      {/* SIDEBAR IDENTICA AO EXEMPLO DO FILAVISTORIAS */}
+      {/* SIDEBAR */}
       <aside className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
@@ -166,7 +168,13 @@ export default function HomeE() {
               )}
             </div>
 
-            <div className={styles.userProfile}>
+            {/* ÍCONE DE PESSOA E PERFIL CLICÁVEL NO HEADER */}
+            <div 
+              className={styles.userProfile}
+              onClick={() => navigate('/perfile')}
+              style={{ cursor: 'pointer' }}
+              title="Acessar Perfil da Equipe"
+            >
               <div className={styles.userAvatar}>
                 <Users size={18} />
               </div>

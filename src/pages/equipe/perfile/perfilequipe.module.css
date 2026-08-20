@@ -1,0 +1,459 @@
+:root {
+  --bg-app: #f0fdf4;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #f4fbf7;
+  --border-color: #d1fae5;
+  
+  --brand-primary: #059669;
+  --brand-primary-hover: #047857;
+  --brand-light: #dcfce7;
+  --brand-dark: #065f46;
+  
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
+  --text-muted: #6b7280;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-sm: 0 2px 4px rgba(5, 150, 105, 0.05);
+  --shadow-md: 0 4px 12px rgba(5, 150, 105, 0.1);
+}
+
+.appContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 280px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.brandHeader {
+  height: 75px;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+}
+
+.logoIcon {
+  width: 38px;
+  height: 38px;
+  background-color: var(--brand-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.brandImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brandText strong {
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  color: var(--brand-dark);
+}
+
+.brandText span {
+  font-size: 0.725rem;
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navCategory {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.navItem:hover {
+  background-color: var(--brand-light);
+  color: var(--brand-dark);
+}
+
+.navItemActive {
+  background-color: var(--brand-primary);
+  color: white !important;
+}
+
+.navItemActive .navIcon {
+  color: white;
+}
+
+.navIcon {
+  display: flex;
+  color: var(--brand-primary);
+}
+
+.sidebarFooter {
+  padding: 1.25rem;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+}
+
+.footerLogoImg {
+  max-width: 140px;
+  max-height: 50px;
+  object-fit: contain;
+}
+
+/* HEADER PRINCIPAL */
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 75px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0;
+}
+
+.headerSubtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconBtn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--brand-primary);
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  transition: background-color 0.2s;
+}
+
+.iconBtn:hover {
+  background-color: var(--brand-light);
+}
+
+.userProfileActive {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  background-color: var(--brand-light);
+  border: 1px solid var(--brand-primary);
+  border-radius: var(--radius-md);
+}
+
+.userAvatar {
+  background-color: var(--brand-primary);
+  color: white;
+  padding: 0.4rem;
+  border-radius: 50%;
+  display: flex;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.userName {
+  font-size: 0.85rem;
+  color: var(--brand-dark);
+}
+
+.userRole {
+  font-size: 0.725rem;
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+.btnLogout {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: #dc2626;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  transition: background-color 0.2s;
+}
+
+.btnLogout:hover {
+  background-color: #fee2e2;
+}
+
+.mainContent {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* GRID DE CONTEÚDO */
+.contentGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+/* PAINEL DE IDENTIFICAÇÃO DA EQUIPE */
+.teamCardSection {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.codeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--brand-primary);
+  color: white;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.teamCardHeader h2 {
+  font-size: 1.35rem;
+  color: var(--brand-dark);
+  margin: 0.6rem 0 0 0;
+}
+
+.teamStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.statBox {
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.statIcon {
+  color: var(--brand-primary);
+}
+
+.statBox span {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.statBox strong {
+  font-size: 0.9rem;
+  color: var(--brand-dark);
+}
+
+/* SEÇÃO DE INTEGRANTES */
+.membrosSection {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.sectionHeader h3 {
+  font-size: 1rem;
+  color: var(--brand-dark);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.subBadge {
+  font-size: 0.75rem;
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.membrosGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.cardMembro {
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.cardMembro:hover {
+  border-color: var(--brand-primary);
+  background-color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.membroHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.avatarCircle {
+  width: 42px;
+  height: 42px;
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.membroHeader h4 {
+  font-size: 0.9rem;
+  color: var(--brand-dark);
+  margin: 0;
+}
+
+.cargoText {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.liderBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  font-size: 0.675rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.membroDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-top: 1px dashed var(--border-color);
+  padding-top: 0.65rem;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.detailItem svg {
+  color: var(--brand-primary);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 900px) {
+  .appContainer { flex-direction: column; }
+  .sidebar { width: 100%; }
+  .teamStatsGrid, .membrosGrid { grid-template-columns: 1fr; }
+}

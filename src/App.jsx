@@ -36,6 +36,7 @@ import AutosNotificacoes from "./pages/equipe/auto/autosnotificacoes";
 import FilaVistorias from "./pages/equipe/fila/filavistorias";
 import Leis from "./pages/equipe/leis/leis";
 import RelatoriosTecnicos from "./pages/equipe/relatorio/relatoriostecnicos";
+import PerfilEquipe from "./pages/equipe/perfile/perfilequipe"
 
 function App() {
   return (
@@ -76,6 +77,7 @@ function App() {
         <Route path="/filae" element={<FilaVistorias />} />
         <Route path="/leise" element={<Leis />} />
         <Route path="/relatorioe" element={<RelatoriosTecnicos />} />
+        <Route path="/perfile" element={<PerfilEquipe />} />
       </Routes>
     </Router>
   );

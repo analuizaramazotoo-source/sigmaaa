@@ -88,7 +88,8 @@ export default function Leis() {
     { id: 'fila', titulo: 'Fila de Vistorias', icon: <ClipboardList size={22} />, rota: '/filae' },
     { id: 'autos', titulo: 'Emitir Auto / Notificação', icon: <FileText size={22} />, rota: '/autoe' },
     { id: 'relatorios', titulo: 'Enviar Relatório', icon: <BarChart2 size={22} />, rota: '/relatorioe' },
-    { id: 'leis', titulo: 'Leis', icon: <BookOpen size={22} />, rota: '/leise', ativo: true }
+    { id: 'leis', titulo: 'Leis', icon: <BookOpen size={22} />, rota: '/leise', ativo: true },
+    { id: 'perfil', titulo: 'Perfil da Equipe', icon: <Users size={22} />, rota: '/perfile' },
   ];
 
   return (
