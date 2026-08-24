@@ -13,8 +13,6 @@ import {
   BarChart2, 
   BookOpen, 
   Users, 
-  LogOut, 
-  Bell, 
   Send,
   Upload,
   CheckCircle2,
@@ -151,10 +149,6 @@ export default function RelatoriosTecnicos() {
           </div>
 
           <div className={styles.headerRight}>
-            <button className={styles.iconBtn} title="Notificações">
-              <Bell size={20} />
-            </button>
-
             {/* PERFIL DA EQUIPE CLICÁVEL (REDIRECIONA PARA /PERFILE) */}
             <Link to="/perfile" className={styles.userProfile}>
               <div className={styles.userAvatar}>
@@ -165,10 +159,6 @@ export default function RelatoriosTecnicos() {
                 <span className={styles.userRole}>Operacional</span>
               </div>
             </Link>
-
-            <button className={styles.btnLogout} onClick={() => navigate('/login')} title="Sair do Sistema">
-              <LogOut size={18} />
-            </button>
 
             {/* BOTÃO AMARELO DE VOLTAR PARA A HOME DA EQUIPE */}
             <button 

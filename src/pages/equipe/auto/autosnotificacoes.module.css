@@ -190,21 +190,6 @@
   gap: 1rem;
 }
 
-.iconBtn {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--brand-primary);
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  transition: background-color 0.2s;
-}
-
-.iconBtn:hover {
-  background-color: var(--brand-light);
-}
-
 /* CAIXA DE PERFIL COMO LINK CLICÁVEL */
 .userProfile {
   display: flex;
@@ -245,21 +230,6 @@
 .userRole {
   font-size: 0.725rem;
   color: var(--text-secondary);
-}
-
-.btnLogout {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: #dc2626;
-  padding: 0.5rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  transition: background-color 0.2s;
-}
-
-.btnLogout:hover {
-  background-color: #fee2e2;
 }
 
 .mainContent {

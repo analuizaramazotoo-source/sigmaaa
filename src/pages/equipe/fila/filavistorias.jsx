@@ -13,8 +13,6 @@ import {
   BarChart2, 
   BookOpen, 
   Users, 
-  LogOut, 
-  Bell, 
   Clock,
   CheckCircle2,
   AlertCircle,
@@ -136,10 +134,6 @@ export default function FilaVistorias() {
           </div>
 
           <div className={styles.headerRight}>
-            <button className={styles.iconBtn} title="Notificações">
-              <Bell size={20} />
-            </button>
-
             {/* PERFIL DA EQUIPE CLICÁVEL (REDIRECIONA PARA /PERFILE) */}
             <Link to="/perfile" className={styles.userProfile}>
               <div className={styles.userAvatar}>
@@ -151,11 +145,7 @@ export default function FilaVistorias() {
               </div>
             </Link>
 
-            <button className={styles.btnLogout} onClick={() => navigate('/login')} title="Sair do Sistema">
-              <LogOut size={18} />
-            </button>
-
-            {/* BOTÃO AMARELO DE VOLTAR */}
+            {/* BOTÃO AMARELO DE VOLTAR PARA A HOME DA EQUIPE */}
             <button 
               onClick={() => navigate('/homee')} 
               style={{
