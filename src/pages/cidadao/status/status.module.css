@@ -98,33 +98,6 @@
   gap: 1rem;
 }
 
-.notificationBadge {
-  position: relative;
-  background-color: var(--bg-sidebar);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem;
-  border-radius: 50%;
-  color: var(--brand-primary);
-  display: flex;
-  cursor: pointer;
-}
-
-.badgeCount {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background-color: #dc2626;
-  color: white;
-  font-size: 0.65rem;
-  font-weight: 700;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .userInfoBox {
   display: flex;
   align-items: center;
@@ -166,23 +139,6 @@
 .userDetails span {
   font-size: 0.675rem;
   color: var(--text-secondary);
-}
-
-.btnSairTopo {
-  background-color: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
-  padding: 0.55rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-}
-
-.btnSairTopo:hover {
-  background-color: #fee2e2;
 }
 
 .btnVoltarTopo {
@@ -370,89 +326,6 @@
   padding: 1.5rem;
   border-top: 1px solid var(--border-color);
   margin-top: auto;
-}
-
-/* MODAL SAIR */
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(3px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.modalCard {
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 2.25rem 2rem;
-  max-width: 420px;
-  width: 90%;
-  text-align: center;
-  box-shadow: var(--shadow-md);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modalIconBadge {
-  background-color: #fee2e2;
-  color: #dc2626;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.25rem;
-}
-
-.modalCard h2 {
-  font-size: 1.25rem;
-  color: var(--brand-dark);
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.modalCard p {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.75rem;
-}
-
-.modalActions {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-}
-
-.btnModalCancelar {
-  flex: 1;
-  background-color: #f1f5f9;
-  color: var(--text-secondary);
-  border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.btnModalConfirmar {
-  flex: 1;
-  background-color: #dc2626;
-  color: #ffffff;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
 }
 
 @media (max-width: 768px) {

@@ -3,9 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./Status.module.css";
 import {
   ArrowLeft,
-  Bell,
   User,
-  LogOut,
   Clock,
   Trees
 } from "lucide-react";
@@ -28,12 +26,7 @@ const mensagens = [
 
 export default function Status() {
   const [etapaAtiva, setEtapaAtiva] = useState(2);
-  const [modalSairAberto, setModalSairAberto] = useState(false);
   const navigate = useNavigate();
-
-  const handleConfirmarSair = () => {
-    navigate("/");
-  };
 
   return (
     <div className={styles.appContainer}>
@@ -52,11 +45,6 @@ export default function Status() {
           </div>
 
           <div className={styles.headerRight}>
-            <div className={styles.notificationBadge}>
-              <Bell size={18} />
-              <span className={styles.badgeCount}>2</span>
-            </div>
-
             <Link to="/perfil" className={styles.userInfoBox}>
               <div className={styles.userAvatarIcon}>
                 <User size={18} />
@@ -66,14 +54,6 @@ export default function Status() {
                 <span>Cidadão • Ativo</span>
               </div>
             </Link>
-
-            <button 
-              className={styles.btnSairTopo} 
-              onClick={() => setModalSairAberto(true)} 
-              type="button"
-            >
-              <LogOut size={16} />
-            </button>
 
             <button 
               type="button" 
@@ -158,34 +138,6 @@ export default function Status() {
           <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
         </footer>
       </div>
-
-      {/* MODAL DE SAÍDA */}
-      {modalSairAberto && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalCard}>
-            <div className={styles.modalIconBadge}>
-              <LogOut size={28} />
-            </div>
-            <h2>Encerrar Sessão</h2>
-            <p>Tem certeza que quer sair?</p>
-
-            <div className={styles.modalActions}>
-              <button 
-                className={styles.btnModalCancelar} 
-                onClick={() => setModalSairAberto(false)}
-              >
-                Cancelar
-              </button>
-              <button 
-                className={styles.btnModalConfirmar} 
-                onClick={handleConfirmarSair}
-              >
-                Sim, Quero Sair
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

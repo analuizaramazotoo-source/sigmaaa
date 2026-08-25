@@ -4,7 +4,6 @@ import {
   AlertTriangle, 
   Send, 
   Trees, 
-  Bell, 
   User, 
   ArrowLeft 
 } from 'lucide-react';
@@ -55,12 +54,8 @@ export default function RelatarProblema() {
           </div>
 
           <div className={styles.headerRight}>
-            <div className={styles.notificationBadge}>
-              <Bell size={18} />
-              <span className={styles.badgeCount}>2</span>
-            </div>
-
-            {/* PERFIL */}
+            
+            {/* PERFIL CLICÁVEL */}
             <Link to="/perfil" className={styles.userInfoBox}>
               <div className={styles.userAvatarIcon}>
                 <User size={18} />
@@ -71,7 +66,7 @@ export default function RelatarProblema() {
               </div>
             </Link>
 
-            {/* BOTÃO VOLTAR AMARELO (REPOSICIONADO APÓS O PERFIL) */}
+            {/* BOTÃO VOLTAR AMARELO */}
             <button 
               type="button" 
               className={styles.btnVoltarTopo} 

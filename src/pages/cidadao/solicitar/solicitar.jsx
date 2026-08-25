@@ -7,7 +7,6 @@ import {
   AlertCircle, 
   Send, 
   Trees, 
-  Bell, 
   User, 
   ArrowLeft 
 } from "lucide-react";
@@ -59,11 +58,7 @@ export default function Solicitar() {
           </div>
 
           <div className={styles.headerRight}>
-            <div className={styles.notificationBadge}>
-              <Bell size={18} />
-              <span className={styles.badgeCount}>2</span>
-            </div>
-
+            
             {/* PERFIL DO USUÁRIO */}
             <Link to="/perfil" className={styles.userInfoBox}>
               <div className={styles.userAvatarIcon}>
