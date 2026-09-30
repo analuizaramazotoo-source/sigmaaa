@@ -1,0 +1,225 @@
+:root {
+  --bg-app: #f0fdf4;
+  --bg-surface: #ffffff;
+  --border-color: #d1fae5;
+
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
+  --text-muted: #6b7280;
+
+  --brand-primary: #059669;
+  --brand-primary-hover: #047857;
+  --brand-light: #dcfce7;
+  --brand-dark: #065f46;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-lg: 0 10px 25px rgba(5, 150, 105, 0.1);
+  
+  --transition-fast: 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.appContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  padding: 1rem;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* MARCA */
+.brandHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.logoIcon {
+  width: 56px;
+  height: 56px;
+  background-color: var(--brand-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brandText strong {
+  font-size: 1.1rem;
+  color: var(--brand-dark);
+}
+
+.brandText span {
+  font-size: 0.85rem;
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+/* TEXTOS */
+.title {
+  font-size: 1.25rem;
+  color: var(--brand-dark);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+}
+
+/* FORMULÁRIO */
+.formSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.formGroup label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--brand-primary);
+}
+
+.inputWrapper input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  outline: none;
+  background-color: var(--bg-app);
+  transition: all var(--transition-fast);
+}
+
+.inputWrapper input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+  background-color: var(--bg-surface);
+}
+
+/* BOTÃO PRINCIPAL */
+.btnPrimary {
+  width: 100%;
+  background-color: var(--brand-primary);
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  margin-top: 0.5rem;
+}
+
+.btnPrimary:hover {
+  background-color: var(--brand-primary-hover);
+}
+
+/* SUCESSO */
+.successSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+}
+
+.successIcon {
+  color: var(--brand-primary);
+  margin-bottom: 1rem;
+}
+
+/* RODAPÉ E LINK */
+.footerActions {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.linkVoltar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.linkVoltar:hover {
+  color: var(--brand-dark);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .authCard {
+    padding: 1.5rem;
+  }
+}
