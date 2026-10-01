@@ -205,17 +205,25 @@
   position: relative;
 }
 
+/* --- BOTÕES DE ÍCONE QUADRADOS COM CANTOS ARREDONDADOS --- */
+.headerRight .iconButton,
 .iconButton {
   position: relative;
-  background: var(--brand-light);
-  border: none;
+  background-color: var(--brand-light);
+  border: 1px solid var(--border-color);
   color: var(--brand-primary-hover);
-  padding: 0.6rem;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-sm); /* Define o canto quadrado suave (8px) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
+.headerRight .iconButton:hover,
 .iconButton:hover {
   background-color: var(--brand-primary);
   color: white;
@@ -223,8 +231,8 @@
 
 .badge {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: -4px;
+  right: -4px;
   background-color: var(--status-danger);
   color: white;
   font-size: 0.65rem;

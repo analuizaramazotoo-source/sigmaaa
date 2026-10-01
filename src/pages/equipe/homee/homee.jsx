@@ -71,6 +71,7 @@ export default function HomeE() {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [modalLogout, setModalLogout] = useState(false);
   const [selectedVistoria, setSelectedVistoria] = useState(null);
+  const [isLogoutHovered, setIsLogoutHovered] = useState(false);
 
   const handleConfirmLogout = () => {
     setModalLogout(false);
@@ -184,13 +185,27 @@ export default function HomeE() {
               </div>
             </div>
 
+            {/* BOTÃO DE SAIR COM EFEITO HOVER VERMELHO */}
             <button 
               type="button"
               className={styles.btnLogout}
               onClick={() => setModalLogout(true)} 
+              onMouseEnter={() => setIsLogoutHovered(true)}
+              onMouseLeave={() => setIsLogoutHovered(false)}
               title="Sair do Sistema"
+              style={{
+                backgroundColor: isLogoutHovered ? '#dc2626' : '#ffffff',
+                border: isLogoutHovered ? '1px solid #dc2626' : '1px solid #d1fae5',
+                padding: '8px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s'
+              }}
             >
-              <LogOut size={18} />
+              <LogOut size={18} color={isLogoutHovered ? '#ffffff' : '#dc2626'} />
             </button>
           </div>
         </header>
@@ -295,7 +310,7 @@ export default function HomeE() {
                         <ItemIcon size={18} />
                       </div>
                       <div className={styles.requestBody}>
-                        <strong className={styles.requestTitle}>#{item.id} - {item.titulo}</strong>
+                        <strong className={styles.requestTitle}>#{item.id} {item.titulo}</strong>
                         <p className={styles.requestAddress}>{item.endereco}</p>
                       </div>
                       <div className={styles.requestMeta}>

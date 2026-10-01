@@ -29,7 +29,7 @@ export default function Leis() {
   const [busca, setBusca] = useState('');
   const [categoria, setCategoria] = useState('todas');
 
-  // BASE DE DADOS DE LEIS E NORMAS
+  // BASE DE DADOS DE LEIS E NORMAS (COM LINKS DO DIÁRIO OFICIAL / LEGISLAÇÃO)
   const [leis] = useState([
     {
       id: 1,
@@ -38,7 +38,8 @@ export default function Leis() {
       categoria: 'crimes',
       resumo: 'Dispõe sobre as sanções penais e administrativas derivadas de condutas e atividades lesivas ao meio ambiente.',
       artigosChave: ['Art. 70 - Das Infrações Administrativas', 'Art. 54 - Causal de Poluição', 'Art. 38 - Destruição de Floresta'],
-      data: '12/02/1998'
+      data: '12/02/1998',
+      urlDiario: 'https://www.planalto.gov.br/ccivil_03/leis/l9605.htm'
     },
     {
       id: 2,
@@ -47,7 +48,8 @@ export default function Leis() {
       categoria: 'codigo',
       resumo: 'Institui o Código Ambiental Municipal, regulamentando o licenciamento, fiscalização e penalidades ambientais.',
       artigosChave: ['Art. 12 - Da Autorização para Poda/Corte', 'Art. 45 - Do Descarte Irregular de Resíduos'],
-      data: '18/05/2021'
+      data: '18/05/2021',
+      urlDiario: 'https://www.in.gov.br/'
     },
     {
       id: 3,
@@ -56,7 +58,8 @@ export default function Leis() {
       categoria: 'queimadas',
       resumo: 'Proíbe a realização de queimadas na zona urbana e estabelece multa progressiva em períodos de estiagem.',
       artigosChave: ['Art. 3º - Das Proibições de Queimada em Lotes Vagos', 'Art. 8º - Da Notificação Imediata'],
-      data: '10/08/2023'
+      data: '10/08/2023',
+      urlDiario: 'https://www.in.gov.br/'
     },
     {
       id: 4,
@@ -65,7 +68,8 @@ export default function Leis() {
       categoria: 'ruido',
       resumo: 'Estipula os limites máximos permissíveis de ruídos em zonas residenciais e comerciais conforme horário.',
       artigosChave: ['Tabela I - Limites de Decibéis (dB)', 'Art. 5º - Do Equipamento de Medição (Decibelímetro)'],
-      data: '15/01/2024'
+      data: '15/01/2024',
+      urlDiario: 'https://www.in.gov.br/'
     }
   ]);
 
@@ -79,6 +83,15 @@ export default function Leis() {
     if (categoria === 'todas') return atendeBusca;
     return atendeBusca && lei.categoria === categoria;
   });
+
+  // FUNÇÃO PARA ABRIR O LINK DO DIÁRIO OFICIAL
+  const handleAbrirDiarioOficial = (url) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      alert('Link do Diário Oficial não cadastrado para esta norma.');
+    }
+  };
 
   // MENU LATERAL PADRONIZADO DA EQUIPE
   const menuModulos = [
@@ -282,7 +295,7 @@ export default function Leis() {
                     <button className={styles.btnDownloadPdf} onClick={() => alert(`Baixando PDF completo de: ${leiSelecionada.titulo}`)}>
                       <Download size={16} /> Baixar PDF Íntegra
                     </button>
-                    <button className={styles.btnAbrirDiario} onClick={() => alert('Direcionando para o Diário Oficial')}>
+                    <button className={styles.btnAbrirDiario} onClick={() => handleAbrirDiarioOficial(leiSelecionada.urlDiario)}>
                       <ExternalLink size={16} /> Ver no Diário Oficial
                     </button>
                   </div>

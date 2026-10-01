@@ -35,6 +35,7 @@ export default function Homec() {
   const navigate = useNavigate();
   const [duvidaAberta, setDuvidaAberta] = useState(null);
   const [modalSairAberto, setModalSairAberto] = useState(false);
+  const [isLogoutHovered, setIsLogoutHovered] = useState(false);
 
   const toggleDuvida = (index) => {
     setDuvidaAberta(duvidaAberta === index ? null : index);
@@ -71,13 +72,27 @@ export default function Homec() {
               </div>
             </Link>
 
+            {/* BOTÃO DE SAIR COM EFEITO HOVER VERMELHO */}
             <button 
               type="button" 
               className={styles.btnSairTopo} 
               onClick={() => setModalSairAberto(true)}
+              onMouseEnter={() => setIsLogoutHovered(true)}
+              onMouseLeave={() => setIsLogoutHovered(false)}
               title="Encerrar Sessão"
+              style={{
+                backgroundColor: isLogoutHovered ? '#dc2626' : '#ffffff',
+                border: isLogoutHovered ? '1px solid #dc2626' : '1px solid #d1fae5',
+                padding: '8px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s'
+              }}
             >
-              <LogOut size={16} />
+              <LogOut size={18} color={isLogoutHovered ? '#ffffff' : '#dc2626'} />
             </button>
           </div>
         </header>

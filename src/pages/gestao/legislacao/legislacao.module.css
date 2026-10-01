@@ -16,7 +16,7 @@
 
 .appContainer {
   display: flex;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background-color: var(--bg-app);
   color: var(--text-primary);
@@ -24,6 +24,7 @@
   overflow-x: hidden;
 }
 
+/* SIDEBAR FIXA ATÉ AO FINAL DA TELA */
 .sidebar {
   width: 260px;
   min-width: 260px;
@@ -33,9 +34,13 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   z-index: 100;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .brandHeader {
@@ -128,11 +133,14 @@
   color: #94a3b8;
 }
 
+/* ÁREA PRINCIPAL COMPENSADA COM MARGIN-LEFT */
 .mainWrapper {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
+  margin-left: 260px;
+  min-height: 100vh;
 }
 
 .header {

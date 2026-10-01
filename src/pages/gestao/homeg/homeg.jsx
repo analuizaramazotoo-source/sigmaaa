@@ -89,12 +89,13 @@ export default function Homeg() {
   const [unreadNotifications, setUnreadNotifications] = useState(5);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [isLogoutHovered, setIsLogoutHovered] = useState(false);
   
   // Modais
   const [modalNewRecord, setModalNewRecord] = useState(false);
   const [modalFilter, setModalFilter] = useState(false);
   const [modalViewAll, setModalViewAll] = useState(false);
-  const [modalLogout, setModalLogout] = useState(false); // Modal para confirmação de logout
+  const [modalLogout, setModalLogout] = useState(false);
   const [selectedOcorrencia, setSelectedOcorrencia] = useState(null);
 
   // Lista Dinâmica
@@ -445,37 +446,38 @@ export default function Homeg() {
                   <div className={styles.menuDivider} />
 
                   <button 
+                    className={styles.iconButton} 
                     onClick={() => setModalLogout(true)} 
-                    className={`${styles.menuItemBtn} ${styles.dangerText}`}
+                    title="Sair do Sistema"
+                    aria-label="Sair do Sistema"
                   >
-                    <LogOut size={16} /> Sair da Conta
+                    <LogOut size={18} color="#dc2626" />
                   </button>
                 </div>
               )}
             </div>
 
-            {/* BOTÃO DE DESLOGAR (IGUAL AO DA HOMEE) */}
+            {/* BOTÃO QUADRADO DE SAIR COM COMPOSTO DE HOVER */}
             <button 
               onClick={() => setModalLogout(true)} 
+              onMouseEnter={() => setIsLogoutHovered(true)}
+              onMouseLeave={() => setIsLogoutHovered(false)}
               title="Sair do Sistema"
+              aria-label="Sair do Sistema"
               style={{
-                backgroundColor: '#fee2e2',
-                color: '#dc2626',
-                border: '1px solid #fecaca',
-                padding: '8px 12px',
+                backgroundColor: isLogoutHovered ? '#dc2626' : '#ffffff',
+                border: isLogoutHovered ? '1px solid #dc2626' : '1px solid #d1fae5',
+                padding: '8px',
                 borderRadius: '8px',
-                fontWeight: '600',
-                fontSize: '13px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                justifyContent: 'center',
                 marginLeft: '10px',
                 transition: 'all 0.2s'
               }}
             >
-              <LogOut size={16} />
-              <span>Sair</span>
+              <LogOut size={18} color={isLogoutHovered ? '#ffffff' : '#dc2626'} />
             </button>
           </div>
         </header>
@@ -644,7 +646,7 @@ export default function Homeg() {
         </div>
       )}
 
-      {/* MODAIS INTERATIVOS EXISTENTES */}
+      {/* MODAIS INTERATIVOS */}
       {selectedOcorrencia && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>

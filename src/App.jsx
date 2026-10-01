@@ -17,7 +17,9 @@ import Login from "./pages/auth/login/login";
 import LoginCidadao from "./pages/auth/login/logincidadao/logincidadao";
 import CadastroCidadao from "./pages/auth/cadastroc/cadastrocidadao";
 import Cadastrog from "./pages/gestao/cadastrog/cadastrog";
-import CadastroEquipe from "./pages/equipe/login/CadastroEquipe"; // Nome atualizado
+import CadastroEquipe from "./pages/equipe/login/CadastroEquipe";
+// IMPORT CORRIGIDO BASEADO NA SUA ESTRUTURA DE PASTAS
+import EsqueciSenha from "./pages/auth/login/esquecisenha"; 
 
 // MÓDULO GESTÃO
 import Homeg from "./pages/gestao/homeg/homeg";
@@ -36,7 +38,7 @@ import AutosNotificacoes from "./pages/equipe/auto/autosnotificacoes";
 import FilaVistorias from "./pages/equipe/fila/filavistorias";
 import Leis from "./pages/equipe/leis/leis";
 import RelatoriosTecnicos from "./pages/equipe/relatorio/relatoriostecnicos";
-import PerfilEquipe from "./pages/equipe/perfile/perfilequipe"
+import PerfilEquipe from "./pages/equipe/perfile/perfilequipe";
 
 function App() {
   return (
@@ -48,7 +50,8 @@ function App() {
         {/* LOGINS E CADASTROS DE AUTENTICAÇÃO */}
         <Route path="/login" element={<Login />} />
         <Route path="/logincidadao" element={<LoginCidadao />} />
-        <Route path="/cadastroeq" element={<CadastroEquipe />} /> {/* Elemento atualizado */}
+        <Route path="/cadastroeq" element={<CadastroEquipe />} />
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} /> {/* Rota adicionada */}
 
         {/* ROTAS CIDADÃO */}
         <Route path="/cidadao" element={<Homec />} />

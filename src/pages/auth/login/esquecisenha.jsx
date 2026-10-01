@@ -38,12 +38,12 @@ export default function EsqueciSenha() {
           <div className={styles.formSection}>
             <h2 className={styles.title}>Esqueceu sua senha?</h2>
             <p className={styles.subtitle}>
-              Digite o e-mail ou CPF cadastrado. Enviaremos um link para você redefinir sua senha.
+              Digite o e-mail cadastrado. Enviaremos um link para você redefinir sua senha.
             </p>
 
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.formGroup}>
-                <label htmlFor="email">E-mail ou CPF</label>
+                <label htmlFor="email">E-mail</label>
                 <div className={styles.inputWrapper}>
                   <Mail size={18} className={styles.inputIcon} />
                   <input

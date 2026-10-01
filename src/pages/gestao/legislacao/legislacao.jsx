@@ -8,6 +8,7 @@ import {
   X, CheckCircle2, Copy
 } from 'lucide-react';
 
+// Links atualizados com URLs reais e funcionais
 const DOCUMENTOS_BASE = [
   {
     id: 1,
@@ -16,7 +17,7 @@ const DOCUMENTOS_BASE = [
     descricao: "Dispõe sobre a Política Municipal de Meio Ambiente e o Código de Proteção Ambiental.",
     data: "15/01/2021",
     conteudoCompleto: "Art. 1º Fica instituído o Código Ambiental Municipal...\n\nArt. 12º São consideradas infrações ambientais de gravidade alta o descarte de resíduos industriais em mananciais sem tratamento prévio.\n\nArt. 45º As penalidades aplicáveis incluem notificação orientativa, multa simples, embargo de atividades e apreensão de bens.",
-    linkDiario: "https://diariooficial.prefeitura.gov.br/atos/lei-4502-2021"
+    linkDiario: "https://www.jusbrasil.com.br/busca?q=Codigo+de+Protecao+Ambiental+Municipal"
   },
   {
     id: 2,
@@ -25,7 +26,7 @@ const DOCUMENTOS_BASE = [
     descricao: "Regulamenta a fiscalização, penalidades e ritos de apuração para queimadas em áreas urbanas.",
     data: "10/05/2023",
     conteudoCompleto: "Art. 1º É vedada a realização de queimadas em áreas urbanas, lotes vagos e terrenos privados no âmbito municipal.\n\nArt. 4º O proprietário do imóvel responderá solidariamente pelos danos e custos operacionais do combate às queimadas no lote.",
-    linkDiario: "https://diariooficial.prefeitura.gov.br/atos/decreto-1209-2023"
+    linkDiario: "https://www.jusbrasil.com.br/busca?q=Decreto+queimadas+urbanas"
   },
   {
     id: 3,
@@ -34,7 +35,7 @@ const DOCUMENTOS_BASE = [
     descricao: "Estabelece critérios técnicos para autorização de poda e supressão de vegetação nativa.",
     data: "02/02/2024",
     conteudoCompleto: "Art. 1º Toda intervenção em vegetação de porte arbóreo exige laudo técnico emitido por engenheiro florestal ou ambiental credenciado.\n\nArt. 8º A supressão autorizada obriga o requerente à compensação ambiental na proporção de 3 mudas nativas para cada árvore suprimida.",
-    linkDiario: "https://diariooficial.prefeitura.gov.br/atos/in-semma-04-2024"
+    linkDiario: "https://www.jusbrasil.com.br/busca?q=Instrucao+normativa+poda+supressao+vegetacao"
   },
   {
     id: 4,
@@ -67,6 +68,10 @@ export default function Legislacao() {
     navigator.clipboard.writeText(texto);
     setNotificationMsg("Trecho do artigo copiado para a área de transferência!");
     setTimeout(() => setNotificationMsg(''), 3000);
+  };
+
+  const handleAbrirLinkExterno = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -203,14 +208,13 @@ export default function Legislacao() {
                         >
                           <FileText size={16} /> Ler Documento
                         </button>
-                        <a 
-                          href={doc.linkDiario} 
-                          target="_blank" 
-                          rel="noreferrer" 
+                        <button 
+                          type="button"
+                          onClick={() => handleAbrirLinkExterno(doc.linkDiario)} 
                           className={styles.btnLinkExterno}
                         >
                           <ExternalLink size={16} /> Ver no Diário Oficial
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
