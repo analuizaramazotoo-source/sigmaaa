@@ -12,7 +12,6 @@ import {
   FileText, 
   BarChart2, 
   BookOpen, 
-  Bell, 
   ChevronDown, 
   CheckCircle2, 
   Clock, 
@@ -66,8 +65,6 @@ export default function HomeE() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [unreadNotifications, setUnreadNotifications] = useState(3);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [modalLogout, setModalLogout] = useState(false);
   const [selectedVistoria, setSelectedVistoria] = useState(null);
@@ -135,40 +132,6 @@ export default function HomeE() {
           </div>
 
           <div className={styles.headerRight}>
-            <div className={styles.popoverContainer}>
-              <button 
-                type="button"
-                className={styles.iconBtn} 
-                onClick={() => {
-                  setShowNotifications(!showNotifications);
-                  setShowUserDropdown(false);
-                }}
-                aria-label="Notificações Internas"
-              >
-                <Bell size={20} />
-                {unreadNotifications > 0 && <span className={styles.badge}>{unreadNotifications}</span>}
-              </button>
-
-              {showNotifications && (
-                <div className={styles.popoverMenu}>
-                  <div className={styles.popoverHeader}>
-                    <strong>Notificações de Campo</strong>
-                    <button 
-                      type="button"
-                      onClick={() => setUnreadNotifications(0)}
-                      className={styles.textBtn}
-                    >
-                      Limpar
-                    </button>
-                  </div>
-                  <ul className={styles.notificationList}>
-                    <li>📌 Nova ordem de vistoria atribuída ao seu setor.</li>
-                    <li>⚠️ Alerta de queimada recorrente na Zona Norte.</li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
             {/* ÍCONE DE PESSOA E PERFIL CLICÁVEL NO HEADER */}
             <div 
               className={styles.userProfile}

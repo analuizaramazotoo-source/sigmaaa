@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './relatoriostecnicos.module.css';
 
@@ -18,11 +18,14 @@ import {
   CheckCircle2,
   Clock,
   Download,
-  ArrowLeft
+  ArrowLeft,
+  X,
+  FileCheck
 } from 'lucide-react';
 
 export default function RelatoriosTecnicos() {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   // ESTADOS DO FORMULÁRIO
   const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState('');
@@ -31,6 +34,9 @@ export default function RelatoriosTecnicos() {
   const [observacoesTecnicas, setObservacoesTecnicas] = useState('');
   const [parecerTecnico, setParecerTecnico] = useState('Procedente - Requer Medidas Corretivas');
   const [mensagemSucesso, setMensagemSucesso] = useState(false);
+
+  // ESTADO DE ANEXOS / FOTOS
+  const [arquivosAnexados, setArquivosAnexados] = useState([]);
 
   // OCORRÊNCIAS DA FILA (LOCALSTORAGE)
   const [ocorrenciasDisponiveis, setOcorrenciasDisponiveis] = useState([]);
@@ -73,6 +79,48 @@ export default function RelatoriosTecnicos() {
     }
   };
 
+  // MÉTODOS DE ANEXO DE ARQUIVOS
+  const processarArquivos = (files) => {
+    const novosArquivos = Array.from(files).filter(file => {
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      const isValidType = ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type);
+
+      if (!isLt10M) alert(`O arquivo "${file.name}" ultrapassa o limite de 10MB.`);
+      if (!isValidType) alert(`O arquivo "${file.name}" não é suportado. Envie JPG, PNG ou PDF.`);
+
+      return isLt10M && isValidType;
+    });
+
+    const arquivosComPreview = novosArquivos.map(file => ({
+      id: Math.random().toString(36).substr(2, 9),
+      file,
+      nome: file.name,
+      tamanho: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+      isPdf: file.type === 'application/pdf'
+    }));
+
+    setArquivosAnexados(prev => [...prev, ...arquivosComPreview]);
+  };
+
+  const handleFileSelect = (e) => {
+    if (e.target.files) {
+      processarArquivos(e.target.files);
+    }
+  };
+
+  const handleRemoveAnexo = (id) => {
+    setArquivosAnexados(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleDragOver = (e) => e.preventDefault();
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files) {
+      processarArquivos(e.dataTransfer.files);
+    }
+  };
+
   // ENVIAR RELATÓRIO
   const handleEnviarRelatorio = (e) => {
     e.preventDefault();
@@ -83,7 +131,8 @@ export default function RelatoriosTecnicos() {
       data: 'Hoje, agora',
       parecer: parecerTecnico,
       status: 'Enviado',
-      corStatus: 'verde'
+      corStatus: 'verde',
+      totalAnexos: arquivosAnexados.length
     };
 
     setRelatoriosEnviados([novoRelatorio, ...relatoriosEnviados]);
@@ -94,6 +143,7 @@ export default function RelatoriosTecnicos() {
       setTituloRelatorio('');
       setObservacoesTecnicas('');
       setOcorrenciaVinculada('');
+      setArquivosAnexados([]);
     }, 3000);
   };
 
@@ -149,7 +199,6 @@ export default function RelatoriosTecnicos() {
           </div>
 
           <div className={styles.headerRight}>
-            {/* PERFIL DA EQUIPE CLICÁVEL (REDIRECIONA PARA /PERFILE) */}
             <Link to="/perfile" className={styles.userProfile}>
               <div className={styles.userAvatar}>
                 <Users size={18} />
@@ -160,7 +209,6 @@ export default function RelatoriosTecnicos() {
               </div>
             </Link>
 
-            {/* BOTÃO AMARELO DE VOLTAR PARA A HOME DA EQUIPE */}
             <button 
               onClick={() => navigate('/homee')} 
               style={{
@@ -205,7 +253,7 @@ export default function RelatoriosTecnicos() {
                     <option value="">-- Selecione uma Ocorrência Ativa --</option>
                     {ocorrenciasDisponiveis.map(o => (
                       <option key={o.id} value={o.id}>
-                        #{o.id} - {o.titulo} ({o.status})
+                        #{o.id} - {o.titulo || o.title} ({o.status})
                       </option>
                     ))}
                   </select>
@@ -259,13 +307,88 @@ export default function RelatoriosTecnicos() {
                 </div>
 
                 {/* ANEXAR ARQUIVOS / FOTOS */}
-                <div className={styles.uploadBox}>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  style={{ display: 'none' }} 
+                  multiple 
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  onChange={handleFileSelect}
+                />
+
+                <div 
+                  className={styles.uploadBox}
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  style={{ cursor: 'pointer' }}
+                >
                   <Upload size={20} className={styles.uploadIcon} />
                   <div>
                     <strong>Anexar Fotos da Vistoria / Documentos Suportados</strong>
                     <span>Formatos aceitos: JPG, PNG ou PDF (Máx. 10MB)</span>
                   </div>
                 </div>
+
+                {/* LISTAGEM DE ARQUIVOS ANEXADOS */}
+                {arquivosAnexados.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '12px' }}>
+                    {arquivosAnexados.map((item) => (
+                      <div 
+                        key={item.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          backgroundColor: '#f0fdf4',
+                          border: '1px solid #bbf7d0',
+                          borderRadius: '8px',
+                          padding: '6px 12px',
+                          fontSize: '12px',
+                          color: '#065f46'
+                        }}
+                      >
+                        {item.preview ? (
+                          <img 
+                            src={item.preview} 
+                            alt={item.nome} 
+                            style={{ width: '32px', height: '32px', objectFit: 'cover', borderRadius: '4px' }}
+                          />
+                        ) : (
+                          <FileCheck size={24} color="#059669" />
+                        )}
+                        <div>
+                          <strong style={{ display: 'block', maxWidth: '140px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {item.nome}
+                          </strong>
+                          <span style={{ fontSize: '10px', color: '#047857' }}>{item.tamanho}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveAnexo(item.id);
+                          }}
+                          style={{
+                            border: 'none',
+                            background: '#fee2e2',
+                            color: '#dc2626',
+                            borderRadius: '50%',
+                            width: '20px',
+                            height: '20px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginLeft: '6px'
+                          }}
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* BOTÃO DE AÇÃO */}
                 <div className={styles.formActions}>

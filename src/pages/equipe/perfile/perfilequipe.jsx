@@ -14,7 +14,6 @@ import {
   BookOpen, 
   Users, 
   LogOut, 
-  Bell, 
   Shield,
   Mail,
   Phone,
@@ -116,10 +115,6 @@ export default function PerfilEquipe() {
           </div>
 
           <div className={styles.headerRight}>
-            <button className={styles.iconBtn} title="Notificações">
-              <Bell size={20} />
-            </button>
-
             <div className={styles.userProfileActive}>
               <div className={styles.userAvatar}>
                 <Users size={18} />
