@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homeg.module.css';
 import { 
   Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, Bell, ChevronDown, Plus, ClipboardCheck, 
+  HelpCircle, ChevronDown, Plus, ClipboardCheck, 
   Clock, Settings, CheckCircle2, Filter, Trash2, Flame, 
   Droplet, Volume2, Leaf, Shield, ArrowUpRight, LogOut, User, Edit3, Home as HomeIcon
 } from 'lucide-react';
@@ -86,8 +86,6 @@ export default function Homeg() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [unreadNotifications, setUnreadNotifications] = useState(5);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isLogoutHovered, setIsLogoutHovered] = useState(false);
   
@@ -378,46 +376,8 @@ export default function Homeg() {
           <div className={styles.headerRight}>
             <div className={styles.popoverContainer}>
               <button 
-                className={styles.iconButton} 
-                onClick={() => {
-                  setShowNotifications(!showNotifications);
-                  setShowUserDropdown(false);
-                }}
-                aria-label="Notificações Internas"
-              >
-                <Bell size={18} />
-                {unreadNotifications > 0 && <span className={styles.badge}>{unreadNotifications}</span>}
-              </button>
-
-              {showNotifications && (
-                <div className={styles.popoverMenu}>
-                  <div className={styles.popoverHeader}>
-                    <strong>Notificações Internas</strong>
-                    <button 
-                      onClick={() => setUnreadNotifications(0)}
-                      className={styles.textBtn}
-                    >
-                      Limpar
-                    </button>
-                  </div>
-                  <ul className={styles.notificationList}>
-                    <li>📌 Novo chamado de Queimada registrado no Setor Norte.</li>
-                    <li>⚠️ Auto de Infração nº 402 finalizado.</li>
-                    <li>📋 Relatório mensal disponível para exportação.</li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            <div className={styles.dividerVertical} />
-
-            <div className={styles.popoverContainer}>
-              <button 
                 className={styles.userDropdown}
-                onClick={() => {
-                  setShowUserDropdown(!showUserDropdown);
-                  setShowNotifications(false);
-                }}
+                onClick={() => setShowUserDropdown(!showUserDropdown)}
               >
                 <div className={styles.avatar}>AL</div>
                 <div className={styles.userInfo}>
