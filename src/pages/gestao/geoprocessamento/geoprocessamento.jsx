@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
+import { useCollection, occurrenceView, reportError } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './geoprocessamento.module.css';
 import { 
   ArrowLeft, Map as MapIcon, Layers, Filter, Navigation, 
   Shield, ClipboardList, FileText, BarChart2, HelpCircle, Home as HomeIcon,
-  X, CheckCircle2, Eye, MapPin, Flame, AlertCircle
-} from 'lucide-react';
-
-const INITIAL_PONTOS = [
-  { id: 1, top: '35%', left: '42%', titulo: 'Zona de Preservação - APP Rio Verde', tipo: 'app', status: 'Preservado', cor: '#10b981' },
-  { id: 2, top: '55%', left: '60%', titulo: 'Alerta de Queimada - Lote Vago', tipo: 'queimada', status: 'Alerta Crítico', cor: '#f59e0b' },
-  { id: 3, top: '48%', left: '28%', titulo: 'Vistoria de Poda Irregular', tipo: 'vistoria', status: 'Em Campo', cor: '#3b82f6' }
-];
+  X,   MapPin} from 'lucide-react';
 
 export default function Geoprocessamento() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [pontosMapa, setPontosMapa] = useState(INITIAL_PONTOS);
+  const [pontosMapa] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), tipo: /queimada/i.test(o.nome_categoria || '') ? 'queimada' : 'vistoria' }));
   const [pontoAtivo, setPontoAtivo] = useState(null);
   const [modalCamadas, setModalCamadas] = useState(false);
   const [modalFiltro, setModalFiltro] = useState(false);
@@ -35,25 +29,12 @@ export default function Geoprocessamento() {
     setCamadas(prev => ({ ...prev, [chave]: !prev[chave] }));
   };
 
-  const handleAddPontoClique = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-    const novo = {
-      id: Date.now(),
-      top: `${y.toFixed(1)}%`,
-      left: `${x.toFixed(1)}%`,
-      titulo: 'Novo Ponto de Marcação',
-      tipo: 'vistoria',
-      status: 'Aguardando Análise',
-      cor: '#ef4444'
-    };
-
-    setPontosMapa(prev => [...prev, novo]);
+  const handleAddPontoClique = () => {
+    reportError(new Error('Para registrar um ponto, cadastre uma ocorrência com localização. O mapa é esquemático.'));
   };
 
   const pontosExibidos = pontosMapa.filter(p => {
+    if (!p.hasCoordinates) return false;
     if (p.tipo === 'app' && !camadas.app) return false;
     if (p.tipo === 'queimada' && !camadas.queimadas) return false;
     if (p.tipo === 'vistoria' && !camadas.vistorias) return false;

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { api, perform, useCollection, occurrenceView, refreshScreens, uploadFiles } from '../../../services/originalScreens';
+import { downloadReport } from '../../../services/downloadDocument';
+import { useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './autosnotificacoes.module.css';
 
@@ -35,36 +37,14 @@ export default function AutosNotificacoes() {
   const [descricaoInfracao, setDescricaoInfracao] = useState('');
   const [valorMulta, setValorMulta] = useState('');
   const [mensagemSucesso, setMensagemSucesso] = useState(false);
+  const [arquivos, setArquivos] = useState([]);
+  const [autoSalvo, setAutoSalvo] = useState(null);
 
   // LISTA DE OCORRÊNCIAS PARA VINCULAR (LOCALSTORAGE)
-  const [ocorrenciasDisponiveis, setOcorrenciasDisponiveis] = useState([]);
+  const [ocorrenciasDisponiveis] = useCollection('/ocorrencias', occurrenceView);
 
   // HISTÓRICO DE AUTOS EMITIDOS
-  const [autosEmitidos, setAutosEmitidos] = useState([
-    {
-      id: 'AUTO-2026-004',
-      tipo: 'Auto de Infração',
-      infrator: 'Construtora Silva Ltda',
-      data: 'Hoje, 11:20',
-      status: 'Emitido',
-      corStatus: 'amarelo'
-    },
-    {
-      id: 'NOTIF-2026-012',
-      tipo: 'Notificação Preventiva',
-      infrator: 'Oficina Mecânica Central',
-      data: 'Ontem, 14:45',
-      status: 'Entregue',
-      corStatus: 'verde'
-    }
-  ]);
-
-  useEffect(() => {
-    const salvas = localStorage.getItem('ocorrencias_mapa');
-    if (salvas) {
-      setOcorrenciasDisponiveis(JSON.parse(salvas));
-    }
-  }, []);
+  const [autosEmitidos] = useCollection('/autos', item => ({ ...item, id: `AUTO-${item.id_auto}`, tipo: item.tipo === 'notificacao' ? 'Notificação Preventiva' : 'Auto de Infração', infrator: item.autuado_nome, data: new Date(item.data_criacao).toLocaleDateString('pt-BR'), status: item.status, corStatus: item.status === 'entregue' ? 'verde' : 'amarelo' }));
 
   // SELECIONAR OCORRÊNCIA E PREENCHER ENDEREÇO AUTOMATICAMENTE
   const handleSelecionarOcorrencia = (e) => {
@@ -72,7 +52,7 @@ export default function AutosNotificacoes() {
     setOcorrenciaVinculada(id);
     const item = ocorrenciasDisponiveis.find(o => String(o.id) === String(id));
     if (item) {
-      setLocalInfracao(item.descricao || item.address || '');
+      setLocalInfracao(item.address || item.descricao || '');
       if (!descricaoInfracao) {
         setDescricaoInfracao(`Constatado no local: ${item.titulo}. Vistoria realizada em campo.`);
       }
@@ -80,31 +60,18 @@ export default function AutosNotificacoes() {
   };
 
   // EMITIR DOCUMENTO
-  const handleEmitirDocumento = (e) => {
+  const handleEmitirDocumento = async (e) => {
     e.preventDefault();
-
-    const novoAuto = {
-      id: tipoDocumento === 'notificacao' ? `NOTIF-2026-0${autosEmitidos.length + 13}` : `AUTO-2026-00${autosEmitidos.length + 5}`,
-      tipo: tipoDocumento === 'notificacao' ? 'Notificação Preventiva' : 'Auto de Infração',
-      infrator: autuadoNome || 'Não identificado / Em apuração',
-      data: 'Hoje, agora',
-      status: 'Emitido',
-      corStatus: 'amarelo'
-    };
-
-    setAutosEmitidos([novoAuto, ...autosEmitidos]);
-    setMensagemSucesso(true);
-
-    // RESET DO FORMULÁRIO APÓS 3 SEGUNDOS
-    setTimeout(() => {
-      setMensagemSucesso(false);
-      setAutuadoNome('');
-      setAutuadoDocumento('');
-      setLocalInfracao('');
-      setDescricaoInfracao('');
-      setValorMulta('');
-      setOcorrenciaVinculada('');
-    }, 3000);
+    await perform(async () => {
+      const record = autoSalvo || await api('/autos', { method: 'POST', body: {
+        id_ocorrencia: Number(ocorrenciaVinculada), tipo: tipoDocumento === 'notificacao' ? 'notificacao' : 'infracao',
+        autuado_nome: autuadoNome || 'Não identificado / Em apuração', autuado_documento: autuadoDocumento,
+        local_infracao: localInfracao, artigo_lei: artigoLei, descricao_infracao: descricaoInfracao,
+        valor_multa: Number(String(valorMulta).replace(',', '.') || 0)
+      }}); setAutoSalvo(record); await uploadFiles(record.id_ocorrencia, arquivos); setAutoSalvo(null); setArquivos([]); refreshScreens(); setMensagemSucesso(true);
+      setAutuadoNome(''); setAutuadoDocumento(''); setLocalInfracao(''); setDescricaoInfracao(''); setValorMulta(''); setOcorrenciaVinculada('');
+      setTimeout(() => setMensagemSucesso(false), 3000);
+    });
   };
 
   // MENU LATERAL PADRONIZADO DA EQUIPE
@@ -335,12 +302,13 @@ export default function AutosNotificacoes() {
                   <div>
                     <strong>Anexar Registros Fotográficos (Evidências)</strong>
                     <span>Arraste as fotos ou clique para carregar arquivos da fiscalização</span>
+                    <input type="file" accept="image/png,image/jpeg,application/pdf" multiple onChange={e => setArquivos(Array.from(e.target.files))} />
                   </div>
                 </div>
 
                 {/* AÇÕES */}
                 <div className={styles.formActions}>
-                  <button type="button" className={styles.btnRascunho}>
+                  <button type="button" className={styles.btnRascunho} onClick={() => perform(async () => { await api('/autos', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), tipo: tipoDocumento === 'notificacao' ? 'notificacao' : 'infracao', autuado_nome: autuadoNome || 'Em apuração', descricao_infracao: descricaoInfracao || 'Rascunho', status: 'rascunho', artigo_lei: artigoLei, local_infracao: localInfracao } }); refreshScreens(); })}>
                     Salvar Rascunho
                   </button>
                   <button type="submit" className={styles.btnEmitir}>
@@ -370,7 +338,7 @@ export default function AutosNotificacoes() {
                     <p className={styles.historyInfrator}>{item.infrator}</p>
                     <div className={styles.historyFooter}>
                       <small><Clock size={12} /> {item.data}</small>
-                      <button className={styles.btnBaixarPdf} onClick={() => alert(`Baixando PDF do ${item.id}`)}>
+                      <button className={styles.btnBaixarPdf} onClick={() => downloadReport({ id_relatorio: item.id_auto, id_ocorrencia: item.id_ocorrencia, titulo: `${item.tipo} — ${item.autuado_nome}`, observacoes: item.descricao_infracao, parecer: item.artigo_lei, data_criacao: item.data_criacao })}>
                         PDF
                       </button>
                     </div>

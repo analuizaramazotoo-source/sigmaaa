@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { downloadReport } from '../../../services/downloadDocument';
+import { useCollection } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './relatoriosTecnicos.module.css';
 import { 
@@ -6,80 +8,9 @@ import {
   Shield, Map as MapIcon, ClipboardList, HelpCircle, Home as HomeIcon, CheckCircle2
 } from 'lucide-react';
 
-const DATABASE_RELATORIOS = {
-  mensal: [
-    {
-      id: 1,
-      titulo: "Relatório Mensal de Ocorrências",
-      descricao: "Métricas consolidadas de vistorias, denúncias e atendimentos de campo do mês corrente.",
-      formato: "PDF",
-      tamanho: "2.4 MB",
-      tipo: "pdf",
-      nomeArquivo: "Relatorio_Mensal_Ocorrencias_Agosto_2026.pdf"
-    },
-    {
-      id: 2,
-      titulo: "Balanço Geral de Infrações e Multas",
-      descricao: "Histórico detalhado por categoria de infração e valores aplicados no período.",
-      formato: "XLSX",
-      tamanho: "1.1 MB",
-      tipo: "excel",
-      nomeArquivo: "Balanco_Infracoes_Multas_Agosto_2026.xlsx"
-    },
-    {
-      id: 3,
-      titulo: "Mapeamento de Queimadas Urbanas",
-      descricao: "Levantamento estatístico dos focos de calor registrados por região municipal.",
-      formato: "PDF",
-      tamanho: "3.8 MB",
-      tipo: "pdf",
-      nomeArquivo: "Mapeamento_Queimadas_Agosto_2026.pdf"
-    }
-  ],
-  trimestral: [
-    {
-      id: 4,
-      titulo: "Consolidado Trimestral de Vistorias (Q3)",
-      descricao: "Estatísticas agregadas de fiscalização ambiental e resolutividade do terceiro trimestre.",
-      formato: "PDF",
-      tamanho: "5.2 MB",
-      tipo: "pdf",
-      nomeArquivo: "Consolidado_Trimestral_Q3_2026.pdf"
-    },
-    {
-      id: 5,
-      titulo: "Planilha de Arrecadação de Fines e Licenças",
-      descricao: "Demostrativo financeiro de multas quitadas e taxas de licenciamento ambiental.",
-      formato: "XLSX",
-      tamanho: "2.8 MB",
-      tipo: "excel",
-      nomeArquivo: "Arrecadacao_Trimestral_Q3_2026.xlsx"
-    }
-  ],
-  anual: [
-    {
-      id: 6,
-      titulo: "Relatório Anual de Gestão Ambiental",
-      descricao: "Balanço completo dos indicadores de sustentabilidade e fiscalização do município.",
-      formato: "PDF",
-      tamanho: "12.4 MB",
-      tipo: "pdf",
-      nomeArquivo: "Relatorio_Anual_Gestao_Ambiental_2026.pdf"
-    },
-    {
-      id: 7,
-      titulo: "Série Histórica de Infrações Fiscais",
-      descricao: "Matriz de dados consolidada com todas as autuações e notificações emitidas no ano.",
-      formato: "XLSX",
-      tamanho: "4.5 MB",
-      tipo: "excel",
-      nomeArquivo: "Serie_Historica_Infracoes_2026.xlsx"
-    }
-  ]
-};
-
 export default function RelatoriosTecnicos() {
   const navigate = useNavigate();
+  const [relatorios] = useCollection('/relatorios');
   const location = useLocation();
 
   const [periodoSelect, setPeriodoSelect] = useState('mensal');
@@ -98,26 +29,12 @@ export default function RelatoriosTecnicos() {
 
   // Simula o download do arquivo gerando um Blob
   const handleDownload = (item) => {
-    const conteudoExemplo = `Prefeitura Municipal - Secretaria do Meio Ambiente\nDocumento: ${item.titulo}\nPeríodo: ${periodoAtivo}\nGerado em: ${new Date().toLocaleString('pt-BR')}`;
-    const blob = new Blob([conteudoExemplo], { type: item.tipo === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = item.nomeArquivo;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    setNotificationMsg(`Download iniciado: ${item.nomeArquivo}`);
-    setTimeout(() => setNotificationMsg(''), 4000);
+    downloadReport(item.record, item.tipo); setNotificationMsg(`Download iniciado: ${item.nomeArquivo}`); setTimeout(() => setNotificationMsg(''), 4000);
   };
 
-  const listaExibida = (DATABASE_RELATORIOS[periodoAtivo] || []).filter(item => {
-    if (filtroTipo === 'pdf') return item.tipo === 'pdf';
-    if (filtroTipo === 'excel') return item.tipo === 'excel';
-    return true;
-  });
+  const now = new Date();
+  const inicio = new Date(now.getFullYear(), periodoAtivo === 'mensal' ? now.getMonth() : periodoAtivo === 'trimestral' ? Math.floor(now.getMonth() / 3) * 3 : 0, 1);
+  const listaExibida = relatorios.filter(r => new Date(r.data_criacao) >= inicio).flatMap(r => ['pdf', 'excel'].map(tipo => ({ id: `${r.id_relatorio}-${tipo}`, titulo: r.titulo, descricao: r.observacoes, record: r, tipo, formato: tipo === 'pdf' ? 'PDF' : 'CSV', tamanho: 'Dados do relatório', nomeArquivo: `relatorio-${r.id_relatorio}.${tipo === 'pdf' ? 'pdf' : 'csv'}` }))).filter(item => filtroTipo === 'todos' || item.tipo === filtroTipo);
 
   return (
     <div className={styles.appContainer}>
@@ -237,7 +154,7 @@ export default function RelatoriosTecnicos() {
                   className={filtroTipo === 'excel' ? styles.filterBtnActive : styles.filterBtn}
                   onClick={() => setFiltroTipo('excel')}
                 >
-                  XLSX
+                  CSV
                 </button>
               </div>
             </div>
@@ -246,9 +163,9 @@ export default function RelatoriosTecnicos() {
               <div className={styles.filterItem}>
                 <Calendar size={18} className={styles.filterIcon} />
                 <select value={periodoSelect} onChange={(e) => setPeriodoSelect(e.target.value)}>
-                  <option value="mensal">Período: Mensal (Agosto/2026)</option>
-                  <option value="trimestral">Período: Trimestral (Q3 2026)</option>
-                  <option value="anual">Período: Anual (2026)</option>
+                  <option value="mensal">Período: Mensal (mês atual)</option>
+                  <option value="trimestral">Período: Trimestral (trimestre atual)</option>
+                  <option value="anual">Período: Anual (ano atual)</option>
                 </select>
               </div>
 

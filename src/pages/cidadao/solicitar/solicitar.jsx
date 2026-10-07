@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { api, perform, getSession, categoryId, uploadFiles, refreshScreens } from '../../../services/originalScreens';
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { 
   Wrench, 
@@ -11,34 +12,32 @@ import {
   ArrowLeft 
 } from "lucide-react";
 
-import styles from "./Solicitar.module.css";
+import styles from './Solicitar.module.css';
 
 export default function Solicitar() {
   const [problema, setProblema] = useState("");
   const [descricao, setDescricao] = useState("");
   const [foto, setFoto] = useState(null);
   const navigate = useNavigate();
+  const [endereco, setEndereco] = useState('');
+  const [arquivo, setArquivo] = useState(null);
+  const [salvo, setSalvo] = useState(null);
+  const [enviando, setEnviando] = useState(false);
 
   const handleFoto = (e) => {
     const file = e.target.files[0];
-    if (file) setFoto(file.name);
+    if (file) { setFoto(file.name); setArquivo(file); }
   };
 
-  const handleEnviar = (e) => {
-    e.preventDefault();
-
-    if (!problema.trim()) {
-      alert("Preencha o campo Problema.");
-      return;
-    }
-
-    if (!descricao.trim()) {
-      alert("Preencha o campo Descrição.");
-      return;
-    }
-
-    alert("Solicitação enviada com sucesso!");
-    navigate("/cidadao");
+  const handleEnviar = async (e) => {
+    e.preventDefault(); if (enviando) return; setEnviando(true);
+    await perform(async () => {
+      const record = salvo || await api('/ocorrencias', { method: 'POST', body: {
+        titulo_ocorrencia: `[SERVIÇO] ${problema}`, descricao_ocorrencia: descricao,
+        id_categoria: await categoryId('outro'), logradouro_ocorrencia: endereco
+      }}); setSalvo(record); await uploadFiles(record.id_ocorrencia, arquivo ? [arquivo] : []);
+      refreshScreens(); alert(`Solicitação salva. Protocolo: ${record.protocolo_ocorrencia}`); navigate('/status');
+    }); setEnviando(false);
   };
 
   return (
@@ -65,7 +64,7 @@ export default function Solicitar() {
                 <User size={18} />
               </div>
               <div className={styles.userDetails}>
-                <strong>Ana Luiza Silva</strong>
+                <strong>{getSession()?.usuario.nome_usuario}</strong>
                 <span>Cidadão • Ativo</span>
               </div>
             </Link>
@@ -113,6 +112,10 @@ export default function Solicitar() {
                   </div>
 
                   <div className={styles.formGroup}>
+                    <label htmlFor="endereco">Endereço / Localização *</label>
+                    <input id="endereco" type="text" value={endereco} onChange={e => setEndereco(e.target.value)} required placeholder="Rua, número, bairro e referência" />
+                  </div>
+                  <div className={styles.formGroup}>
                     <label htmlFor="descricao">Descrição Detalhada *</label>
                     <textarea
                       id="descricao"
@@ -145,7 +148,7 @@ export default function Solicitar() {
                     >
                       Cancelar
                     </button>
-                    <button type="submit" className={styles.btnPrimary}>
+                    <button type="submit" disabled={enviando} className={styles.btnPrimary}>
                       <Send size={16} /> Enviar Relato
                     </button>
                   </div>
@@ -182,8 +185,7 @@ export default function Solicitar() {
             <div className={styles.aviso}>
               <AlertCircle size={20} className={styles.avisoIcone} />
               <span>
-                Certifique-se de selecionar corretamente a localização no mapa para
-                facilitar o atendimento das equipes de campo.
+                Informe o endereço completo para facilitar o atendimento das equipes. O mapa é uma representação esquemática.
               </span>
             </div>
           </div>

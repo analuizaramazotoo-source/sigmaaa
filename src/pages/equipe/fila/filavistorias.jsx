@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { api, perform, useCollection, occurrenceView, canonicalStatus, refreshScreens } from '../../../services/originalScreens';
+import { useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './filavistorias.module.css';
 
@@ -24,49 +25,14 @@ import {
 export default function FilaVistorias() {
   const navigate = useNavigate();
 
-  const [vistorias, setVistorias] = useState([]);
+  const [vistorias] = useCollection('/ocorrencias', occurrenceView);
   const [itemSelecionado, setItemSelecionado] = useState(null);
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
 
-  // CARREGAR E ESCUTAR SINCRONIZAÇÃO EM TEMPO REAL
-  const carregarVistorias = () => {
-    const salvas = localStorage.getItem('ocorrencias_mapa');
-    if (salvas) {
-      const dados = JSON.parse(salvas);
-      setVistorias(dados);
-      if (dados.length > 0 && !itemSelecionado) {
-        setItemSelecionado(dados[0]);
-      }
-    }
-  };
-
-  useEffect(() => {
-    carregarVistorias();
-
-    const handleStorageChange = () => {
-      carregarVistorias();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
   // MARCAR COMO CONCLUÍDO / CONCLUIR VISTORIA
-  const handleAtualizarStatus = (id, novoStatus, novaCor) => {
-    const listaAtualizada = vistorias.map(item => {
-      if (item.id === id) {
-        return { ...item, status: novoStatus, corStatus: novaCor };
-      }
-      return item;
-    });
-
-    setVistorias(listaAtualizada);
-    const selecionadoAtualizado = listaAtualizada.find(i => i.id === id);
-    setItemSelecionado(selecionadoAtualizado);
-
-    localStorage.setItem('ocorrencias_mapa', JSON.stringify(listaAtualizada));
-    window.dispatchEvent(new Event('storage'));
+  const handleAtualizarStatus = async (id, novoStatus) => {
+    await perform(async () => { const value = await api(`/ocorrencias/${id}`, { method: 'PATCH', body: { status_ocorrencia: canonicalStatus(novoStatus) }}); setItemSelecionado(occurrenceView(value)); refreshScreens(); });
   };
 
   // NAVEGAÇÃO DA SIDEBAR PADRONIZADA (IGUAL À HOME DA EQUIPE)

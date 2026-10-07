@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { api, getSession, perform, saveProfile, logout } from '../../../services/originalScreens';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './perfil.module.css';
 import { 
@@ -15,27 +16,17 @@ export default function Perfil() {
   const [modalLogout, setModalLogout] = useState(false);
 
   // Estado dos dados do Perfil
-  const [userData, setUserData] = useState({
-    name: 'Ana Luiza Silva',
-    email: 'ana.silva@prefeitura.gov.br',
-    phone: '(11) 98765-4321',
-    matricula: '48.201',
-    cargo: 'Fiscal Ambiental Senior',
-    departamento: 'Secretaria Municipal do Meio Ambiente',
-    setor: 'Fiscalização e Controle Urbano'
-  });
+  const [userData, setUserData] = useState({ name: getSession()?.usuario.nome_usuario || '', email: getSession()?.usuario.email_usuario || '', phone: getSession()?.usuario.telefone_usuario || '', matricula: '', cargo: '', departamento: '', setor: '' });
+  useEffect(() => { perform(async () => { const u = await api('/usuarios/me'); setUserData({ name: u.nome_usuario, email: u.email_usuario, phone: u.telefone_usuario || '', matricula: u.matricula_usuario || '', cargo: u.cargo_gestor || '', departamento: u.departamento_gestor || '', setor: u.setor_gestor || '' }); }); }, []);
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3000);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); await perform(async () => { await saveProfile({ nome_usuario: userData.name, email_usuario: userData.email, telefone_usuario: userData.phone }); setSavedSuccess(true); setTimeout(() => setSavedSuccess(false), 3000); });
   };
 
-  const handleConfirmLogout = () => {
-    setModalLogout(false);
-    navigate('/login');
+  const handleConfirmLogout = async () => {
+    try { await logout(); } finally { setModalLogout(false); navigate('/login'); }
   };
 
   return (
@@ -128,7 +119,7 @@ export default function Perfil() {
                     <strong>Notificações Internas</strong>
                   </div>
                   <ul className={styles.notificationList}>
-                    <li>📌 Alteração de dados requer validação do RH.</li>
+                    <li>Sem notificações disponíveis.</li>
                   </ul>
                 </div>
               )}
@@ -146,7 +137,7 @@ export default function Perfil() {
                   setShowNotifications(false);
                 }}
               >
-                <div className={styles.avatar}>AL</div>
+                <div className={styles.avatar}>{userData.name.slice(0, 2).toUpperCase()}</div>
                 <div className={styles.userInfo}>
                   <span className={styles.userName}>{userData.name}</span>
                   <span className={styles.userRole}>Mat. {userData.matricula}</span>
@@ -233,7 +224,7 @@ export default function Perfil() {
 
               <div className={styles.profileBadgeWrapper}>
                 <div className={styles.profileAvatarWrapper}>
-                  <div className={styles.profileAvatar}>AL</div>
+                  <div className={styles.profileAvatar}>{userData.name.slice(0, 2).toUpperCase()}</div>
                   <button type="button" className={styles.avatarChangeBtn} title="Alterar Foto">
                     <Camera size={14} />
                   </button>
@@ -316,7 +307,7 @@ export default function Perfil() {
                   <button 
                     type="button" 
                     className={styles.btnSecondary} 
-                    onClick={() => alert("Solicitação de alteração de senha enviada para o e-mail institucional.")}
+                    onClick={() => navigate("/alterar")}
                   >
                     <Key size={16} /> Alterar Senha
                   </button>

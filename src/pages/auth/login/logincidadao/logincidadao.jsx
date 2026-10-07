@@ -1,7 +1,13 @@
-import styles from "./logincidadao.module.css";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api, setSession, perform } from '../../../../services/originalScreens';
+import styles from './logincidadao.module.css';
 import { Link } from "react-router-dom";
 
 function LoginCidadao() {
+  const [email, setEmail] = useState(''), [senha, setSenha] = useState('');
+  const navigate = useNavigate();
+  async function entrar() { await perform(async () => { const session = await api('/auth/login', { method: 'POST', body: { identificador: email, senha, perfil: 'cidadao' }}); setSession(session); navigate('/cidadao'); }); }
   return (
     <div className={styles.container}>
       
@@ -40,19 +46,19 @@ function LoginCidadao() {
             Entre com seu e-mail e senha para acessar sua conta
           </p>
 
-          <input type="email" placeholder="E-mail" />
+          <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} />
 
-          <input type="password" placeholder="Senha" />
+          <input type="password" placeholder="Senha" value={senha} onChange={e => setSenha(e.target.value)} />
 
           <span className={styles.esqueceu}>
             Esqueceu sua senha?
           </span>
 
-          <Link to = "/cidadao"><button>ENTRAR</button></Link>
+          <button onClick={entrar}>ENTRAR</button>
 
           <div className={styles.links}>
             <span>Novo por aqui?</span>
-            <a href="/">Crie sua conta</a>
+            <Link to="/cadastro">Crie sua conta</Link>
           </div>
 
         </div>

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { getSession, perform, saveProfile } from '../../../services/originalScreens';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./perfil.module.css";
+import styles from './perfil.module.css';
 
 import prefeituraLogo from "../../../assets/prefeitura.png";
 import arvoreLogo from "../../../assets/arvore.png";
@@ -27,10 +28,10 @@ export default function Perfil() {
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
   const [formData, setFormData] = useState({
-    nome: "Lucas Pereira",
-    email: "lucas.pereira@gmail.com",
-    celular: "(14) 99888-7777",
-    cpf: "432.887.654-00",
+    nome: getSession()?.usuario.nome_usuario || "",
+    email: getSession()?.usuario.email_usuario || "",
+    celular: getSession()?.usuario.telefone_usuario || "",
+    cpf: getSession()?.usuario.cpf_usuario || "",
     senha: "",
     confirmarSenha: ""
   });
@@ -40,15 +41,15 @@ export default function Perfil() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSalvar = (e) => {
+  const handleSalvar = async (e) => {
     e.preventDefault();
-    if (formData.senha && formData.senha !== formData.confirmarSenha) {
-      alert("As senhas informadas não coincidem.");
-      return;
-    }
-
-    setMensagemSucesso("Perfil atualizado com sucesso!");
-    setTimeout(() => setMensagemSucesso(""), 4000);
+    await perform(async () => {
+      if (formData.senha && formData.senha !== formData.confirmarSenha) throw new Error('As senhas não coincidem.');
+      const body = { nome_usuario: formData.nome, email_usuario: formData.email, telefone_usuario: formData.celular, cpf_usuario: formData.cpf };
+      if (formData.senha) Object.assign(body, { senha_usuario: formData.senha, senha_atual: window.prompt('Informe a senha atual para confirmar a alteração:') });
+      await saveProfile(body); setMensagemSucesso('Perfil atualizado com sucesso!');
+      setFormData(f => ({ ...f, senha: '', confirmarSenha: '' })); setTimeout(() => setMensagemSucesso(''), 4000);
+    });
   };
 
   return (

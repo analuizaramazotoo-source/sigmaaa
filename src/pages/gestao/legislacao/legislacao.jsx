@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useCollection } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './legislacao.module.css';
 import { 
@@ -9,47 +10,9 @@ import {
 } from 'lucide-react';
 
 // Links atualizados com URLs reais e funcionais
-const DOCUMENTOS_BASE = [
-  {
-    id: 1,
-    titulo: "Lei Municipal nº 4.502/2021",
-    categoria: "Código Ambiental",
-    descricao: "Dispõe sobre a Política Municipal de Meio Ambiente e o Código de Proteção Ambiental.",
-    data: "15/01/2021",
-    conteudoCompleto: "Art. 1º Fica instituído o Código Ambiental Municipal...\n\nArt. 12º São consideradas infrações ambientais de gravidade alta o descarte de resíduos industriais em mananciais sem tratamento prévio.\n\nArt. 45º As penalidades aplicáveis incluem notificação orientativa, multa simples, embargo de atividades e apreensão de bens.",
-    linkDiario: "https://www.jusbrasil.com.br/busca?q=Codigo+de+Protecao+Ambiental+Municipal"
-  },
-  {
-    id: 2,
-    titulo: "Decreto nº 1.209/2023",
-    categoria: "Queimadas Urbanas",
-    descricao: "Regulamenta a fiscalização, penalidades e ritos de apuração para queimadas em áreas urbanas.",
-    data: "10/05/2023",
-    conteudoCompleto: "Art. 1º É vedada a realização de queimadas em áreas urbanas, lotes vagos e terrenos privados no âmbito municipal.\n\nArt. 4º O proprietário do imóvel responderá solidariamente pelos danos e custos operacionais do combate às queimadas no lote.",
-    linkDiario: "https://www.jusbrasil.com.br/busca?q=Decreto+queimadas+urbanas"
-  },
-  {
-    id: 3,
-    titulo: "Instrução Normativa SEMMA 04/2024",
-    categoria: "Poda e Supressão",
-    descricao: "Estabelece critérios técnicos para autorização de poda e supressão de vegetação nativa.",
-    data: "02/02/2024",
-    conteudoCompleto: "Art. 1º Toda intervenção em vegetação de porte arbóreo exige laudo técnico emitido por engenheiro florestal ou ambiental credenciado.\n\nArt. 8º A supressão autorizada obriga o requerente à compensação ambiental na proporção de 3 mudas nativas para cada árvore suprimida.",
-    linkDiario: "https://www.jusbrasil.com.br/busca?q=Instrucao+normativa+poda+supressao+vegetacao"
-  },
-  {
-    id: 4,
-    titulo: "Lei Federal nº 9.605/1998",
-    categoria: "Crimes Ambientais",
-    descricao: "Lei de Crimes Ambientais - Sanções penais e administrativas derivadas de condutas lesivas ao meio ambiente.",
-    data: "12/02/1998",
-    conteudoCompleto: "Art. 54º Causar poluição de qualquer natureza em níveis tais que resultem ou possam resultar em danos à saúde humana, ou que provoquem a mortandade de animais ou a destruição significativa da flora.\n\nPena: reclusão, de um a quatro anos, e multa.",
-    linkDiario: "https://www.planalto.gov.br/ccivil_03/leis/l9605.htm"
-  }
-];
-
 export default function Legislacao() {
   const navigate = useNavigate();
+  const [documentos] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, descricao: l.conteudo || '', categoria: l.categoria || '', conteudoCompleto: l.conteudo, linkDiario: l.url_oficial, data: '' }));
   const location = useLocation();
 
   const [busca, setBusca] = useState('');
@@ -58,7 +21,7 @@ export default function Legislacao() {
 
   const isActive = (path) => location.pathname === path;
 
-  const docsFiltrados = DOCUMENTOS_BASE.filter(doc => 
+  const docsFiltrados = documentos.filter(doc => 
     doc.titulo.toLowerCase().includes(busca.toLowerCase()) || 
     doc.categoria.toLowerCase().includes(busca.toLowerCase()) ||
     doc.descricao.toLowerCase().includes(busca.toLowerCase())

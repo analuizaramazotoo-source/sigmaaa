@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useCollection, occurrenceView, getSession, logout } from '../../../services/originalScreens';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
@@ -12,7 +13,7 @@ import {
   FileText, 
   BarChart2, 
   BookOpen, 
-  ChevronDown, 
+   
   CheckCircle2, 
   Clock, 
   LogOut, 
@@ -20,62 +21,21 @@ import {
   ArrowUpRight, 
   Flame, 
   Trash2, 
-  Droplet,
-  Users,
-  User
-} from 'lucide-react';
-
-const VISTORIAS_INICIAIS = [
-  {
-    id: 201,
-    titulo: "Vistoria de Queimada em Lote",
-    endereco: "Rua Ipê Amarelo, 88 - Bairro Flores",
-    status: "Pendente",
-    statusType: "warning",
-    prioridade: "Alta",
-    top: "38%",
-    left: "45%",
-    icon: Flame
-  },
-  {
-    id: 202,
-    titulo: "Inspeção de Descarte de Entulho",
-    endereco: "Av. das Palmeiras, 450 - Centro",
-    status: "Em Campo",
-    statusType: "info",
-    prioridade: "Média",
-    top: "55%",
-    left: "62%",
-    icon: Trash2
-  },
-  {
-    id: 203,
-    titulo: "Verificação de Poda Irregular",
-    endereco: "Rua dos Sabiás, 12 - Jd. América",
-    status: "Concluído",
-    statusType: "success",
-    prioridade: "Baixa",
-    top: "30%",
-    left: "25%",
-    icon: Droplet
-  }
-];
+  
+  Users} from 'lucide-react';
 
 export default function HomeE() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [vistorias] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), icon: /queimada/i.test(o.nome_categoria || '') ? Flame : Trash2, statusType: o.status_ocorrencia === 'resolvida' ? 'success' : o.status_ocorrencia === 'em_andamento' ? 'info' : 'warning' }));
 
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [modalLogout, setModalLogout] = useState(false);
   const [selectedVistoria, setSelectedVistoria] = useState(null);
   const [isLogoutHovered, setIsLogoutHovered] = useState(false);
 
-  const handleConfirmLogout = () => {
-    setModalLogout(false);
-    navigate('/login');
+  const handleConfirmLogout = async () => {
+    try { await logout(); } finally { setModalLogout(false); navigate('/login'); }
   };
 
-  const isActive = (path) => location.pathname === path;
 
   // MENU LATERAL COM ÍCONE DE PESSOA/EQUIPE CORRIGIDO (<Users size={22} />)
   const menuModulos = [
@@ -143,7 +103,7 @@ export default function HomeE() {
                 <Users size={18} />
               </div>
               <div className={styles.userInfo}>
-                <strong className={styles.userName}>Equipe de Campo</strong>
+                <strong className={styles.userName}>{getSession()?.usuario.nome_usuario}</strong>
                 <span className={styles.userRole}>Operacional</span>
               </div>
             </div>
@@ -188,7 +148,7 @@ export default function HomeE() {
               </div>
               <div className={styles.statData}>
                 <span className={styles.statTitle}>Vistorias Atribuídas</span>
-                <strong className={styles.statValue}>12</strong>
+                <strong className={styles.statValue}>{vistorias.length}</strong>
                 <span className={styles.statSubtitle}>Na sua fila de trabalho</span>
               </div>
             </div>
@@ -199,7 +159,7 @@ export default function HomeE() {
               </div>
               <div className={styles.statData}>
                 <span className={styles.statTitle}>Pendentes</span>
-                <strong className={styles.statValue}>5</strong>
+                <strong className={styles.statValue}>{vistorias.filter(v => v.status_ocorrencia === 'em_andamento').length}</strong>
                 <span className={styles.statSubtitle}>Aguardando ida a campo</span>
               </div>
             </div>
@@ -209,8 +169,8 @@ export default function HomeE() {
                 <CheckCircle2 size={22} />
               </div>
               <div className={styles.statData}>
-                <span className={styles.statTitle}>Concluídas Hoje</span>
-                <strong className={styles.statValue}>7</strong>
+                <span className={styles.statTitle}>Concluídas</span>
+                <strong className={styles.statValue}>{vistorias.filter(v => v.status_ocorrencia === 'resolvida').length}</strong>
                 <span className={styles.statSubtitle}>Relatórios finalizados</span>
               </div>
             </div>
@@ -227,10 +187,10 @@ export default function HomeE() {
                 <div className={styles.mapCanvas}>
                   <div className={styles.mapWatermark}>
                     <MapIcon size={48} />
-                    <span>Mapeamento Operacional em Tempo Real</span>
+                    <span>Mapa Operacional Esquemático</span>
                   </div>
 
-                  {VISTORIAS_INICIAIS.map((v) => (
+                  {vistorias.filter(v => v.hasCoordinates).map((v) => (
                     <div 
                       key={v.id} 
                       className={styles.mapPin}
@@ -261,7 +221,7 @@ export default function HomeE() {
               </div>
 
               <div className={styles.requestsList}>
-                {VISTORIAS_INICIAIS.map((item) => {
+                {vistorias.map((item) => {
                   const ItemIcon = item.icon;
                   return (
                     <div 

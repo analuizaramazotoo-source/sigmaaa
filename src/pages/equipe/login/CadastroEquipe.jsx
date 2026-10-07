@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { api, perform } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './cadastroEquipe.module.css';
+import styles from './CadastroEquipe.module.css';
 
 import prefeituraLogo from '../../../assets/prefeitura.png';
 import arvoreLogo from '../../../assets/arvore.png';
@@ -51,25 +52,14 @@ export default function CadastroEquipe() {
     }
   };
 
-  const handleCadastro = (e) => {
-    e.preventDefault();
-
-    if (formData.senha.length < 8) {
-      alert('A senha deve conter no mínimo 8 caracteres.');
-      return;
-    }
-
-    if (formData.senha !== formData.confirmarSenha) {
-      alert('As senhas informadas não coincidem.');
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      navigate('/homee');
-    }, 600);
+  const handleCadastro = async (e) => {
+    e.preventDefault(); if (isSubmitting) return;
+    if (formData.senha !== formData.confirmarSenha) { alert('As senhas não coincidem.'); return; }
+    setIsSubmitting(true); await perform(async () => {
+      const digits = formData.cpfMatricula.replace(/\D/g, '');
+      await api('/usuarios', { method: 'POST', body: { nome_usuario: formData.nome, email_usuario: formData.email, senha_usuario: formData.senha, tipo_usuario: 'equipe', ...(digits.length === 11 ? { cpf_usuario: digits } : { matricula_usuario: formData.cpfMatricula }) } });
+      alert('Servidor cadastrado com sucesso.'); navigate('/homeg');
+    }); setIsSubmitting(false);
   };
 
   return (

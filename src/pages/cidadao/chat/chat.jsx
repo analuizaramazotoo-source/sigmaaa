@@ -1,11 +1,24 @@
+import { useNavigate } from 'react-router-dom';
+import { api, perform, useCollection, occurrenceView, getSession, refreshScreens } from '../../../services/originalScreens';
 import { useState } from "react";
-import styles from "./chat.module.css";
+import styles from './chat.module.css';
 
 import arvoreLogo from "../../../assets/arvore.png";
 
 export default function Chat() {
+  const navigate = useNavigate();
+  const [ocorrencias] = useCollection('/ocorrencias', occurrenceView);
+  const [protocolo, setProtocolo] = useState('');
+  const ocorrencia = ocorrencias.find(o => String(o.id) === protocolo) || ocorrencias[0];
+  const [mensagens] = useCollection(ocorrencia ? `/ocorrencias/${ocorrencia.id}/mensagens` : null);
+  const [enviando, setEnviando] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
   const [mensagem, setMensagem] = useState("");
+
+  async function enviar() {
+    if (!ocorrencia || !mensagem.trim() || enviando) return;
+    setEnviando(true); await perform(async () => { await api(`/ocorrencias/${ocorrencia.id}/mensagens`, { method: 'POST', body: { mensagem } }); setMensagem(''); refreshScreens(); }); setEnviando(false);
+  }
 
   return (
     <div className={styles.containerChat}>
@@ -21,7 +34,7 @@ export default function Chat() {
         </div>
 
         <div className={styles.headerDireita}>
-          <button className={styles.btnVoltar}>Voltar</button>
+          <button className={styles.btnVoltar} onClick={() => navigate("/cidadao")}>Voltar</button>
 
           <button
             className={styles.menuIcon}
@@ -51,15 +64,15 @@ export default function Chat() {
           🏠 Home
         </button>
 
-        <button className={styles.menuItem}>📋 Relatar</button>
+        <button className={styles.menuItem} onClick={() => navigate("/relatar-problema")}>📋 Relatar</button>
 
-        <button className={styles.menuItem}>📌 Solicitar</button>
+        <button className={styles.menuItem} onClick={() => navigate("/solicitar")}>📌 Solicitar</button>
 
-        <button className={styles.menuItem}>📊 Status</button>
+        <button className={styles.menuItem} onClick={() => navigate("/status")}>📊 Status</button>
 
-        <button className={styles.menuItem}>💬 Chat com Gestão</button>
+        <button className={styles.menuItem} onClick={() => navigate("/chat")}>💬 Chat com Gestão</button>
 
-        <button className={styles.menuItem}>👤 Perfil</button>
+        <button className={styles.menuItem} onClick={() => navigate("/perfil")}>👤 Perfil</button>
       </div>
 
       {/* CONTEÚDO */}
@@ -67,13 +80,14 @@ export default function Chat() {
         {/* SIDEBAR */}
         <aside className={styles.sidebar}>
           <h3>Gestão</h3>
+          <select aria-label="Solicitação" value={ocorrencia?.id || ''} onChange={e => setProtocolo(e.target.value)}>{ocorrencias.map(o => <option key={o.id} value={o.id}>{o.protocolo_ocorrencia}</option>)}</select>
 
           <div className={styles.usuarioCard}>
             <div className={styles.avatar}>👤</div>
 
             <div>
-              <h4>Ricardo - Gestão</h4>
-              <span>Online</span>
+              <h4>Atendimento da Gestão</h4>
+              <span>Mensagens da ocorrência</span>
             </div>
           </div>
         </aside>
@@ -85,32 +99,13 @@ export default function Chat() {
             <div className={styles.chatUsuario}>
               <div className={styles.avatarTopo}>👤</div>
 
-              <h3>Ricardo - Gestão</h3>
+              <h3>{ocorrencia?.protocolo_ocorrencia || "Selecione uma solicitação"}</h3>
             </div>
           </div>
 
           {/* MENSAGENS */}
           <div className={styles.mensagens}>
-            <div className={styles.mensagemDireita}>
-              Olá Ricardo, encontramos uma lixeira quebrada.
-            </div>
-
-            <div className={styles.mensagemEsquerda}>
-              Oi! Tire uma foto e registre no relatório.
-            </div>
-
-            <div className={styles.mensagemEsquerda}>
-              Vou informar a gestão para reposição.
-            </div>
-
-            <div className={styles.mensagemDireita}>
-              Aqui está a foto da lixeira
-            </div>
-
-            {/* IMAGEM */}
-            <div className={styles.imagemBox}>
-              Imagem
-            </div>
+            {mensagens.map(m => <div key={m.id_mensagem} className={m.id_remetente === getSession()?.usuario.id_usuario ? styles.mensagemDireita : styles.mensagemEsquerda}><strong>{m.nome_usuario}: </strong>{m.mensagem}</div>)}
           </div>
 
           {/* INPUT */}
@@ -122,7 +117,7 @@ export default function Chat() {
               onChange={(e) => setMensagem(e.target.value)}
             />
 
-            <button>➜</button>
+            <button onClick={enviar} disabled={!ocorrencia || enviando}>➜</button>
           </div>
         </main>
       </section>

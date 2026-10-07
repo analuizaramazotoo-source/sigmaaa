@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { downloadReport } from '../../../services/downloadDocument';
+import { api, perform, useCollection, occurrenceView, refreshScreens, uploadFiles } from '../../../services/originalScreens';
+import { useState,  useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './relatoriostecnicos.module.css';
 
@@ -39,34 +41,11 @@ export default function RelatoriosTecnicos() {
   const [arquivosAnexados, setArquivosAnexados] = useState([]);
 
   // OCORRÊNCIAS DA FILA (LOCALSTORAGE)
-  const [ocorrenciasDisponiveis, setOcorrenciasDisponiveis] = useState([]);
+  const [ocorrenciasDisponiveis] = useCollection('/ocorrencias', occurrenceView);
+  const [relatorioSalvo, setRelatorioSalvo] = useState(null);
 
   // HISTÓRICO DE RELATÓRIOS ENVIADOS
-  const [relatoriosEnviados, setRelatoriosEnviados] = useState([
-    {
-      id: 'REL-2026-088',
-      titulo: 'Relatório de Vistoria - Queimada Urbana',
-      data: 'Hoje, 10:15',
-      parecer: 'Procedente',
-      status: 'Enviado',
-      corStatus: 'verde'
-    },
-    {
-      id: 'REL-2026-087',
-      titulo: 'Relatório de Inspeção de Arborização',
-      data: 'Ontem, 15:30',
-      parecer: 'Aguardando Análise',
-      status: 'Em Triagem',
-      corStatus: 'amarelo'
-    }
-  ]);
-
-  useEffect(() => {
-    const salvas = localStorage.getItem('ocorrencias_mapa');
-    if (salvas) {
-      setOcorrenciasDisponiveis(JSON.parse(salvas));
-    }
-  }, []);
+  const [relatoriosEnviados] = useCollection('/relatorios', item => ({ ...item, id: `REL-${item.id_relatorio}`, titulo: item.titulo, data: new Date(item.data_criacao).toLocaleDateString('pt-BR'), parecer: item.parecer, status: 'Enviado', corStatus: 'verde' }));
 
   // SELECIONAR OCORRÊNCIA E PREENCHER DADOS AUTOMATICAMENTE
   const handleSelecionarOcorrencia = (e) => {
@@ -82,10 +61,10 @@ export default function RelatoriosTecnicos() {
   // MÉTODOS DE ANEXO DE ARQUIVOS
   const processarArquivos = (files) => {
     const novosArquivos = Array.from(files).filter(file => {
-      const isLt10M = file.size / 1024 / 1024 < 10;
+      const isLt10M = file.size / 1024 / 1024 <= 5;
       const isValidType = ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type);
 
-      if (!isLt10M) alert(`O arquivo "${file.name}" ultrapassa o limite de 10MB.`);
+      if (!isLt10M) alert(`O arquivo "${file.name}" ultrapassa o limite de 5MB.`);
       if (!isValidType) alert(`O arquivo "${file.name}" não é suportado. Envie JPG, PNG ou PDF.`);
 
       return isLt10M && isValidType;
@@ -122,29 +101,14 @@ export default function RelatoriosTecnicos() {
   };
 
   // ENVIAR RELATÓRIO
-  const handleEnviarRelatorio = (e) => {
+  const handleEnviarRelatorio = async (e) => {
     e.preventDefault();
-
-    const novoRelatorio = {
-      id: `REL-2026-0${relatoriosEnviados.length + 89}`,
-      titulo: tituloRelatorio || 'Relatório de Vistoria Operacional',
-      data: 'Hoje, agora',
-      parecer: parecerTecnico,
-      status: 'Enviado',
-      corStatus: 'verde',
-      totalAnexos: arquivosAnexados.length
-    };
-
-    setRelatoriosEnviados([novoRelatorio, ...relatoriosEnviados]);
-    setMensagemSucesso(true);
-
-    setTimeout(() => {
-      setMensagemSucesso(false);
-      setTituloRelatorio('');
-      setObservacoesTecnicas('');
-      setOcorrenciaVinculada('');
-      setArquivosAnexados([]);
-    }, 3000);
+    await perform(async () => {
+      const record = relatorioSalvo || await api('/relatorios', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), titulo: tituloRelatorio || 'Relatório de Vistoria Operacional', tipo: tipoRelatorio, observacoes: observacoesTecnicas, parecer: parecerTecnico }});
+      setRelatorioSalvo(record); await uploadFiles(record.id_ocorrencia, arquivosAnexados.map(a => a.file));
+      refreshScreens(); setMensagemSucesso(true); setTituloRelatorio(''); setObservacoesTecnicas(''); setOcorrenciaVinculada(''); setArquivosAnexados([]); setRelatorioSalvo(null);
+      setTimeout(() => setMensagemSucesso(false), 3000);
+    });
   };
 
   // MENU LATERAL PADRONIZADO DA EQUIPE
@@ -326,7 +290,7 @@ export default function RelatoriosTecnicos() {
                   <Upload size={20} className={styles.uploadIcon} />
                   <div>
                     <strong>Anexar Fotos da Vistoria / Documentos Suportados</strong>
-                    <span>Formatos aceitos: JPG, PNG ou PDF (Máx. 10MB)</span>
+                    <span>Formatos aceitos: JPG, PNG ou PDF (Máx. 5MB)</span>
                   </div>
                 </div>
 
@@ -419,7 +383,7 @@ export default function RelatoriosTecnicos() {
                     <small className={styles.historyParecer}>Parecer: <strong>{item.parecer}</strong></small>
                     <div className={styles.historyFooter}>
                       <small><Clock size={12} /> {item.data}</small>
-                      <button className={styles.btnBaixarPdf} onClick={() => alert(`Baixando PDF do ${item.id}`)}>
+                      <button className={styles.btnBaixarPdf} onClick={() => downloadReport(item)}>
                         <Download size={12} /> PDF
                       </button>
                     </div>

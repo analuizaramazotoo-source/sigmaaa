@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import styles from "./login.module.css";
+import styles from './login.module.css';
+import { api, setSession } from '../../../services/api';
 
 import {
   ArrowLeft,
@@ -18,18 +19,17 @@ function Login() {
   const [perfil, setPerfil] = useState("cidadao");
   const [cpfOuEmail, setCpfOuEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Redireciona para a home de acordo com o perfil selecionado
-    if (perfil === "cidadao") {
-      navigate("/cidadao");
-    } else if (perfil === "equipe") {
-      navigate("/homee");
-    } else if (perfil === "gestao") {
-      navigate("/homeg");
-    }
+    setErro(''); setEnviando(true);
+    try {
+      const session = await api('/auth/login', { method: 'POST', body: { identificador: cpfOuEmail, senha, perfil } });
+      setSession(session);
+      navigate(session.usuario.tipo_usuario === 'gestao' ? '/homeg' : session.usuario.tipo_usuario === 'equipe' ? '/homee' : '/cidadao');
+    } catch (error) { setErro(error.message); } finally { setEnviando(false); }
   };
 
   // Função auxiliar para definir para qual rota de cadastro redirecionar
@@ -105,6 +105,7 @@ function Login() {
               </button>
             </div>
 
+            {erro && <p role="alert" style={{ color: '#b91c1c' }}>{erro}</p>}
             <form onSubmit={handleLogin} className={styles.formGrid}>
               {/* ÁREA DOS INPUTS */}
               <div className={styles.inputsArea}>
@@ -139,17 +140,17 @@ function Login() {
                 </div>
 
                 <div className={styles.btnArea}>
-                  <button className={styles.btnLogin} type="submit">
-                    ENTRAR NO SISTEMA
+                  <button className={styles.btnLogin} type="submit" disabled={enviando}>
+                    {enviando ? 'ENTRANDO…' : 'ENTRAR NO SISTEMA'}
                   </button>
                 </div>
 
-                <div className={styles.criarContaArea}>
+                {perfil === 'cidadao' ? <div className={styles.criarContaArea}>
                   <span>Ainda não tem conta? </span>
                   <Link to={getRotaCadastro()} className={styles.criarContaLink}>
                     Cadastre-se
                   </Link>
-                </div>
+                </div> : <p>O cadastro de servidores é realizado pela gestão.</p>}
               </div>
 
               {/* ÁREA DA ILUSTRAÇÃO/ÍCONE */}

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { downloadReport } from '../../../services/downloadDocument';
+import { useCollection } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './leis.module.css';
 
@@ -30,50 +32,9 @@ export default function Leis() {
   const [categoria, setCategoria] = useState('todas');
 
   // BASE DE DADOS DE LEIS E NORMAS (COM LINKS DO DIÁRIO OFICIAL / LEGISLAÇÃO)
-  const [leis] = useState([
-    {
-      id: 1,
-      titulo: 'Lei Nº 9.605/1998 - Lei de Crimes Ambientais',
-      esfera: 'Federal',
-      categoria: 'crimes',
-      resumo: 'Dispõe sobre as sanções penais e administrativas derivadas de condutas e atividades lesivas ao meio ambiente.',
-      artigosChave: ['Art. 70 - Das Infrações Administrativas', 'Art. 54 - Causal de Poluição', 'Art. 38 - Destruição de Floresta'],
-      data: '12/02/1998',
-      urlDiario: 'https://www.planalto.gov.br/ccivil_03/leis/l9605.htm'
-    },
-    {
-      id: 2,
-      titulo: 'Lei Municipal Nº 4.210/2021 - Código Ambiental do Município',
-      esfera: 'Municipal',
-      categoria: 'codigo',
-      resumo: 'Institui o Código Ambiental Municipal, regulamentando o licenciamento, fiscalização e penalidades ambientais.',
-      artigosChave: ['Art. 12 - Da Autorização para Poda/Corte', 'Art. 45 - Do Descarte Irregular de Resíduos'],
-      data: '18/05/2021',
-      urlDiario: 'https://www.in.gov.br/'
-    },
-    {
-      id: 3,
-      titulo: 'Decreto Municipal Nº 1.890/2023 - Queimadas e Controle de Fumaça',
-      esfera: 'Municipal',
-      categoria: 'queimadas',
-      resumo: 'Proíbe a realização de queimadas na zona urbana e estabelece multa progressiva em períodos de estiagem.',
-      artigosChave: ['Art. 3º - Das Proibições de Queimada em Lotes Vagos', 'Art. 8º - Da Notificação Imediata'],
-      data: '10/08/2023',
-      urlDiario: 'https://www.in.gov.br/'
-    },
-    {
-      id: 4,
-      titulo: 'Instrução Normativa SMA Nº 04/2024 - Padrões de Emissão Sonora',
-      esfera: 'Municipal',
-      categoria: 'ruido',
-      resumo: 'Estipula os limites máximos permissíveis de ruídos em zonas residenciais e comerciais conforme horário.',
-      artigosChave: ['Tabela I - Limites de Decibéis (dB)', 'Art. 5º - Do Equipamento de Medição (Decibelímetro)'],
-      data: '15/01/2024',
-      urlDiario: 'https://www.in.gov.br/'
-    }
-  ]);
+  const [leis] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, esfera: '', categoria: l.categoria || '', resumo: l.conteudo || '', artigosChave: [l.conteudo || ''], data: '', urlDiario: l.url_oficial }));
 
-  const [leiSelecionada, setLeiSelecionada] = useState(leis[0]);
+  const [leiSelecionada, setLeiSelecionada] = useState(null);
 
   // FILTRAGEM DE LEIS
   const leisFiltradas = leis.filter(lei => {
@@ -292,8 +253,8 @@ export default function Leis() {
                   </div>
 
                   <div className={styles.detailActions}>
-                    <button className={styles.btnDownloadPdf} onClick={() => alert(`Baixando PDF completo de: ${leiSelecionada.titulo}`)}>
-                      <Download size={16} /> Baixar PDF Íntegra
+                    <button className={styles.btnDownloadPdf} onClick={() => downloadReport({ id_relatorio: `lei-${leiSelecionada.id}`, titulo: leiSelecionada.titulo, observacoes: leiSelecionada.conteudo, tipo: 'Legislação', parecer: '' })}>
+                      <Download size={16} /> Baixar Texto em PDF
                     </button>
                     <button className={styles.btnAbrirDiario} onClick={() => handleAbrirDiarioOficial(leiSelecionada.urlDiario)}>
                       <ExternalLink size={16} /> Ver no Diário Oficial

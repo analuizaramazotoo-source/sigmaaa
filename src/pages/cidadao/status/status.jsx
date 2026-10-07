@@ -1,6 +1,7 @@
+import { useCollection, occurrenceView, getSession } from '../../../services/originalScreens';
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import styles from "./Status.module.css";
+import styles from './status.module.css';
 import {
   ArrowLeft,
   User,
@@ -25,7 +26,10 @@ const mensagens = [
 ];
 
 export default function Status() {
-  const [etapaAtiva, setEtapaAtiva] = useState(2);
+  const [solicitacoes] = useCollection('/ocorrencias', occurrenceView);
+  const [selecionada, setSelecionada] = useState('');
+  const solicitacao = solicitacoes.find(o => String(o.id) === selecionada) || solicitacoes[0];
+  const etapaAtiva = solicitacao ? ({ aberta: 0, em_analise: 1, em_andamento: 3, resolvida: 4, arquivada: 0 }[solicitacao.status_ocorrencia] ?? 0) : -1;
   const navigate = useNavigate();
 
   return (
@@ -50,7 +54,7 @@ export default function Status() {
                 <User size={18} />
               </div>
               <div className={styles.userDetails}>
-                <strong>Ana Luiza Silva</strong>
+                <strong>{getSession()?.usuario.nome_usuario}</strong>
                 <span>Cidadão • Ativo</span>
               </div>
             </Link>
@@ -82,11 +86,17 @@ export default function Status() {
                 </div>
               </div>
 
+              <div className={styles.statusBox}>
+                <select aria-label="Solicitação" value={solicitacao?.id || ''} onChange={e => setSelecionada(e.target.value)}>
+                  {solicitacoes.map(o => <option key={o.id} value={o.id}>{o.protocolo_ocorrencia} — {o.titulo}</option>)}
+                </select>
+                <p>{solicitacao ? `${solicitacao.protocolo_ocorrencia} — ${solicitacao.endereco}` : 'Nenhuma solicitação cadastrada.'}</p>
+              </div>
               {/* TIMELINE DE ETAPAS */}
               <div className={styles.timelineWrapper}>
                 {etapas.map((etapa, i) => (
                   <React.Fragment key={i}>
-                    <div className={styles.etapaItem} onClick={() => setEtapaAtiva(i)}>
+                    <div className={styles.etapaItem} >
                       <div
                         className={styles.etapaPonto}
                         style={{
@@ -127,7 +137,7 @@ export default function Status() {
 
               {/* MENSAGEM DO STATUS */}
               <div className={styles.statusBox}>
-                <p className={styles.mensagem}>{mensagens[etapaAtiva]}</p>
+                <p className={styles.mensagem}>{solicitacao?.status_ocorrencia === 'arquivada' ? 'Solicitação arquivada.' : mensagens[etapaAtiva] || 'Envie um relato para acompanhar o atendimento.'}</p>
               </div>
 
             </div>

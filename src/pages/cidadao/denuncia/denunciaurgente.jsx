@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { api, perform, getSession, categoryId, refreshScreens } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   ShieldAlert, 
@@ -11,11 +12,13 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
-import styles from './DenunciaUrgente.module.css';
+import styles from './denunciaurgente.module.css';
 
 export default function DenunciaUrgente() {
   const navigate = useNavigate();
   const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [protocolo, setProtocolo] = useState('');
   const [formData, setFormData] = useState({
     tipoDenuncia: '',
     endereco: '',
@@ -32,9 +35,15 @@ export default function DenunciaUrgente() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setEnviado(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); if (enviando) return; setEnviando(true);
+    await perform(async () => {
+      const result = await api('/ocorrencias', { method: 'POST', body: {
+        titulo_ocorrencia: `[URGENTE] ${formData.tipoDenuncia.replaceAll('_', ' ')}`,
+        id_categoria: await categoryId(formData.tipoDenuncia), logradouro_ocorrencia: formData.endereco,
+        descricao_ocorrencia: `${formData.detalhes}\nReferência: ${formData.referencia}\nRisco imediato à vida/saúde: ${formData.riscoImediato}`
+      }}); setProtocolo(result.protocolo_ocorrencia); refreshScreens(); setEnviado(true);
+    }); setEnviando(false);
   };
 
   const handleNovaDenuncia = () => {
@@ -74,7 +83,7 @@ export default function DenunciaUrgente() {
               <User size={18} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-              <strong style={{ fontSize: '13px', color: '#064e3b', fontWeight: '700' }}>Ana Luiza Silva</strong>
+              <strong style={{ fontSize: '13px', color: '#064e3b', fontWeight: '700' }}>{getSession()?.usuario.nome_usuario}</strong>
               <span style={{ fontSize: '11px', color: '#047857' }}>Cidadão • Ativo</span>
             </div>
           </Link>
@@ -193,7 +202,7 @@ export default function DenunciaUrgente() {
 
                 {/* BOTÃO DE AÇÃO APENAS ENVIAR */}
                 <div className={styles.actions}>
-                  <button type="submit" className={styles.btnUrgent}>
+                  <button type="submit" disabled={enviando} className={styles.btnUrgent}>
                     <Send size={16} /> Enviar Denúncia Urgente
                   </button>
                 </div>
@@ -209,13 +218,13 @@ export default function DenunciaUrgente() {
               <h2>Denúncia Enviada com Prioridade!</h2>
               
               <p className={styles.descricaoSucesso}>
-                Sua denúncia de emergência foi recebida e encaminhada imediatamente para a fiscalização de plantão.
+                Sua denúncia de emergência foi registrada para análise da fiscalização.
               </p>
 
               <div className={styles.infoGroup}>
                 <div className={styles.infoBox}>
                   <span>Protocolo de Emergência:</span>
-                  <strong>#URG-2026/0089</strong>
+                  <strong>{protocolo}</strong>
                 </div>
                 <div className={styles.infoBox}>
                   <span>Prioridade:</span>

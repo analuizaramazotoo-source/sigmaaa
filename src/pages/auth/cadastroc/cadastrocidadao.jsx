@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./cadastrocidadao.module.css";
+import styles from './cadastrocidadao.module.css';
+import { api, setSession } from '../../../services/api';
 import {
   ArrowLeft,
   ShieldCheck,
@@ -16,6 +17,8 @@ function CadastroCidadao() {
   const [cpf, setCpf] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [erro, setErro] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   // Permite apenas números nos campos de Celular e CPF
   const handleOnlyNumbers = (e, setter) => {
@@ -24,7 +27,7 @@ function CadastroCidadao() {
   };
 
   // Ao cadastrar, valida e vai para a área do cidadão
-  const handleCadastrar = (e) => {
+  const handleCadastrar = async (e) => {
     e.preventDefault();
 
     if (senha !== confirmarSenha) {
@@ -32,7 +35,11 @@ function CadastroCidadao() {
       return;
     }
 
-    navigate("/cidadao");
+    setErro(''); setEnviando(true);
+    try {
+      const session = await api('/auth/cadastro', { method: 'POST', body: { nome_usuario: nome, email_usuario: email, telefone_usuario: celular, cpf_usuario: cpf, senha_usuario: senha } });
+      setSession(session); navigate('/cidadao');
+    } catch (error) { setErro(error.message); } finally { setEnviando(false); }
   };
 
   return (
@@ -71,7 +78,9 @@ function CadastroCidadao() {
               </div>
             </div>
 
+            {erro && <p role="alert" style={{ color: '#b91c1c' }}>{erro}</p>}
             <form onSubmit={handleCadastrar} className={styles.formGrid}>
+              <fieldset disabled={enviando} style={{ display: 'contents', border: 0 }}>
               {/* ÁREA DOS INPUTS OBRIGATÓRIOS */}
               <div className={styles.inputsArea}>
                 <div className={styles.inputGroup}>
@@ -167,6 +176,7 @@ function CadastroCidadao() {
                   <p>Cadastro oficial para acompanhamento e atendimento a solicitações ambientais.</p>
                 </div>
               </div>
+              </fieldset>
             </form>
           </div>
         </div>

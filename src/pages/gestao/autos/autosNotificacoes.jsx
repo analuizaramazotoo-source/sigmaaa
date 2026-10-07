@@ -1,47 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
+import { useState} from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './autosNotificacoes.module.css';
 import { 
   ArrowLeft, FileText, Plus, Search, FileCheck, 
   Shield, Map as MapIcon, ClipboardList, BarChart2, HelpCircle, Home as HomeIcon,
-  X, CheckCircle2, AlertTriangle, Eye
-} from 'lucide-react';
-
-const INITIAL_AUTOS = [
-  { 
-    id: "AUTO-2026/089", 
-    infrator: "Construtora Silva LTDA", 
-    data: "01/08/2026", 
-    status: "Notificado",
-    statusClass: styles.statusNotificado,
-    tipo: "Descarte Irregular",
-    descricao: "Depósito não autorizado de resíduos de construção civil em calçada pública."
-  },
-  { 
-    id: "AUTO-2026/090", 
-    infrator: "Posto Central S/A", 
-    data: "03/08/2026", 
-    status: "Autuado",
-    statusClass: styles.statusAutuado,
-    tipo: "Vazamento / Poluição",
-    descricao: "Vazamento de efluente oleoso atingindo a rede de drenagem pluvial urbana."
-  },
-  { 
-    id: "AUTO-2026/091", 
-    infrator: "Comércio de Madeiras Verde", 
-    data: "05/08/2026", 
-    status: "Em Análise",
-    statusClass: styles.statusAnalise,
-    tipo: "Desmatamento",
-    descricao: "Supressão de espécimes arbóreos nativos sem licença ambiental prévia."
-  }
-];
+  X, CheckCircle2} from 'lucide-react';
 
 export default function AutosNotificacoes() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [autos, setAutos] = useState([]);
+  const [ocorrencias] = useCollection('/ocorrencias', occurrenceView);
+  const [autos] = useCollection('/autos', a => ({ ...a, id: `AUTO-${a.id_auto}`, infrator: a.autuado_nome, data: new Date(a.data_criacao).toLocaleDateString('pt-BR'), tipo: a.tipo_infracao || (a.tipo === 'infracao' ? 'Auto de Infração' : 'Notificação'), descricao: a.descricao_infracao, status: ({ notificado: 'Notificado', autuado: 'Autuado', em_analise: 'Em Análise', emitido: 'Autuado', entregue: 'Notificado', cancelado: 'Cancelado' })[a.status] || a.status, statusClass: a.status === 'em_analise' ? styles.statusAnalise : a.tipo === 'infracao' ? styles.statusAutuado : styles.statusNotificado }));
   const [searchTerm, setSearchTerm] = useState('');
   const [modalNovoAuto, setModalNovoAuto] = useState(false);
   const [selectedAuto, setSelectedAuto] = useState(null);
@@ -49,27 +20,12 @@ export default function AutosNotificacoes() {
 
   // Formulário de Novo Auto
   const [formData, setFormData] = useState({
+    id_ocorrencia: '',
     infrator: '',
     tipo: 'Descarte Irregular',
     status: 'Notificado',
     descricao: ''
   });
-
-  // Carrega e sincroniza com localStorage
-  useEffect(() => {
-    const salvos = localStorage.getItem('autos_notificacoes_dados');
-    if (salvos) {
-      setAutos(JSON.parse(salvos));
-    } else {
-      localStorage.setItem('autos_notificacoes_dados', JSON.stringify(INITIAL_AUTOS));
-      setAutos(INITIAL_AUTOS);
-    }
-  }, []);
-
-  const salvarAutos = (novaLista) => {
-    setAutos(novaLista);
-    localStorage.setItem('autos_notificacoes_dados', JSON.stringify(novaLista));
-  };
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -79,50 +35,20 @@ export default function AutosNotificacoes() {
     }
   };
 
-  const handleCreateAuto = (e) => {
+  const handleCreateAuto = async (e) => {
     e.preventDefault();
-    if (!formData.infrator.trim()) return;
-
-    const ano = new Date().getFullYear();
-    const numRandom = Math.floor(Math.random() * 900) + 100;
-    const novoId = `AUTO-${ano}/${numRandom}`;
-
-    const novoItem = {
-      id: novoId,
-      infrator: formData.infrator,
-      tipo: formData.tipo,
-      data: new Date().toLocaleDateString('pt-BR'),
-      status: formData.status,
-      statusClass: getStatusClass(formData.status),
-      descricao: formData.descricao || "Documento fiscal emitido via sistema municipal."
-    };
-
-    const novaLista = [novoItem, ...autos];
-    salvarAutos(novaLista);
-
-    setFormData({ infrator: '', tipo: 'Descarte Irregular', status: 'Notificado', descricao: '' });
-    setModalNovoAuto(false);
-    setSuccessMessage(`Documento ${novoId} emitido com sucesso!`);
-
-    setTimeout(() => setSuccessMessage(''), 4000);
+    await perform(async () => {
+      const result = await api('/autos', { method: 'POST', body: { id_ocorrencia: Number(formData.id_ocorrencia), tipo: formData.status === 'Autuado' ? 'infracao' : 'notificacao', tipo_infracao: formData.tipo, autuado_nome: formData.infrator, descricao_infracao: formData.descricao, status: ({ Notificado: 'notificado', Autuado: 'autuado', 'Em Análise': 'em_analise' })[formData.status] }});
+      refreshScreens(); setModalNovoAuto(false); setFormData({ id_ocorrencia: '', infrator: '', tipo: 'Descarte Irregular', status: 'Notificado', descricao: '' }); setSuccessMessage(`Documento AUTO-${result.id_auto} salvo.`); setTimeout(() => setSuccessMessage(''), 4000);
+    });
   };
 
-  const handleUpdateStatus = (autoId, novoStatus) => {
-    const novaLista = autos.map(item => {
-      if (item.id === autoId) {
-        return {
-          ...item,
-          status: novoStatus,
-          statusClass: getStatusClass(novoStatus)
-        };
-      }
-      return item;
+  const handleUpdateStatus = async (autoId, novoStatus) => {
+    await perform(async () => {
+      const item = autos.find(a => a.id === autoId); if (!item) return;
+      await api(`/autos/${item.id_auto}`, { method: 'PATCH', body: { status: ({ Notificado: 'notificado', Autuado: 'autuado', 'Em Análise': 'em_analise' })[novoStatus] }});
+      refreshScreens(); setSelectedAuto(prev => prev ? { ...prev, status: novoStatus, statusClass: getStatusClass(novoStatus) } : null); setSuccessMessage(`Status atualizado para ${novoStatus}.`); setTimeout(() => setSuccessMessage(''), 4000);
     });
-
-    salvarAutos(novaLista);
-    setSelectedAuto(prev => prev ? { ...prev, status: novoStatus, statusClass: getStatusClass(novoStatus) } : null);
-    setSuccessMessage(`Status do ${autoId} atualizado para ${novoStatus}!`);
-    setTimeout(() => setSuccessMessage(''), 4000);
   };
 
   const isActive = (path) => location.pathname === path;
@@ -319,6 +245,7 @@ export default function AutosNotificacoes() {
             </div>
 
             <form onSubmit={handleCreateAuto} className={styles.modalForm}>
+              <label>Ocorrência vinculada *<select required value={formData.id_ocorrencia} onChange={e => setFormData({ ...formData, id_ocorrencia: e.target.value })}><option value="">Selecione</option>{ocorrencias.map(o => <option key={o.id} value={o.id}>{o.protocolo_ocorrencia} — {o.titulo}</option>)}</select></label>
               <label>
                 Infrator / Razão Social
                 <input 

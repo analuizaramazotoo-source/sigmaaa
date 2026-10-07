@@ -1,6 +1,6 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
-import styles from './Layout.module.css';
+import styles from './layout.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, Phone, Bell, ChevronDown, Leaf

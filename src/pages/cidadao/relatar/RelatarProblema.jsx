@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { api, perform, getSession, useCollection, uploadFiles, refreshScreens } from '../../../services/originalScreens';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   AlertTriangle, 
@@ -12,6 +13,9 @@ import styles from './RelatarProblema.module.css';
 
 export default function RelatarProblema() {
   const navigate = useNavigate();
+  const [categorias] = useCollection('/categorias');
+  const [salvo, setSalvo] = useState(null);
+  const [enviando, setEnviando] = useState(false);
 
   const [formData, setFormData] = useState({
     titulo: '',
@@ -30,11 +34,17 @@ export default function RelatarProblema() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Dados do formulário enviados:', formData);
-    alert('Relato de ocorrência enviado com sucesso!');
-    navigate('/cidadao');
+  const handleSubmit = async (e) => {
+    e.preventDefault(); if (enviando) return; setEnviando(true);
+    await perform(async () => {
+      const record = salvo || await api('/ocorrencias', { method: 'POST', body: {
+        titulo_ocorrencia: formData.titulo, id_categoria: Number(formData.categoria),
+        data_ocorrencia: formData.data, logradouro_ocorrencia: formData.endereco,
+        descricao_ocorrencia: formData.descricao
+      }});
+      setSalvo(record); await uploadFiles(record.id_ocorrencia, formData.arquivos);
+      refreshScreens(); alert(`Relato salvo. Protocolo: ${record.protocolo_ocorrencia}`); navigate('/status');
+    }); setEnviando(false);
   };
 
   return (
@@ -61,7 +71,7 @@ export default function RelatarProblema() {
                 <User size={18} />
               </div>
               <div className={styles.userDetails}>
-                <strong>Ana Luiza Silva</strong>
+                <strong>{getSession()?.usuario.nome_usuario}</strong>
                 <span>Cidadão • Ativo</span>
               </div>
             </Link>
@@ -123,12 +133,7 @@ export default function RelatarProblema() {
                       required
                     >
                       <option value="" disabled>Selecione uma categoria</option>
-                      <option value="lixo">Lixo / Entulho Irregular</option>
-                      <option value="esgoto">Esgoto a Céu Aberto</option>
-                      <option value="desmatamento">Desmatamento / Poda Irregular</option>
-                      <option value="queimada">Queimada / Fumaça</option>
-                      <option value="agua">Poluição de Recursos Hídricos</option>
-                      <option value="outro">Outros</option>
+                      {categorias.map(c => <option key={c.id_categoria} value={c.id_categoria}>{c.nome_categoria}</option>)}
                     </select>
                   </div>
 
@@ -180,7 +185,7 @@ export default function RelatarProblema() {
                   >
                     Cancelar
                   </button>
-                  <button type="submit" className={styles.btnPrimary}>
+                  <button type="submit" disabled={enviando} className={styles.btnPrimary}>
                     <Send size={16} /> Enviar Relato
                   </button>
                 </div>

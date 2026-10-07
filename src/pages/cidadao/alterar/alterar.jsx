@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
+import { perform, saveProfile } from '../../../services/originalScreens';
 import { useState } from "react";
-import styles from "./alterar.module.css";
+import styles from './alterar.module.css';
 
 import arvoreLogo from "../../../assets/arvore.png";
 
@@ -12,7 +14,7 @@ export default function Alterar() {
   const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
-  function handleSalvar() {
+  async function handleSalvar() {
     if (!senhaAtual || !novaSenha || !confirmarSenha) {
       alert("Preencha todos os campos.");
       return;
@@ -21,7 +23,7 @@ export default function Alterar() {
       alert("As senhas não coincidem.");
       return;
     }
-    alert("Senha alterada com sucesso!");
+    await perform(async () => { await saveProfile({ senha_usuario: novaSenha, senha_atual: senhaAtual }); setSenhaAtual(''); setNovaSenha(''); setConfirmarSenha(''); alert('Senha alterada com sucesso!'); });
   }
 
   return (

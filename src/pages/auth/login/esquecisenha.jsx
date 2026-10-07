@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Trees, Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import styles from './EsqueciSenha.module.css';
+import styles from './esquecisenha.module.css';
 
 export default function EsqueciSenha() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [enviado, setEnviado] = useState(false);
+  const [enviado] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,7 +14,7 @@ export default function EsqueciSenha() {
       return;
     }
     // Aqui entraria a integração com a API para disparar o e-mail
-    setEnviado(true);
+    alert('O envio de recuperação por e-mail ainda não está disponível. Procure a Secretaria para recuperar o acesso.');
   };
 
   return (

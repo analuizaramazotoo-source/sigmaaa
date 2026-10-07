@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { api, perform, useCollection, occurrenceView, categoryId, canonicalStatus, refreshScreens, getSession, logout } from '../../../services/originalScreens';
+import { useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homeg.module.css';
 import { 
   Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, ChevronDown, Plus, ClipboardCheck, 
   Clock, Settings, CheckCircle2, Filter, Trash2, Flame, 
-  Droplet, Volume2, Leaf, Shield, ArrowUpRight, LogOut, User, Edit3, Home as HomeIcon
+  Droplet,  Leaf, Shield, ArrowUpRight, LogOut, User, Edit3, Home as HomeIcon
 } from 'lucide-react';
 
 const STATS_DATA = [
@@ -43,45 +44,6 @@ const STATS_DATA = [
   },
 ];
 
-const INITIAL_FILA = [
-  { 
-    id: 1, 
-    title: "Manutenção de Parques", 
-    address: "Rua das Flores, 123 - Centro", 
-    date: "12/08/2026", 
-    status: "Em campo", 
-    statusType: "andamento",
-    corStatus: "amarelo",
-    posicaoTop: "45%",
-    posicaoLeft: "48%",
-    icon: Trash2 
-  },
-  { 
-    id: 2, 
-    title: "Corte Irregular de Árvore", 
-    address: "Av. Brasil, 456 - Jardim Novo", 
-    date: "08/08/2026", 
-    status: "Pendente triagem", 
-    statusType: "analise",
-    corStatus: "vermelho",
-    posicaoTop: "58%",
-    posicaoLeft: "28%",
-    icon: Flame 
-  },
-  { 
-    id: 3, 
-    title: "Poda Concluída", 
-    address: "Rio das Pedras, s/n - Centro", 
-    date: "02/08/2026", 
-    status: "Fiscalizado", 
-    statusType: "resolvida",
-    corStatus: "verde",
-    posicaoTop: "32%",
-    posicaoLeft: "62%",
-    icon: Droplet 
-  }
-];
-
 export default function Homeg() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -97,7 +59,7 @@ export default function Homeg() {
   const [selectedOcorrencia, setSelectedOcorrencia] = useState(null);
 
   // Lista Dinâmica
-  const [fila, setFila] = useState([]);
+  const [fila] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), icon: /queimada/i.test(o.nome_categoria || '') ? Flame : /hídric/i.test(o.nome_categoria || '') ? Droplet : Trash2 }));
   const [activeFilter, setActiveFilter] = useState('todos');
 
   // Formulário
@@ -107,96 +69,21 @@ export default function Homeg() {
     category: 'descarte'
   });
 
-  const carregarFila = () => {
-    const dadosSalvos = localStorage.getItem('ocorrencias_mapa');
-    if (dadosSalvos) {
-      const dados = JSON.parse(dadosSalvos);
-      const dadosComIcones = dados.map(item => ({
-        ...item,
-        icon: item.iconName === 'flame' ? Flame : item.iconName === 'droplet' ? Droplet : item.iconName === 'volume' ? Volume2 : Trash2
-      }));
-      setFila(dadosComIcones);
-    } else {
-      localStorage.setItem('ocorrencias_mapa', JSON.stringify(INITIAL_FILA));
-      setFila(INITIAL_FILA);
-    }
-  };
-
-  useEffect(() => {
-    carregarFila();
-
-    const handleStorageChange = () => {
-      carregarFila();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const salvarEAtualizar = (novaFila) => {
-    setFila(novaFila);
-    localStorage.setItem('ocorrencias_mapa', JSON.stringify(novaFila));
-    window.dispatchEvent(new Event('storage'));
-  };
-
-  const handleCreateRecord = (e) => {
+  const handleCreateRecord = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.address) return;
-
-    let iconName = 'trash';
-    if (formData.category === 'queimada') iconName = 'flame';
-    if (formData.category === 'agua') iconName = 'droplet';
-    if (formData.category === 'som') iconName = 'volume';
-
-    const topRand = Math.floor(Math.random() * 50 + 25) + '%';
-    const leftRand = Math.floor(Math.random() * 50 + 25) + '%';
-
-    const newEntry = {
-      id: Date.now(),
-      title: formData.title,
-      titulo: formData.title,
-      address: formData.address,
-      descricao: formData.address,
-      date: new Date().toLocaleDateString('pt-BR'),
-      data: 'Hoje, ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-      status: "Pendente triagem",
-      statusType: "analise",
-      corStatus: "vermelho",
-      prioridade: "Média",
-      posicaoTop: topRand,
-      posicaoLeft: leftRand,
-      iconName: iconName
-    };
-
-    const novaFila = [newEntry, ...fila];
-    salvarEAtualizar(novaFila);
-
-    setFormData({ title: '', address: '', category: 'descarte' });
-    setModalNewRecord(false);
-  };
-
-  const handleUpdateStatus = (newStatus, newStatusType, newCor) => {
-    if (!selectedOcorrencia) return;
-
-    const novaFila = fila.map(item => {
-      if (item.id === selectedOcorrencia.id) {
-        return {
-          ...item,
-          status: newStatus,
-          statusType: newStatusType,
-          corStatus: newCor || (newStatusType === 'resolvida' ? 'verde' : newStatusType === 'andamento' ? 'amarelo' : 'vermelho')
-        };
-      }
-      return item;
+    await perform(async () => {
+      await api('/ocorrencias', { method: 'POST', body: { titulo_ocorrencia: formData.title, logradouro_ocorrencia: formData.address, id_categoria: await categoryId(formData.category) }});
+      refreshScreens(); setFormData({ title: '', address: '', category: 'descarte' }); setModalNewRecord(false);
     });
-
-    salvarEAtualizar(novaFila);
-    setSelectedOcorrencia(null);
   };
 
-  const handleConfirmLogout = () => {
-    setModalLogout(false);
-    navigate('/login');
+  const handleUpdateStatus = async (newStatus) => {
+    if (!selectedOcorrencia) return;
+    await perform(async () => { await api(`/ocorrencias/${selectedOcorrencia.id}`, { method: 'PATCH', body: { status_ocorrencia: canonicalStatus(newStatus) }}); refreshScreens(); setSelectedOcorrencia(null); });
+  };
+
+  const handleConfirmLogout = async () => {
+    try { await logout(); } finally { setModalLogout(false); navigate('/login'); }
   };
 
   const filteredFila = fila.filter(item => {
@@ -379,10 +266,10 @@ export default function Homeg() {
                 className={styles.userDropdown}
                 onClick={() => setShowUserDropdown(!showUserDropdown)}
               >
-                <div className={styles.avatar}>AL</div>
+                <div className={styles.avatar}>{getSession()?.usuario.nome_usuario?.slice(0, 2).toUpperCase()}</div>
                 <div className={styles.userInfo}>
-                  <span className={styles.userName}>Ana Luiza Silva</span>
-                  <span className={styles.userRole}>Fiscal Ambiental • Mat. 48.201</span>
+                  <span className={styles.userName}>{getSession()?.usuario.nome_usuario}</span>
+                  <span className={styles.userRole}>{getSession()?.usuario.cargo_usuario || 'Gestão'} • Mat. {getSession()?.usuario.matricula_usuario || 'Não informada'}</span>
                 </div>
                 <ChevronDown size={16} className={styles.dropdownIcon} />
               </button>
@@ -390,7 +277,7 @@ export default function Homeg() {
               {showUserDropdown && (
                 <div className={styles.popoverMenuRight}>
                   <div className={styles.userMenuHeader}>
-                    <strong>Ana Luiza Silva</strong>
+                    <strong>{getSession()?.usuario.nome_usuario}</strong>
                     <span>Fiscal de Campo</span>
                   </div>
                   <div className={styles.menuDivider} />
@@ -466,7 +353,7 @@ export default function Homeg() {
                   </div>
                   <div className={styles.statData}>
                     <span className={styles.statTitle}>{stat.title}</span>
-                    <strong className={styles.statValue}>{stat.value}</strong>
+                    <strong className={styles.statValue}>{stat.id === 'total' ? fila.length : stat.id === 'resolvidas' ? fila.filter(o => o.statusType === 'resolvida').length : fila.filter(o => o.statusType === stat.id).length}</strong>
                     <span className={styles.statSubtitle}>{stat.subtitle}</span>
                   </div>
                 </div>

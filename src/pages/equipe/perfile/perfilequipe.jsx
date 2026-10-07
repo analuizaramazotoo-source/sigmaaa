@@ -1,4 +1,5 @@
-import React from 'react';
+import { api, perform, logout } from '../../../services/originalScreens';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './perfilequipe.module.css';
 
@@ -27,41 +28,12 @@ export default function PerfilEquipe() {
   const navigate = useNavigate();
 
   // DADOS DA EQUIPE E INTEGRANTES
-  const dadosEquipe = {
-    codigoEquipe: 'EQP-ALPHA-01',
-    nomeEquipe: 'Equipe Alpha 01 - Setor Urbano',
-    status: 'Em Operação',
-    turno: 'Diurno (07:30 - 17:00)',
-    membros: [
-      {
-        id: 1,
-        nome: 'Carlos Eduardo Santos',
-        cargo: 'Fiscal Ambiental Líder',
-        matricula: 'MAT-48.201',
-        email: 'carlos.santos@prefeitura.gov.br',
-        telefone: '(14) 99876-5432',
-        lider: true
-      },
-      {
-        id: 2,
-        nome: 'Mariana Lima e Silva',
-        cargo: 'Fiscal Ambiental',
-        matricula: 'MAT-51.109',
-        email: 'mariana.silva@prefeitura.gov.br',
-        telefone: '(14) 99765-4321',
-        lider: false
-      },
-      {
-        id: 3,
-        nome: 'Roberto Rocha',
-        cargo: 'Técnico em Meio Ambiente',
-        matricula: 'MAT-39.882',
-        email: 'roberto.rocha@prefeitura.gov.br',
-        telefone: '(14) 99654-3210',
-        lider: false
-      }
-    ]
-  };
+  const [dadosEquipe, setDadosEquipe] = useState({ codigoEquipe: '', nomeEquipe: 'Nenhuma equipe vinculada', status: '', turno: 'Não informado', membros: [] });
+  useEffect(() => { perform(async () => {
+    const equipe = await api('/equipes/minha');
+    if (!equipe) return;
+    setDadosEquipe({ codigoEquipe: `EQP-${equipe.id_equipe}`, nomeEquipe: equipe.nome_equipe, status: equipe.status_equipe, turno: 'Não informado', membros: equipe.membros.map(m => ({ id: m.id_membro, nome: m.nome_usuario, cargo: m.funcao_na_equipe || '', matricula: m.matricula_usuario || '', email: m.email_usuario, telefone: m.telefone_usuario || '', lider: /líder|lider|encarregado/i.test(m.funcao_na_equipe || '') })) });
+  }); }, []);
 
   // MENU LATERAL
   const menuModulos = [
@@ -120,12 +92,12 @@ export default function PerfilEquipe() {
                 <Users size={18} />
               </div>
               <div className={styles.userInfo}>
-                <strong className={styles.userName}>Equipe Alpha 01</strong>
+                <strong className={styles.userName}>{dadosEquipe.nomeEquipe}</strong>
                 <span className={styles.userRole}>Perfil do Grupo</span>
               </div>
             </div>
 
-            <button className={styles.btnLogout} onClick={() => navigate('/')} title="Sair do Sistema">
+            <button className={styles.btnLogout} onClick={() => perform(async () => { await logout(); navigate('/login'); })} title="Sair do Sistema">
               <LogOut size={18} />
             </button>
           </div>

@@ -1,90 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
+import { useState} from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './filaFiscalizacao.module.css';
 import { 
   ArrowLeft, ClipboardList, Flame, Trash2, Clock, 
   Shield, Map as MapIcon, FileText, BarChart2, HelpCircle, Home as HomeIcon,
-  CheckCircle2, AlertTriangle, Filter, Eye, X, UserCheck
+  CheckCircle2, AlertTriangle,  Eye, X, UserCheck
 } from 'lucide-react';
-
-const INITIAL_CHAMADOS = [
-  { 
-    id: 101, 
-    titulo: "Descarte irregular de resíduos", 
-    local: "Av. das Palmeiras, 450", 
-    urgente: true,
-    data: "18/08/2026 • 09:15",
-    tipo: "descarte",
-    descricao: "Acúmulo de entulho e materiais de construção bloqueando a calçada pública."
-  },
-  { 
-    id: 102, 
-    titulo: "Queimada urbana em lote vago", 
-    local: "Rua Ipê Amarelo, 88", 
-    urgente: true,
-    data: "18/08/2026 • 10:05",
-    tipo: "queimada",
-    descricao: "Foco de incêndio com fumaça densa próximo a área residencial."
-  },
-  { 
-    id: 103, 
-    titulo: "Desmatamento não autorizado", 
-    local: "Zona Rural - Setor Leste", 
-    urgente: false,
-    data: "17/08/2026 • 14:30",
-    tipo: "desmatamento",
-    descricao: "Supressão de vegetação nativa sem placa de autorização ambiental visível."
-  },
-  { 
-    id: 104, 
-    titulo: "Poluição sonora comercial", 
-    local: "Rua do Comércio, 120", 
-    urgente: false,
-    data: "17/08/2026 • 16:45",
-    tipo: "som",
-    descricao: "Emissão de ruído acima dos decibéis permitidos após o horário comercial."
-  }
-];
 
 export default function FilaFiscalizacao() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [chamados, setChamados] = useState([]);
+  const [chamados] = useCollection('/ocorrencias?status=aberta', occurrenceView);
+  const [equipes] = useCollection('/equipes');
+  const [equipeDestino, setEquipeDestino] = useState('');
   const [filterType, setFilterType] = useState('todos');
   const [selectedChamado, setSelectedChamado] = useState(null);
   const [chamadoParaAssumir, setChamadoParaAssumir] = useState(null);
   const [notificationMsg, setNotificationMsg] = useState('');
 
-  // Carrega e sincroniza a fila com o localStorage
-  useEffect(() => {
-    const salvos = localStorage.getItem('fila_fiscalizacao_dados');
-    if (salvos) {
-      setChamados(JSON.parse(salvos));
-    } else {
-      localStorage.setItem('fila_fiscalizacao_dados', JSON.stringify(INITIAL_CHAMADOS));
-      setChamados(INITIAL_CHAMADOS);
-    }
-  }, []);
-
-  const salvarFila = (novaLista) => {
-    setChamados(novaLista);
-    localStorage.setItem('fila_fiscalizacao_dados', JSON.stringify(novaLista));
-  };
-
-  const handleConfirmAssumir = () => {
+  const handleConfirmAssumir = async () => {
     if (!chamadoParaAssumir) return;
-
-    const novaLista = chamados.filter(c => c.id !== chamadoParaAssumir.id);
-    salvarFila(novaLista);
-
-    setNotificationMsg(`Chamado #${chamadoParaAssumir.id} atribuído à sua equipe com sucesso!`);
-    setChamadoParaAssumir(null);
-    setSelectedChamado(null);
-
-    setTimeout(() => {
-      setNotificationMsg('');
-    }, 4000);
+    await perform(async () => {
+      if (!equipeDestino) throw new Error('Selecione uma equipe para assumir o chamado.');
+      await api(`/ocorrencias/${chamadoParaAssumir.id}/assumir`, { method: 'POST', body: { id_equipe: Number(equipeDestino) }});
+      refreshScreens(); setNotificationMsg(`Chamado #${chamadoParaAssumir.id} encaminhado à equipe.`); setChamadoParaAssumir(null); setSelectedChamado(null); setTimeout(() => setNotificationMsg(''), 4000);
+    });
   };
 
   const isActive = (path) => location.pathname === path;
@@ -339,8 +281,9 @@ export default function FilaFiscalizacao() {
             </div>
             <h3 style={{ color: '#065f46', margin: '0 0 0.5rem 0' }}>Confirmar Atribuição</h3>
             <p style={{ color: '#047857', fontSize: '0.9rem', margin: '0 0 1.5rem 0' }}>
-              Deseja assumir o chamado <strong>#{chamadoParaAssumir.id} - {chamadoParaAssumir.titulo}</strong> para a sua equipe?
+              Deseja encaminhar o chamado <strong>#{chamadoParaAssumir.id} - {chamadoParaAssumir.titulo}</strong> para uma equipe?
             </p>
+            <label>Equipe responsável<select value={equipeDestino} onChange={e => setEquipeDestino(e.target.value)} style={{ width: '100%', padding: 10, margin: '10px 0 20px', border: '1px solid #d1fae5', borderRadius: 8 }}><option value="">Selecione</option>{equipes.map(e => <option key={e.id_equipe} value={e.id_equipe}>{e.nome_equipe}</option>)}</select></label>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
               <button type="button" onClick={() => setChamadoParaAssumir(null)} className={styles.btnCancel}>
                 Cancelar

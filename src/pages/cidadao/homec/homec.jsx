@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./homec.module.css";
+import styles from './homec.module.css';
+import { getSession, logout } from '../../../services/api';
 
 import {
   FileWarning,
@@ -23,7 +24,7 @@ const duvidasFrequentes = [
   },
   {
     pergunta: "Quanto tempo demora para resolver?",
-    resposta: "O prazo varia de acordo com a gravidade, sendo de 24h a 48h para casos urgentes e até 7 dias úteis para solicitações convencionais."
+    resposta: "O prazo depende da avaliação da Secretaria. Acompanhe o andamento na área de solicitações."
   },
   {
     pergunta: "Posso enviar fotos do problema?",
@@ -41,7 +42,8 @@ export default function Homec() {
     setDuvidaAberta(duvidaAberta === index ? null : index);
   };
 
-  const handleConfirmarSair = () => {
+  const handleConfirmarSair = async () => {
+    try { await logout(); } catch { /* A sessão local já foi encerrada. */ }
     navigate("/");
   };
 
@@ -67,7 +69,7 @@ export default function Homec() {
                 <User size={18} />
               </div>
               <div className={styles.userDetails}>
-                <strong>Ana Luiza Silva</strong>
+                <strong>{getSession()?.usuario.nome_usuario}</strong>
                 <span>Cidadão • Ativo</span>
               </div>
             </Link>

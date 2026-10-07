@@ -1,4 +1,5 @@
-import React from "react";
+import { Guard, ConnectionFeedback } from './components/OriginalGuard';
+import Chat from './pages/cidadao/chat/chat';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -50,38 +51,40 @@ function App() {
         {/* LOGINS E CADASTROS DE AUTENTICAÇÃO */}
         <Route path="/login" element={<Login />} />
         <Route path="/logincidadao" element={<LoginCidadao />} />
-        <Route path="/cadastroeq" element={<CadastroEquipe />} />
+        <Route path="/cadastroeq" element={<Guard roles={['gestao']}><CadastroEquipe /></Guard>} />
         <Route path="/esqueci-senha" element={<EsqueciSenha />} /> {/* Rota adicionada */}
 
         {/* ROTAS CIDADÃO */}
-        <Route path="/cidadao" element={<Homec />} />
-        <Route path="/relatar-problema" element={<RelatarProblema />} />
-        <Route path="/solicitar" element={<Solicitar />} />
-        <Route path="/status" element={<Status />} />
-        <Route path="/denuncia" element={<DenunciaUrgente />} />
-        <Route path="/perfil" element={<Perfil />} />
-        <Route path="/alterar" element={<Alterar />} />
+        <Route path="/cidadao" element={<Guard><Homec /></Guard>} />
+        <Route path="/relatar-problema" element={<Guard><RelatarProblema /></Guard>} />
+        <Route path="/solicitar" element={<Guard><Solicitar /></Guard>} />
+        <Route path="/status" element={<Guard><Status /></Guard>} />
+        <Route path="/denuncia" element={<Guard><DenunciaUrgente /></Guard>} />
+        <Route path="/perfil" element={<Guard><Perfil /></Guard>} />
+        <Route path="/alterar" element={<Guard><Alterar /></Guard>} />
         <Route path="/cadastro" element={<CadastroCidadao />} />
 
         {/* ROTAS GESTÃO */}
-        <Route path="/homeg" element={<Homeg />} />
-        <Route path="/geoprocessamento" element={<Geoprocessamento />} />
-        <Route path="/fila-fiscalizacao" element={<FilaFiscalizacao />} />
-        <Route path="/autos-notificacoes-gestao" element={<AutosNotificacoesGestao />} />
-        <Route path="/relatorios-tecnicos-gestao" element={<RelatoriosTecnicosGestao />} />
-        <Route path="/legislacao" element={<Legislacao />} />
-        <Route path="/perfilg" element={<Perfilg />} />
-        <Route path="/cadastrog" element={<Cadastrog />} />
-        <Route path="/config" element={<Configuracoes />} />
+        <Route path="/homeg" element={<Guard roles={['gestao']}><Homeg /></Guard>} />
+        <Route path="/geoprocessamento" element={<Guard roles={['gestao']}><Geoprocessamento /></Guard>} />
+        <Route path="/fila-fiscalizacao" element={<Guard roles={['gestao']}><FilaFiscalizacao /></Guard>} />
+        <Route path="/autos-notificacoes-gestao" element={<Guard roles={['gestao']}><AutosNotificacoesGestao /></Guard>} />
+        <Route path="/relatorios-tecnicos-gestao" element={<Guard roles={['gestao']}><RelatoriosTecnicosGestao /></Guard>} />
+        <Route path="/legislacao" element={<Guard roles={['gestao']}><Legislacao /></Guard>} />
+        <Route path="/perfilg" element={<Guard roles={['gestao']}><Perfilg /></Guard>} />
+        <Route path="/cadastrog" element={<Guard roles={['gestao']}><Cadastrog /></Guard>} />
+        <Route path="/config" element={<Guard roles={['gestao']}><Configuracoes /></Guard>} />
 
         {/* ROTAS EQUIPE */}
-        <Route path="/homee" element={<HomeE />} />
-        <Route path="/autoe" element={<AutosNotificacoes />} />
-        <Route path="/filae" element={<FilaVistorias />} />
-        <Route path="/leise" element={<Leis />} />
-        <Route path="/relatorioe" element={<RelatoriosTecnicos />} />
-        <Route path="/perfile" element={<PerfilEquipe />} />
+        <Route path="/homee" element={<Guard roles={['gestao', 'equipe']}><HomeE /></Guard>} />
+        <Route path="/autoe" element={<Guard roles={['gestao', 'equipe']}><AutosNotificacoes /></Guard>} />
+        <Route path="/filae" element={<Guard roles={['gestao', 'equipe']}><FilaVistorias /></Guard>} />
+        <Route path="/leise" element={<Guard roles={['gestao', 'equipe']}><Leis /></Guard>} />
+        <Route path="/relatorioe" element={<Guard roles={['gestao', 'equipe']}><RelatoriosTecnicos /></Guard>} />
+        <Route path="/perfile" element={<Guard roles={['gestao', 'equipe']}><PerfilEquipe /></Guard>} />
+        <Route path="/chat" element={<Guard><Chat /></Guard>} />
       </Routes>
+      <ConnectionFeedback />
     </Router>
   );
 }
