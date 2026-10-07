@@ -12,7 +12,7 @@ import {
 // Links atualizados com URLs reais e funcionais
 export default function Legislacao() {
   const navigate = useNavigate();
-  const [documentos] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, descricao: l.conteudo || '', categoria: l.categoria || '', conteudoCompleto: l.conteudo, linkDiario: l.url_oficial, data: '' }));
+  const [documentos] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, descricao: (l.conteudo || '').split('\n\n')[1] || l.conteudo || '', categoria: l.categoria || '', conteudoCompleto: l.conteudo, linkDiario: l.url_oficial, data: '' }));
   const location = useLocation();
 
   const [busca, setBusca] = useState('');
@@ -29,7 +29,7 @@ export default function Legislacao() {
 
   const handleCopiarTrecho = (texto) => {
     navigator.clipboard.writeText(texto);
-    setNotificationMsg("Trecho do artigo copiado para a área de transferência!");
+    setNotificationMsg("Resumo copiado para a área de transferência!");
     setTimeout(() => setNotificationMsg(''), 3000);
   };
 
@@ -176,7 +176,7 @@ export default function Legislacao() {
                           onClick={() => handleAbrirLinkExterno(doc.linkDiario)} 
                           className={styles.btnLinkExterno}
                         >
-                          <ExternalLink size={16} /> Ver no Diário Oficial
+                          <ExternalLink size={16} /> Consultar fonte oficial
                         </button>
                       </div>
                     </div>
@@ -230,7 +230,7 @@ export default function Legislacao() {
                 onClick={() => handleCopiarTrecho(docSelecionado.conteudoCompleto)}
                 className={styles.btnLinkExterno}
               >
-                <Copy size={16} /> Copiar Fundamentação
+                <Copy size={16} /> Copiar resumo
               </button>
               <button type="button" onClick={() => setDocSelecionado(null)} className={styles.btnCancel}>
                 Fechar

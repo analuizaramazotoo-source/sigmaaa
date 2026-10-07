@@ -27,9 +27,10 @@ export default function RelatoriosTecnicos() {
     setTimeout(() => setNotificationMsg(''), 3000);
   };
 
-  // Simula o download do arquivo gerando um Blob
-  const handleDownload = (item) => {
-    downloadReport(item.record, item.tipo); setNotificationMsg(`Download iniciado: ${item.nomeArquivo}`); setTimeout(() => setNotificationMsg(''), 4000);
+  const handleDownload = async (item) => {
+    if (await downloadReport(item.record, item.tipo)) {
+      setNotificationMsg(`Download iniciado: ${item.nomeArquivo}`); setTimeout(() => setNotificationMsg(''), 4000);
+    }
   };
 
   const now = new Date();

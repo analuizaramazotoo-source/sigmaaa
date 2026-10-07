@@ -338,7 +338,7 @@ export default function AutosNotificacoes() {
                     <p className={styles.historyInfrator}>{item.infrator}</p>
                     <div className={styles.historyFooter}>
                       <small><Clock size={12} /> {item.data}</small>
-                      <button className={styles.btnBaixarPdf} onClick={() => downloadReport({ id_relatorio: item.id_auto, id_ocorrencia: item.id_ocorrencia, titulo: `${item.tipo} — ${item.autuado_nome}`, observacoes: item.descricao_infracao, parecer: item.artigo_lei, data_criacao: item.data_criacao })}>
+                      <button className={styles.btnBaixarPdf} onClick={() => downloadReport({ ...item, documento: 'auto', id_relatorio: item.id_auto, titulo: `${item.tipo} - ${item.autuado_nome}`, observacoes: item.descricao_infracao, parecer: item.artigo_lei })}>
                         PDF
                       </button>
                     </div>

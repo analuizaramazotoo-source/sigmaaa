@@ -32,7 +32,8 @@ export default function Leis() {
   const [categoria, setCategoria] = useState('todas');
 
   // BASE DE DADOS DE LEIS E NORMAS (COM LINKS DO DIÁRIO OFICIAL / LEGISLAÇÃO)
-  const [leis] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, esfera: '', categoria: l.categoria || '', resumo: l.conteudo || '', artigosChave: [l.conteudo || ''], data: '', urlDiario: l.url_oficial }));
+  const [leis] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, esfera: /Âmbito: federal/i.test(l.conteudo || '') ? 'Federal' : 'Norma cadastrada', categoria: l.categoria || '', resumo: (l.conteudo || '').split('\n\n')[1] || l.conteudo || '', artigosChave: (l.conteudo || '').split('\n\n'), data: '', urlDiario: l.url_oficial }));
+  const categorias = [...new Set(leis.map(lei => lei.categoria).filter(Boolean))];
 
   const [leiSelecionada, setLeiSelecionada] = useState(null);
 
@@ -50,7 +51,7 @@ export default function Leis() {
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     } else {
-      alert('Link do Diário Oficial não cadastrado para esta norma.');
+      alert('Fonte oficial não cadastrada para esta norma.');
     }
   };
 
@@ -164,24 +165,9 @@ export default function Leis() {
                 >
                   Todas
                 </button>
-                <button 
-                  className={categoria === 'crimes' ? styles.chipActive : styles.chip} 
-                  onClick={() => setCategoria('crimes')}
-                >
-                  Federal
-                </button>
-                <button 
-                  className={categoria === 'codigo' ? styles.chipActive : styles.chip} 
-                  onClick={() => setCategoria('codigo')}
-                >
-                  Código Municipal
-                </button>
-                <button 
-                  className={categoria === 'queimadas' ? styles.chipActive : styles.chip} 
-                  onClick={() => setCategoria('queimadas')}
-                >
-                  Queimadas
-                </button>
+                {categorias.map(value => (
+                  <button key={value} className={categoria === value ? styles.chipActive : styles.chip} onClick={() => setCategoria(value)}>{value}</button>
+                ))}
               </div>
 
               <div className={styles.leisList}>
@@ -253,11 +239,11 @@ export default function Leis() {
                   </div>
 
                   <div className={styles.detailActions}>
-                    <button className={styles.btnDownloadPdf} onClick={() => downloadReport({ id_relatorio: `lei-${leiSelecionada.id}`, titulo: leiSelecionada.titulo, observacoes: leiSelecionada.conteudo, tipo: 'Legislação', parecer: '' })}>
-                      <Download size={16} /> Baixar Texto em PDF
+                    <button className={styles.btnDownloadPdf} onClick={() => downloadReport({ id_relatorio: `lei-${leiSelecionada.id}`, titulo: leiSelecionada.titulo, observacoes: leiSelecionada.conteudo, tipo: 'Legislação', parecer: leiSelecionada.urlDiario })}>
+                      <Download size={16} /> Baixar resumo em PDF
                     </button>
                     <button className={styles.btnAbrirDiario} onClick={() => handleAbrirDiarioOficial(leiSelecionada.urlDiario)}>
-                      <ExternalLink size={16} /> Ver no Diário Oficial
+                      <ExternalLink size={16} /> Consultar fonte oficial
                     </button>
                   </div>
                 </div>
