@@ -2,6 +2,7 @@ import { useCollection, occurrenceView, getSession } from '../../../services/ori
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from './status.module.css';
+import TupaMap from '../../../components/TupaMap';
 import {
   ArrowLeft,
   User,
@@ -128,12 +129,7 @@ export default function Status() {
               </div>
 
               {/* CAIXA DO MAPA (CONTIDA) */}
-              <div className={styles.mapaPlaceholder}>
-                <div className={styles.mapaGridH} />
-                <div className={styles.mapaGridV} />
-                <div className={styles.caminhaoIcon}>🚛</div>
-                <div className={styles.pontoOcorrencia} />
-              </div>
+              <TupaMap occurrences={solicitacao ? [solicitacao] : []} selectedLocation={solicitacao} height={300} />
 
               {/* MENSAGEM DO STATUS */}
               <div className={styles.statusBox}>

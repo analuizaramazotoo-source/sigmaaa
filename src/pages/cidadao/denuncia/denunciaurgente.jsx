@@ -13,11 +13,14 @@ import {
 } from 'lucide-react';
 
 import styles from './denunciaurgente.module.css';
+import TupaMap from '../../../components/TupaMap';
+import { coordinateBody } from '../../../services/mapCoordinates';
 
 export default function DenunciaUrgente() {
   const navigate = useNavigate();
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [localizacao, setLocalizacao] = useState(null);
   const [protocolo, setProtocolo] = useState('');
   const [formData, setFormData] = useState({
     tipoDenuncia: '',
@@ -41,12 +44,13 @@ export default function DenunciaUrgente() {
       const result = await api('/ocorrencias', { method: 'POST', body: {
         titulo_ocorrencia: `[URGENTE] ${formData.tipoDenuncia.replaceAll('_', ' ')}`,
         id_categoria: await categoryId(formData.tipoDenuncia), logradouro_ocorrencia: formData.endereco,
-        descricao_ocorrencia: `${formData.detalhes}\nReferência: ${formData.referencia}\nRisco imediato à vida/saúde: ${formData.riscoImediato}`
+        descricao_ocorrencia: `${formData.detalhes}\nReferência: ${formData.referencia}\nRisco imediato à vida/saúde: ${formData.riscoImediato}`, ...coordinateBody(localizacao)
       }}); setProtocolo(result.protocolo_ocorrencia); refreshScreens(); setEnviado(true);
     }); setEnviando(false);
   };
 
   const handleNovaDenuncia = () => {
+    setLocalizacao(null);
     setFormData({
       tipoDenuncia: '',
       endereco: '',
@@ -200,6 +204,7 @@ export default function DenunciaUrgente() {
 
                 </div>
 
+                <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
                 {/* BOTÃO DE AÇÃO APENAS ENVIAR */}
                 <div className={styles.actions}>
                   <button type="submit" disabled={enviando} className={styles.btnUrgent}>

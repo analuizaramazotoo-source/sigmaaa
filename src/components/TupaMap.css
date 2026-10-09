@@ -1,0 +1,8 @@
+.sigma-map { width: 100%; min-width: 0; border: 1px solid #d1fae5; border-radius: 12px; overflow: hidden; background: #fff; }
+.sigma-map-canvas { width: 100%; min-height: 220px; isolation: isolate; z-index: 0; background: #e9f0e9; }
+.sigma-map-info { padding: 10px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: #065f46; font-size: 12px; }
+.sigma-map-info span { flex: 1; min-width: 150px; }
+.sigma-map-info button { border: 1px solid #a7f3d0; background: #f0fdf4; color: #065f46; padding: 6px 10px; border-radius: 6px; cursor: pointer; font: inherit; }
+.sigma-map-note { margin: 0; padding: 0 12px 10px; color: #475569; font-size: 12px; }
+.sigma-map .leaflet-popup-content { line-height: 1.6; overflow-wrap: anywhere; }
+.sigma-map .leaflet-control-attribution { font-size: 10px; }

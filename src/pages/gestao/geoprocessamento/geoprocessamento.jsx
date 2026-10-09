@@ -1,18 +1,23 @@
-import { useCollection, occurrenceView, reportError } from '../../../services/originalScreens';
+import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './geoprocessamento.module.css';
+import TupaMap from '../../../components/TupaMap';
+import { coordinateBody, coordinatesInTupa } from '../../../services/mapCoordinates';
 import { 
-  ArrowLeft, Map as MapIcon, Layers, Filter, Navigation, 
+  ArrowLeft, Map as MapIcon, Layers, Filter,
   Shield, ClipboardList, FileText, BarChart2, HelpCircle, Home as HomeIcon,
-  X,   MapPin} from 'lucide-react';
+  X } from 'lucide-react';
 
 export default function Geoprocessamento() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [pontosMapa] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), tipo: /queimada/i.test(o.nome_categoria || '') ? 'queimada' : 'vistoria' }));
-  const [pontoAtivo, setPontoAtivo] = useState(null);
+  const [pontosMapa] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), tipo: /queimada/i.test(o.nome_categoria || '') ? 'queimada' : /poda|desmat|vegetação/i.test(o.nome_categoria || '') ? 'app' : 'vistoria' }));
+  const [ocorrenciaId, setOcorrenciaId] = useState('');
+  const [localizacao, setLocalizacao] = useState(null);
+  const [salvando, setSalvando] = useState(false);
+  const [mensagem, setMensagem] = useState('');
   const [modalCamadas, setModalCamadas] = useState(false);
   const [modalFiltro, setModalFiltro] = useState(false);
   const [regiaoAtiva, setRegiaoAtiva] = useState('Todas');
@@ -29,12 +34,24 @@ export default function Geoprocessamento() {
     setCamadas(prev => ({ ...prev, [chave]: !prev[chave] }));
   };
 
-  const handleAddPontoClique = () => {
-    reportError(new Error('Para registrar um ponto, cadastre uma ocorrência com localização. O mapa é esquemático.'));
+  const selectOccurrence = occurrence => {
+    setOcorrenciaId(String(occurrence?.id || ''));
+    const coordinates = coordinatesInTupa(occurrence);
+    setLocalizacao(coordinates ? { lat: coordinates[0], lng: coordinates[1] } : null);
+    setMensagem('');
+  };
+  const saveLocation = async () => {
+    if (!ocorrenciaId || !coordinatesInTupa(localizacao) || salvando) return;
+    setSalvando(true);
+    await perform(async () => {
+      await api(`/ocorrencias/${ocorrenciaId}`, { method: 'PATCH', body: coordinateBody(localizacao) });
+      refreshScreens(); setMensagem('Localização salva. O ponto aparecerá nos painéis da gestão, equipe e cidadão.');
+    });
+    setSalvando(false);
   };
 
   const pontosExibidos = pontosMapa.filter(p => {
-    if (!p.hasCoordinates) return false;
+    if (regiaoAtiva !== 'Todas' && p.status_ocorrencia !== regiaoAtiva) return false;
     if (p.tipo === 'app' && !camadas.app) return false;
     if (p.tipo === 'queimada' && !camadas.queimadas) return false;
     if (p.tipo === 'vistoria' && !camadas.vistorias) return false;
@@ -123,7 +140,7 @@ export default function Geoprocessamento() {
               </div>
               <div>
                 <h2>Mapa Interativo de Análise Territorial</h2>
-                <p>Monitore zonas de preservação, alertas de satélite e áreas sob vistoria.</p>
+                <p>Consulte as ruas de Tupã e as localizações das ocorrências cadastradas.</p>
               </div>
             </div>
 
@@ -142,61 +159,21 @@ export default function Geoprocessamento() {
                 className={styles.btnSecondary}
                 onClick={() => setModalFiltro(!modalFiltro)}
               >
-                <Filter size={16} /> Filtros de Área ({regiaoAtiva})
+                <Filter size={16} /> Filtrar por status
               </button>
             </div>
 
-            {/* CANVAS INTERATIVO DO MAPA */}
-            <div 
-              className={styles.mapCanvasContainer}
-              onClick={() => setPontoAtivo(null)}
-              onDoubleClick={handleAddPontoClique}
-              title="Clique duplo para marcar um novo ponto no mapa"
-            >
-              <div className={styles.mapWatermark}>
-                <Navigation size={48} />
-                <span>Clique duplo no mapa para marcar um ponto</span>
-              </div>
-
-              {/* RENDERIZAÇÃO DOS PINOS */}
-              {pontosExibidos.map((p) => (
-                <div
-                  key={p.id}
-                  className={styles.mapPin}
-                  style={{ top: p.top, left: p.left, backgroundColor: p.cor }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPontoAtivo(p);
-                  }}
-                >
-                  <MapPin size={16} color="#ffffff" />
-                </div>
-              ))}
-
-              {/* CARD DE INFORMAÇÕES DO PIN SELECIONADO */}
-              {pontoAtivo && (
-                <div 
-                  className={styles.popupCard}
-                  style={{ top: pontoAtivo.top, left: pontoAtivo.left }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className={styles.popupHeader}>
-                    <strong>{pontoAtivo.titulo}</strong>
-                    <button type="button" onClick={() => setPontoAtivo(null)} className={styles.closeBtnPopup}>
-                      <X size={14} />
-                    </button>
-                  </div>
-                  <p>Status: <span style={{ color: pontoAtivo.cor, fontWeight: 'bold' }}>{pontoAtivo.status}</span></p>
-                  <button 
-                    type="button" 
-                    className={styles.btnActionPopup}
-                    onClick={() => navigate('/fila-fiscalizacao')}
-                  >
-                    Ver Ocorrências Próximas
-                  </button>
-                </div>
-              )}
+            <div className={styles.modalForm} style={{ marginBottom: '16px' }}>
+              <label>Localizar ou corrigir uma ocorrência
+                <select value={ocorrenciaId} onChange={event => selectOccurrence(pontosMapa.find(point => String(point.id) === event.target.value))}>
+                  <option value="">Selecione um protocolo para marcar o local</option>
+                  {pontosMapa.map(point => <option key={point.id} value={point.id}>{point.protocolo_ocorrencia} - {point.titulo}</option>)}
+                </select>
+              </label>
             </div>
+            <TupaMap occurrences={pontosExibidos} selectedLocation={localizacao} onPick={ocorrenciaId ? setLocalizacao : undefined} onOccurrenceClick={selectOccurrence} height={440} />
+            {ocorrenciaId && <button type="button" className={styles.btnSubmit} style={{ marginTop: '12px' }} disabled={salvando || !coordinatesInTupa(localizacao)} onClick={saveLocation}>{salvando ? 'Salvando...' : 'Salvar localização da ocorrência'}</button>}
+            {mensagem && <p role="status">{mensagem}</p>}
           </div>
         </main>
 
@@ -218,7 +195,7 @@ export default function Geoprocessamento() {
             
             <div className={styles.modalForm}>
               <label style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>Áreas de Preservação (APP)</span>
+                <span>Ocorrências de vegetação</span>
                 <input 
                   type="checkbox" 
                   checked={camadas.app} 
@@ -228,7 +205,7 @@ export default function Geoprocessamento() {
               </label>
 
               <label style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>Alertas de Queimadas</span>
+                <span>Relatos de queimadas</span>
                 <input 
                   type="checkbox" 
                   checked={camadas.queimadas} 
@@ -238,7 +215,7 @@ export default function Geoprocessamento() {
               </label>
 
               <label style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>Lotes sob Vistoria</span>
+                <span>Outras ocorrências</span>
                 <input 
                   type="checkbox" 
                   checked={camadas.vistorias} 
@@ -262,7 +239,7 @@ export default function Geoprocessamento() {
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent} style={{ maxWidth: '380px' }}>
             <div className={styles.modalHeader}>
-              <h3>Filtrar por Região</h3>
+              <h3>Filtrar por status</h3>
               <button type="button" onClick={() => setModalFiltro(false)} className={styles.closeBtnModal}>
                 <X size={18} />
               </button>
@@ -270,16 +247,17 @@ export default function Geoprocessamento() {
 
             <div className={styles.modalForm}>
               <label>
-                Selecione o Setor do Município:
+                Situação da ocorrência:
                 <select 
                   value={regiaoAtiva} 
                   onChange={(e) => setRegiaoAtiva(e.target.value)}
                 >
-                  <option value="Todas">Todas as Regiões</option>
-                  <option value="Zona Norte">Setor Norte</option>
-                  <option value="Zona Sul">Setor Sul</option>
-                  <option value="Centro">Centro Urbano</option>
-                  <option value="Zona Rural">Área Rural / Mananciais</option>
+                  <option value="Todas">Todos os status</option>
+                  <option value="aberta">Aberta</option>
+                  <option value="em_analise">Em análise</option>
+                  <option value="em_andamento">Em andamento</option>
+                  <option value="resolvida">Resolvida</option>
+                  <option value="arquivada">Arquivada</option>
                 </select>
               </label>
             </div>

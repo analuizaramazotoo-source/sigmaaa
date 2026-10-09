@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { api, getSession, logout, setSession } from './api';
+import { coordinatesInTupa } from './mapCoordinates';
 export { api, getSession, logout, setSession };
 export function refreshScreens() { window.dispatchEvent(new Event('sigma:refresh')); }
 export function reportError(error) { window.dispatchEvent(new CustomEvent('sigma:error', { detail: error.message || String(error) })); }
@@ -28,12 +29,9 @@ export function occurrenceView(o) {
   const type = /queimad|fumaça/i.test(o.nome_categoria || o.titulo_ocorrencia) ? 'queimada' : /água|hídric|esgoto/i.test(o.nome_categoria || '') ? 'agua' : /sonor/i.test(o.nome_categoria || '') ? 'som' : /desmat|poda/i.test(o.nome_categoria || '') ? 'desmatamento' : 'descarte';
   const stateType = o.status_ocorrencia === 'resolvida' ? 'resolvida' : o.status_ocorrencia === 'em_andamento' ? 'andamento' : o.status_ocorrencia === 'arquivada' ? 'naoAtendida' : 'analise';
   const color = stateType === 'resolvida' ? 'verde' : stateType === 'andamento' ? 'amarelo' : 'vermelho';
-  // O desenho original é esquemático. Só projeta pontos que possuem coordenadas.
-  const hasCoordinates = o.latitude_ocorrencia != null && o.latitude_ocorrencia !== '' && o.longitude_ocorrencia != null && o.longitude_ocorrencia !== '';
-  const top = hasCoordinates ? `${Math.max(5, Math.min(95, 50 - (Number(o.latitude_ocorrencia) + 21.935) * 1000))}%` : null;
-  const left = hasCoordinates ? `${Math.max(5, Math.min(95, 50 + (Number(o.longitude_ocorrencia) + 50.514) * 1000))}%` : null;
+  const hasCoordinates = Boolean(coordinatesInTupa(o));
   const date = o.data_ocorrencia ? new Date(o.data_ocorrencia).toLocaleDateString('pt-BR') : '';
-  return { ...o, id: o.id_ocorrencia, title: o.titulo_ocorrencia, titulo: o.titulo_ocorrencia, address: o.logradouro_ocorrencia || '', endereco: o.logradouro_ocorrencia || '', local: o.logradouro_ocorrencia || '', descricao: o.descricao_ocorrencia || '', date, data: date, status: statusLabels[o.status_ocorrencia] || o.status_ocorrencia, statusType: stateType, corStatus: color, prioridade: urgent ? 'Alta' : 'Média', urgente: urgent, tipo: type, top, left, posicaoTop: top, posicaoLeft: left, hasCoordinates, cor: color === 'verde' ? '#10b981' : color === 'amarelo' ? '#f59e0b' : '#ef4444' };
+  return { ...o, id: o.id_ocorrencia, title: o.titulo_ocorrencia, titulo: o.titulo_ocorrencia, address: o.logradouro_ocorrencia || '', endereco: o.logradouro_ocorrencia || '', local: o.logradouro_ocorrencia || '', descricao: o.descricao_ocorrencia || '', date, data: date, status: statusLabels[o.status_ocorrencia] || o.status_ocorrencia, statusType: stateType, corStatus: color, prioridade: urgent ? 'Alta' : 'Média', urgente: urgent, tipo: type, hasCoordinates, cor: color === 'verde' ? '#10b981' : color === 'amarelo' ? '#f59e0b' : '#ef4444' };
 }
 export function canonicalStatus(label) {
   if (/fiscalizado|conclu|visitado|resolvid/i.test(label)) return 'resolvida';

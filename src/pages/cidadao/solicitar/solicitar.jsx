@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 
 import styles from './Solicitar.module.css';
+import TupaMap from '../../../components/TupaMap';
+import { coordinateBody } from '../../../services/mapCoordinates';
 
 export default function Solicitar() {
   const [problema, setProblema] = useState("");
@@ -23,6 +25,7 @@ export default function Solicitar() {
   const [arquivo, setArquivo] = useState(null);
   const [salvo, setSalvo] = useState(null);
   const [enviando, setEnviando] = useState(false);
+  const [localizacao, setLocalizacao] = useState(null);
 
   const handleFoto = (e) => {
     const file = e.target.files[0];
@@ -34,7 +37,7 @@ export default function Solicitar() {
     await perform(async () => {
       const record = salvo || await api('/ocorrencias', { method: 'POST', body: {
         titulo_ocorrencia: `[SERVIÇO] ${problema}`, descricao_ocorrencia: descricao,
-        id_categoria: await categoryId('outro'), logradouro_ocorrencia: endereco
+        id_categoria: await categoryId('outro'), logradouro_ocorrencia: endereco, ...coordinateBody(localizacao)
       }}); setSalvo(record); await uploadFiles(record.id_ocorrencia, arquivo ? [arquivo] : []);
       refreshScreens(); alert(`Solicitação salva. Protocolo: ${record.protocolo_ocorrencia}`); navigate('/status');
     }); setEnviando(false);
@@ -162,21 +165,7 @@ export default function Solicitar() {
                   <span>Localização da Ocorrência</span>
                 </div>
 
-                <div className={styles.mapaPlaceholder}>
-                  <div
-                    className={styles.mapaPonto}
-                    style={{ top: "30%", left: "65%" }}
-                  />
-                  <div
-                    className={styles.mapaPontoLaranja}
-                    style={{ top: "50%", left: "40%" }}
-                  />
-                  <div
-                    className={styles.mapaPontoAmarelo}
-                    style={{ top: "68%", left: "52%" }}
-                  />
-                  <div className={styles.mapaLinha} />
-                </div>
+                <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={380} />
               </div>
 
             </div>
@@ -185,7 +174,7 @@ export default function Solicitar() {
             <div className={styles.aviso}>
               <AlertCircle size={20} className={styles.avisoIcone} />
               <span>
-                Informe o endereço completo para facilitar o atendimento das equipes. O mapa é uma representação esquemática.
+                Informe o endereço completo e marque no mapa o local da ocorrência em Tupã.
               </span>
             </div>
           </div>

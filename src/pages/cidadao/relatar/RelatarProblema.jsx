@@ -10,12 +10,15 @@ import {
 } from 'lucide-react';
 
 import styles from './RelatarProblema.module.css';
+import TupaMap from '../../../components/TupaMap';
+import { coordinateBody } from '../../../services/mapCoordinates';
 
 export default function RelatarProblema() {
   const navigate = useNavigate();
   const [categorias] = useCollection('/categorias');
   const [salvo, setSalvo] = useState(null);
   const [enviando, setEnviando] = useState(false);
+  const [localizacao, setLocalizacao] = useState(null);
 
   const [formData, setFormData] = useState({
     titulo: '',
@@ -40,7 +43,7 @@ export default function RelatarProblema() {
       const record = salvo || await api('/ocorrencias', { method: 'POST', body: {
         titulo_ocorrencia: formData.titulo, id_categoria: Number(formData.categoria),
         data_ocorrencia: formData.data, logradouro_ocorrencia: formData.endereco,
-        descricao_ocorrencia: formData.descricao
+        descricao_ocorrencia: formData.descricao, ...coordinateBody(localizacao)
       }});
       setSalvo(record); await uploadFiles(record.id_ocorrencia, formData.arquivos);
       refreshScreens(); alert(`Relato salvo. Protocolo: ${record.protocolo_ocorrencia}`); navigate('/status');
@@ -176,6 +179,7 @@ export default function RelatarProblema() {
 
                 </div>
 
+                <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
                 {/* BOTÕES DE AÇÃO */}
                 <div className={styles.actions}>
                   <button 

@@ -2,6 +2,8 @@ import { api, perform, useCollection, occurrenceView, categoryId, canonicalStatu
 import { useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homeg.module.css';
+import TupaMap from '../../../components/TupaMap';
+import { coordinateBody } from '../../../services/mapCoordinates';
 import { 
   Map as MapIcon, ClipboardList, FileText, BarChart2, 
   HelpCircle, ChevronDown, Plus, ClipboardCheck, 
@@ -28,7 +30,7 @@ const STATS_DATA = [
   },
   { 
     id: 'andamento',
-    title: "Equipes em Campo", 
+    title: "Ocorrências em Campo",
     value: "89", 
     subtitle: "Ações fiscais em curso", 
     icon: Settings,
@@ -36,7 +38,7 @@ const STATS_DATA = [
   },
   { 
     id: 'resolvidas',
-    title: "Concluídas no Mês", 
+    title: "Concluídas",
     value: "17", 
     subtitle: "Demandas finalizadas", 
     icon: CheckCircle2,
@@ -61,6 +63,7 @@ export default function Homeg() {
   // Lista Dinâmica
   const [fila] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), icon: /queimada/i.test(o.nome_categoria || '') ? Flame : /hídric/i.test(o.nome_categoria || '') ? Droplet : Trash2 }));
   const [activeFilter, setActiveFilter] = useState('todos');
+  const [localizacao, setLocalizacao] = useState(null);
 
   // Formulário
   const [formData, setFormData] = useState({
@@ -72,8 +75,8 @@ export default function Homeg() {
   const handleCreateRecord = async (e) => {
     e.preventDefault();
     await perform(async () => {
-      await api('/ocorrencias', { method: 'POST', body: { titulo_ocorrencia: formData.title, logradouro_ocorrencia: formData.address, id_categoria: await categoryId(formData.category) }});
-      refreshScreens(); setFormData({ title: '', address: '', category: 'descarte' }); setModalNewRecord(false);
+      await api('/ocorrencias', { method: 'POST', body: { titulo_ocorrencia: formData.title, logradouro_ocorrencia: formData.address, id_categoria: await categoryId(formData.category), ...coordinateBody(localizacao) }});
+      refreshScreens(); setFormData({ title: '', address: '', category: 'descarte' }); setLocalizacao(null); setModalNewRecord(false);
     });
   };
 
@@ -374,13 +377,7 @@ export default function Homeg() {
               </div>
 
               <div className={styles.mapWrapper}>
-                <div className={styles.mapPlaceholder}>
-                  <MapIcon size={56} className={styles.mapPlaceholderIcon} />
-                  <p>Mapa Tático de Ocorrências e Rotas de Fiscalização</p>
-                  <small style={{ marginTop: '8px', opacity: 0.8 }}>
-                    Exibindo {filteredFila.length} ponto(s) filtrado(s)
-                  </small>
-                </div>
+                <TupaMap occurrences={filteredFila} onOccurrenceClick={setSelectedOcorrencia} height={360} />
 
                 <div className={styles.mapLegend}>
                   <span className={styles.legendTitle}>Status das Ações:</span>
@@ -582,9 +579,10 @@ export default function Homeg() {
                 </select>
               </label>
 
+              <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={240} />
               <div className={styles.modalActions}>
                 <button type="button" onClick={() => setModalNewRecord(false)} className={styles.btnCancel}>Cancelar</button>
-                <button type="submit" className={styles.btnPrimaryModal}>Salvar e Enviar para Equipe</button>
+                <button type="submit" className={styles.btnPrimaryModal}>Salvar ocorrência</button>
               </div>
             </form>
           </div>

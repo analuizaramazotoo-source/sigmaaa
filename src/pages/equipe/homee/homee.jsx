@@ -2,6 +2,7 @@ import { useCollection, occurrenceView, getSession, logout } from '../../../serv
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
+import TupaMap from '../../../components/TupaMap';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
 import prefeituraLogo from '../../../assets/prefeitura.png';
@@ -17,7 +18,6 @@ import {
   CheckCircle2, 
   Clock, 
   LogOut, 
-  Map as MapIcon, 
   ArrowUpRight, 
   Flame, 
   Trash2, 
@@ -184,24 +184,7 @@ export default function HomeE() {
               </div>
 
               <div className={styles.mapCanvasWrapper}>
-                <div className={styles.mapCanvas}>
-                  <div className={styles.mapWatermark}>
-                    <MapIcon size={48} />
-                    <span>Mapa Operacional Esquemático</span>
-                  </div>
-
-                  {vistorias.filter(v => v.hasCoordinates).map((v) => (
-                    <div 
-                      key={v.id} 
-                      className={styles.mapPin}
-                      style={{ top: v.top, left: v.left }}
-                      onClick={() => setSelectedVistoria(v)}
-                      title={v.titulo}
-                    >
-                      <MapPin size={18} color="#ffffff" />
-                    </div>
-                  ))}
-                </div>
+                <TupaMap occurrences={vistorias} onOccurrenceClick={setSelectedVistoria} height={360} />
 
                 <div className={styles.mapLegend}>
                   <span>Legenda:</span>
