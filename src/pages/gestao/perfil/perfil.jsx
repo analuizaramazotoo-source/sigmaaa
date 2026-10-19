@@ -1,16 +1,16 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, getSession, perform, saveProfile, logout } from '../../../services/originalScreens';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './perfil.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, Bell, ChevronDown, Menu, X, Shield, 
+  HelpCircle, Bell, ChevronDown, Shield,
   LogOut, Settings, Save, Key, Mail, Phone, BadgeCheck, Camera, ArrowLeft
 } from 'lucide-react';
 
 export default function Perfil() {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [modalLogout, setModalLogout] = useState(false);
@@ -32,16 +32,9 @@ export default function Perfil() {
   return (
     <div className={styles.appContainer}>
       {/* OVERLAY PARA MOBILE */}
-      {sidebarOpen && (
-        <div 
-          className={styles.overlay} 
-          onClick={() => setSidebarOpen(false)} 
-          aria-hidden="true"
-        />
-      )}
 
       {/* SIDEBAR OPERACIONAL */}
-      <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
             <Shield size={24} />
@@ -50,13 +43,6 @@ export default function Perfil() {
             <strong>SISTEMA DE GESTÃO</strong>
             <span>MUNICIPAL AMBIENTAL</span>
           </div>
-          <button 
-            className={styles.closeMenuBtn} 
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Fechar menu"
-          >
-            <X size={20} />
-          </button>
         </div>
 
         <nav className={styles.navigation}>
@@ -79,19 +65,12 @@ export default function Perfil() {
             <HelpCircle size={18} /> Legislação
           </Link>
         </nav>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>
         <header className={styles.header}>
           <div className={styles.headerLeft}>
-            <button 
-              className={styles.hamburgerBtn} 
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Abrir menu"
-            >
-              <Menu size={22} />
-            </button>
             <div>
               <h1 className={styles.headerTitle}>Perfil do Servidor</h1>
               <span className={styles.headerSubtitle}>Dados cadastrais e credenciais de acesso</span>

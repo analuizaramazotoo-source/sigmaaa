@@ -50,7 +50,8 @@ export default function TupaMapView({ occurrences = EMPTY, selectedLocation = nu
     const selected = coordinatesInTupa(selectedLocation);
     if (selected) {
       L.circleMarker(selected, { radius: 10, color: '#065f46', weight: 3, fillColor: '#34d399', fillOpacity: 1 }).bindTooltip('Local selecionado').addTo(layer);
-      instance.panTo(selected);
+      if (selectedLocation?.houseNumber && selectedLocation.approximate === false) instance.setView(selected, 18);
+      else instance.panTo(selected);
     }
     return () => { layer.remove(); };
   }, [occurrences, selectedLocation, onOccurrenceClick]);
@@ -60,7 +61,7 @@ export default function TupaMapView({ occurrences = EMPTY, selectedLocation = nu
     <div className="sigma-map">
       <div className="sigma-map-canvas" ref={host} style={{ height }} aria-label="Mapa de ruas de Tupã, São Paulo" />
       <div className="sigma-map-info">
-        <span>{onPick ? selected ? `Local marcado: ${selected[0].toFixed(6)}, ${selected[1].toFixed(6)}` : 'Clique no mapa para marcar o local da ocorrência.' : `${occurrences.length - missing} ocorrência(s) no mapa de Tupã.`}</span>
+        <span>{selected ? `Local marcado: ${selected[0].toFixed(6)}, ${selected[1].toFixed(6)}` : onPick ? 'Clique no mapa para marcar o local da ocorrência.' : `${occurrences.length - missing} ocorrência(s) no mapa de Tupã.`}</span>
         <button type="button" onClick={() => map.current?.setView(TUPA_CENTER, 14)}>Centralizar Tupã</button>
         {onPick && selected && <button type="button" onClick={() => onPick(null)}>Limpar ponto</button>}
       </div>

@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, logout } from '../../../services/originalScreens';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +49,7 @@ export default function PerfilEquipe() {
   return (
     <div className={styles.appContainer}>
       {/* SIDEBAR PADRÃO */}
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
@@ -76,7 +77,7 @@ export default function PerfilEquipe() {
         <div className={styles.sidebarFooter}>
           <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>

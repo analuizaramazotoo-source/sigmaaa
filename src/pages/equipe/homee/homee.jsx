@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { useCollection, occurrenceView, getSession, logout } from '../../../services/originalScreens';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -51,7 +52,7 @@ export default function HomeE() {
     <div className={styles.appContainer}>
       
       {/* SIDEBAR */}
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
@@ -79,7 +80,7 @@ export default function HomeE() {
         <div className={styles.sidebarFooter}>
           <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>

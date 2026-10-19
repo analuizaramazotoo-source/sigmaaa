@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -62,7 +63,7 @@ export default function Geoprocessamento() {
     <div className={styles.appContainer}>
       
       {/* SIDEBAR FIXA */}
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div>
           <div className={styles.brandHeader}>
             <div className={styles.logoIcon}>
@@ -107,7 +108,7 @@ export default function Geoprocessamento() {
           <div className={styles.footerTitle}>Prefeitura Municipal</div>
           <div className={styles.footerSubtitle}>Secretaria do Meio Ambiente</div>
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* CONTEÚDO PRINCIPAL DA TELA */}
       <div className={styles.mainWrapper}>

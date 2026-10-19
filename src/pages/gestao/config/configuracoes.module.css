@@ -29,3 +29,18 @@
 .appContainer :is(button,a,input,select):focus-visible { outline:3px solid #34d399; outline-offset:3px; }
 @media(max-width:850px) { .contentGrid { grid-template-columns:1fr; } }
 @media(max-width:550px) { .header { padding:20px 16px; } .header h1 { font-size:22px; } .mainContent { padding:20px 16px; } .formRow { grid-template-columns:1fr; } .tabs a { margin-left:0; } .cardSection { padding:20px; } }
+
+@media (max-width:1024px) {
+.appContainer { flex-direction:column; }
+.mainContent { margin-left:0; min-width:0; width:100%; }
+}
+
+@media (max-width:640px) {
+.appContainer { width:100%; min-width:0; }
+.header { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.actions { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.mainContent { min-width:0; max-width:100%; }
+.contentGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
+.formRow { grid-template-columns:minmax(0,1fr); min-width:0; }
+.mainContent { padding:16px; }
+}

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { useNavigate } from 'react-router-dom';
 import { api, perform, useCollection, occurrenceView, getSession, refreshScreens } from '../../../services/originalScreens';
 import { useState } from "react";
@@ -12,7 +14,6 @@ export default function Chat() {
   const ocorrencia = ocorrencias.find(o => String(o.id) === protocolo) || ocorrencias[0];
   const [mensagens] = useCollection(ocorrencia ? `/ocorrencias/${ocorrencia.id}/mensagens` : null);
   const [enviando, setEnviando] = useState(false);
-  const [menuAberto, setMenuAberto] = useState(false);
   const [mensagem, setMensagem] = useState("");
 
   async function enviar() {
@@ -22,6 +23,17 @@ export default function Chat() {
 
   return (
     <div className={styles.containerChat}>
+      <ResponsiveSidebar alwaysCollapsed className={styles.menuLateral}>
+        <nav className="sigma-citizen-navigation" aria-label="Menu do cidadão">
+          <Link to="/cidadao">Início</Link>
+          <Link to="/relatar-problema">Relatar problema</Link>
+          <Link to="/solicitar">Solicitar serviço</Link>
+          <Link to="/status">Minhas solicitações</Link>
+          <Link to="/chat">Chat com Gestão</Link>
+          <Link to="/perfil">Meu perfil</Link>
+        </nav>
+      </ResponsiveSidebar>
+
       {/* HEADER */}
       <header className={styles.headerChat}>
         <div className={styles.logoArea}>
@@ -36,44 +48,8 @@ export default function Chat() {
         <div className={styles.headerDireita}>
           <button className={styles.btnVoltar} onClick={() => navigate("/cidadao")}>Voltar</button>
 
-          <button
-            className={styles.menuIcon}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            ⋮
-          </button>
         </div>
       </header>
-
-      {/* MENU LATERAL */}
-      <div
-        className={`${styles.menuLateral} ${
-          menuAberto ? styles.menuAberto : ""
-        }`}
-      >
-        <div className={styles.topoMenu}>
-          <button
-            className={styles.btnFechar}
-            onClick={() => setMenuAberto(false)}
-          >
-            ✕
-          </button>
-        </div>
-
-        <button className={`${styles.menuItem} ${styles.menuAtivo}`}>
-          🏠 Home
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate("/relatar-problema")}>📋 Relatar</button>
-
-        <button className={styles.menuItem} onClick={() => navigate("/solicitar")}>📌 Solicitar</button>
-
-        <button className={styles.menuItem} onClick={() => navigate("/status")}>📊 Status</button>
-
-        <button className={styles.menuItem} onClick={() => navigate("/chat")}>💬 Chat com Gestão</button>
-
-        <button className={styles.menuItem} onClick={() => navigate("/perfil")}>👤 Perfil</button>
-      </div>
 
       {/* CONTEÚDO */}
       <section className={styles.chatContainer}>

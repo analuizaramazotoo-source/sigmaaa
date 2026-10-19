@@ -1,9 +1,9 @@
+import ImageAttachments from '../../../components/ImageAttachments';
 import { api, perform, getSession, categoryId, uploadFiles, refreshScreens } from '../../../services/originalScreens';
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { 
   Wrench, 
-  UploadCloud, 
   MapPin, 
   AlertCircle, 
   Send, 
@@ -13,24 +13,20 @@ import {
 } from "lucide-react";
 
 import styles from './Solicitar.module.css';
+import AddressMap from '../../../components/AddressMap';
 import TupaMap from '../../../components/TupaMap';
 import { coordinateBody } from '../../../services/mapCoordinates';
 
 export default function Solicitar() {
   const [problema, setProblema] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [foto, setFoto] = useState(null);
   const navigate = useNavigate();
   const [endereco, setEndereco] = useState('');
-  const [arquivo, setArquivo] = useState(null);
   const [salvo, setSalvo] = useState(null);
   const [enviando, setEnviando] = useState(false);
   const [localizacao, setLocalizacao] = useState(null);
+  const [images, setImages] = useState([]);
 
-  const handleFoto = (e) => {
-    const file = e.target.files[0];
-    if (file) { setFoto(file.name); setArquivo(file); }
-  };
 
   const handleEnviar = async (e) => {
     e.preventDefault(); if (enviando) return; setEnviando(true);
@@ -38,7 +34,7 @@ export default function Solicitar() {
       const record = salvo || await api('/ocorrencias', { method: 'POST', body: {
         titulo_ocorrencia: `[SERVIÇO] ${problema}`, descricao_ocorrencia: descricao,
         id_categoria: await categoryId('outro'), logradouro_ocorrencia: endereco, ...coordinateBody(localizacao)
-      }}); setSalvo(record); await uploadFiles(record.id_ocorrencia, arquivo ? [arquivo] : []);
+      }}); setSalvo(record); await uploadFiles(record.id_ocorrencia, images, file => setImages(current => current.filter(image => image !== file)));
       refreshScreens(); alert(`Solicitação salva. Protocolo: ${record.protocolo_ocorrencia}`); navigate('/status');
     }); setEnviando(false);
   };
@@ -115,8 +111,7 @@ export default function Solicitar() {
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label htmlFor="endereco">Endereço / Localização *</label>
-                    <input id="endereco" type="text" value={endereco} onChange={e => setEndereco(e.target.value)} required placeholder="Rua, número, bairro e referência" />
+                    <AddressMap address={endereco} onAddressChange={value => setEndereco(value)} label="Endereço / Localização *" selectedLocation={localizacao} onPick={setLocalizacao} height={280} showMap={false} />
                   </div>
                   <div className={styles.formGroup}>
                     <label htmlFor="descricao">Descrição Detalhada *</label>
@@ -130,18 +125,7 @@ export default function Solicitar() {
                     />
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label>Foto do Problema (Opcional)</label>
-                    <div className={styles.fileUpload}>
-                      <UploadCloud size={28} />
-                      <p>{foto ? foto : "Clique ou arraste uma foto aqui"}</p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFoto}
-                      />
-                    </div>
-                  </div>
+                  <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
 
                   <div className={styles.formActions}>
                     <button
@@ -164,8 +148,7 @@ export default function Solicitar() {
                   <MapPin size={18} />
                   <span>Localização da Ocorrência</span>
                 </div>
-
-                <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={380} />
+                <TupaMap selectedLocation={localizacao} height={380} />
               </div>
 
             </div>
@@ -174,7 +157,7 @@ export default function Solicitar() {
             <div className={styles.aviso}>
               <AlertCircle size={20} className={styles.avisoIcone} />
               <span>
-                Informe o endereço completo e marque no mapa o local da ocorrência em Tupã.
+                Digite o nome da rua e escolha uma sugestão de Tupã. O mapa será marcado automaticamente.
               </span>
             </div>
           </div>

@@ -18,6 +18,6 @@ export function coordinatesOf(value) {
 }
 export function coordinateBody(value) {
   const coordinates = coordinatesInTupa(value);
-  if (!coordinates) throw new Error('Marque o local da ocorrência dentro do município de Tupã/SP.');
+  if (!coordinates) throw new Error('Escolha uma rua nas sugestões de endereço em Tupã/SP antes de enviar.');
   return { latitude_ocorrencia: coordinates[0], longitude_ocorrencia: coordinates[1] };
 }

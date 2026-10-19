@@ -47,11 +47,12 @@ export async function categoryId(key) {
   if (!category) throw new Error('Cadastre uma categoria correspondente no back-end.');
   return category.id_categoria;
 }
-export async function uploadFiles(occurrenceId, files) {
+export async function uploadFiles(occurrenceId, files, onUploaded = () => {}) {
   for (const file of Array.from(files || [])) {
     if (file.size > 5 * 1024 * 1024 || !['image/png', 'image/jpeg', 'application/pdf'].includes(file.type)) throw new Error('Anexe JPG, PNG ou PDF até 5 MB.');
     const content = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
     await api(`/ocorrencias/${occurrenceId}/anexos`, { method: 'POST', body: { nome_anexo: file.name, conteudo: content } });
+    onUploaded(file);
   }
 }
 export async function saveProfile(body) {

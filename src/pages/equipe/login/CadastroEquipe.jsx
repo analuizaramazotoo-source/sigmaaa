@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform } from '../../../services/originalScreens';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -65,7 +66,7 @@ export default function CadastroEquipe() {
   return (
     <div className={styles.appContainer}>
       {/* SIDEBAR INSTITUCIONAL */}
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Árvore" className={styles.brandImg} />
@@ -87,7 +88,7 @@ export default function CadastroEquipe() {
         <div className={styles.sidebarFooter}>
           <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>

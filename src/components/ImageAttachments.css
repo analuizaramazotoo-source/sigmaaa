@@ -1,0 +1,18 @@
+.sigma-image-attachments { padding:16px; margin:16px 0; border:1px dashed #059669; border-radius:12px; background:#f0fdf4; width:100%; min-width:0; }
+.sigma-image-attachments > label { display:flex; gap:8px; align-items:center; color:#065f46; font-size:14px; font-weight:600; margin-bottom:8px; }
+.sigma-image-attachments > p { font-size:12px; color:#475569; line-height:1.5; margin:8px 0; }
+.sigma-image-attachments input[type=file] { width:100%; max-width:100%; min-width:0; padding:8px 0; color:#064e3b; }
+.sigma-image-attachments input::file-selector-button { padding:10px; border:1px solid #a7f3d0; border-radius:8px; background:#fff; color:#065f46; cursor:pointer; margin-right:8px; }
+ .sigma-image-attachments ul { display:flex; flex-wrap:wrap; gap:10px; list-style:none; margin:12px 0 0; padding:0; }
+.sigma-image-attachments li { display:grid; grid-template-columns:72px minmax(0,1fr); align-items:center; gap:6px 10px; width:min(100%,280px); min-width:0; padding:8px; border:1px solid #d1fae5; border-radius:8px; background:#fff; }
+.sigma-image-attachments .sigma-image-thumb { grid-row:1 / span 2; width:72px; height:72px; min-height:0; padding:0; border:1px solid #d1fae5; border-radius:6px; overflow:hidden; cursor:zoom-in; background:#fff; }
+.sigma-image-thumb img { display:block; width:72px; max-width:72px; height:72px; object-fit:cover; }
+.sigma-image-attachments span { overflow-wrap:anywhere; font-size:12px; color:#475569; }
+.sigma-image-remove { display:inline-flex; align-items:center; justify-content:center; gap:6px; justify-self:start; border:1px solid #fecaca; border-radius:6px; color:#b91c1c; background:#fff; padding:6px 8px; cursor:pointer; font-size:12px; }
+.sigma-photo-dialog { margin:auto; padding:16px; width:min(900px,calc(100vw - 32px)); max-height:calc(100dvh - 32px); border:0; border-radius:12px; background:white; color:#064e3b; box-shadow:0 20px 80px #0008; }
+.sigma-photo-dialog::backdrop { background:#021b16cc; }
+.sigma-photo-dialog-content header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:12px; }
+.sigma-photo-dialog-content strong { overflow-wrap:anywhere; min-width:0; font-size:14px; }
+.sigma-photo-dialog button { display:inline-flex; flex-shrink:0; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid #a7f3d0; border-radius:8px; background:#f0fdf4; color:#065f46; cursor:pointer; }
+.sigma-photo-dialog img { display:block; width:auto; max-width:100%; height:auto; max-height:75dvh; object-fit:contain; margin:auto; }
+.sigma-image-attachments .sigma-image-error { color:#b91c1c; }

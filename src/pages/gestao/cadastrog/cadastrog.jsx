@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform } from '../../../services/originalScreens';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +66,7 @@ export default function Cadastrog() {
 
   return (
     <div className={styles.appContainer}>
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Árvore" className={styles.brandImg} />
@@ -85,7 +86,7 @@ export default function Cadastrog() {
         <div className={styles.sidebarFooterLogo}>
           <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       <div className={styles.mainWrapper}>
         <header className={styles.topHeader}>

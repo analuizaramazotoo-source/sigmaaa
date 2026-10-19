@@ -346,3 +346,21 @@
     display: none;
   }
 }
+@media (max-width:1024px) {
+.appContainer { flex-direction:column; }
+.mainWrapper { margin-left:0; min-width:0; width:100%; }
+.mainContent { margin-left:0; min-width:0; width:100%; }
+}
+
+@media (max-width:640px) {
+.appContainer { width:100%; min-width:0; }
+.mainWrapper { width:100%; min-width:0; margin-left:0; }
+.topHeader { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.headerRight { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.cardHeader { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.mainContent { min-width:0; max-width:100%; }
+.container { min-width:0; max-width:100%; }
+.card { min-width:0; max-width:100%; }
+.mainContent { padding:16px; }
+.container { padding:16px; }
+}

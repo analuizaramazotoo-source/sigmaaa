@@ -1,4 +1,5 @@
-import { api, perform, getSession, categoryId, refreshScreens } from '../../../services/originalScreens';
+import ImageAttachments from '../../../components/ImageAttachments';
+import { api, perform, getSession, categoryId, uploadFiles, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
@@ -13,14 +14,16 @@ import {
 } from 'lucide-react';
 
 import styles from './denunciaurgente.module.css';
-import TupaMap from '../../../components/TupaMap';
+import AddressMap from '../../../components/AddressMap';
 import { coordinateBody } from '../../../services/mapCoordinates';
 
 export default function DenunciaUrgente() {
   const navigate = useNavigate();
   const [enviado, setEnviado] = useState(false);
+  const [salvo, setSalvo] = useState(null);
   const [enviando, setEnviando] = useState(false);
   const [localizacao, setLocalizacao] = useState(null);
+  const [images, setImages] = useState([]);
   const [protocolo, setProtocolo] = useState('');
   const [formData, setFormData] = useState({
     tipoDenuncia: '',
@@ -41,16 +44,16 @@ export default function DenunciaUrgente() {
   const handleSubmit = async (e) => {
     e.preventDefault(); if (enviando) return; setEnviando(true);
     await perform(async () => {
-      const result = await api('/ocorrencias', { method: 'POST', body: {
+      const result = salvo || await api('/ocorrencias', { method: 'POST', body: {
         titulo_ocorrencia: `[URGENTE] ${formData.tipoDenuncia.replaceAll('_', ' ')}`,
         id_categoria: await categoryId(formData.tipoDenuncia), logradouro_ocorrencia: formData.endereco,
         descricao_ocorrencia: `${formData.detalhes}\nReferência: ${formData.referencia}\nRisco imediato à vida/saúde: ${formData.riscoImediato}`, ...coordinateBody(localizacao)
-      }}); setProtocolo(result.protocolo_ocorrencia); refreshScreens(); setEnviado(true);
+      }}); setSalvo(result); await uploadFiles(result.id_ocorrencia, images, file => setImages(current => current.filter(image => image !== file))); setProtocolo(result.protocolo_ocorrencia); refreshScreens(); setEnviado(true);
     }); setEnviando(false);
   };
 
   const handleNovaDenuncia = () => {
-    setLocalizacao(null);
+    setLocalizacao(null); setImages([]); setSalvo(null);
     setFormData({
       tipoDenuncia: '',
       endereco: '',
@@ -62,10 +65,10 @@ export default function DenunciaUrgente() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', minHeight: '100vh', backgroundColor: '#f0fdf4', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '100vh', backgroundColor: '#f0fdf4', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       
       {/* CABEÇALHO SUPERIOR */}
-      <header style={{ width: '100%', height: '80px', backgroundColor: '#ffffff', padding: '0 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', boxSizing: 'border-box' }}>
+      <header className={styles.topHeader} style={{ width: '100%', height: '80px', backgroundColor: '#ffffff', padding: '0 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', boxSizing: 'border-box' }}>
         
         {/* LOGO E TÍTULO À ESQUERDA */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -79,7 +82,7 @@ export default function DenunciaUrgente() {
         </div>
 
         {/* PERFIL E BOTÃO VOLTAR À DIREITA */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className={styles.headerActions} style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', minWidth: 0 }}>
           
           {/* BOX DO PERFIL */}
           <Link to="/perfil" style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#f0fdf4', border: '1px solid #d1fae5', padding: '6px 16px', borderRadius: '24px', textDecoration: 'none' }}>
@@ -152,15 +155,7 @@ export default function DenunciaUrgente() {
 
                   <div className={styles.fullWidth}>
                     <div className={styles.formGroup}>
-                      <label htmlFor="endereco">Endereço Exato / Ponto de Localização *</label>
-                      <input 
-                        type="text" 
-                        id="endereco" 
-                        placeholder="Rua, Número, Bairro ou Coordenadas" 
-                        value={formData.endereco}
-                        onChange={handleChange}
-                        required 
-                      />
+                      <AddressMap address={formData.endereco} onAddressChange={value => setFormData(prev => ({ ...prev, endereco: value }))} label="Endereço Exato / Ponto de Localização *" selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
                     </div>
                   </div>
 
@@ -203,8 +198,7 @@ export default function DenunciaUrgente() {
                   </div>
 
                 </div>
-
-                <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
+                <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
                 {/* BOTÃO DE AÇÃO APENAS ENVIAR */}
                 <div className={styles.actions}>
                   <button type="submit" disabled={enviando} className={styles.btnUrgent}>

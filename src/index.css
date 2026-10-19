@@ -10,3 +10,20 @@ body,
 body {
   display: block;
 }
+
+img { max-width:100%; }
+input,select,textarea { min-width:0; }
+button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
+@media (max-width:1024px) {
+  [data-responsive-shell] { flex-direction:column !important; }
+}
+@media (max-width:640px) {
+  [data-responsive-grid] { grid-template-columns:minmax(0,1fr) !important; }
+  [data-responsive-grid] > * { min-width:0; grid-column:auto !important; }
+  input,select,textarea { font-size:16px !important; }
+  button { min-height:40px; }
+  .sigma-map .leaflet-control-zoom a { min-height:30px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; }
+}

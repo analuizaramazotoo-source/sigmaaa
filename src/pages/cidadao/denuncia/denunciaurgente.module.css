@@ -237,3 +237,21 @@
     grid-column: span 1;
   }
 }
+@media (max-width:1024px) {
+.mainContent { margin-left:0; min-width:0; width:100%; }
+}
+
+@media (max-width:640px) {
+.topHeader { flex-wrap:wrap; height:auto !important; padding:16px !important; gap:12px; }
+.headerActions { width:100%; max-width:100%; }
+.headerActions > a { max-width:100%; min-width:0; }
+.headerActions strong { overflow-wrap:anywhere; }
+.cardHeader { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.actions { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.mainContent { min-width:0; max-width:100%; }
+.container { min-width:0; max-width:100%; }
+.card { min-width:0; max-width:100%; }
+.grid { grid-template-columns:minmax(0,1fr); min-width:0; }
+.mainContent { padding:16px; }
+.container { padding:16px; }
+}

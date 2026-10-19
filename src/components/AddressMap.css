@@ -1,0 +1,13 @@
+.sigma-address-map { width:100%; min-width:0; }
+.sigma-address-field { position:relative; width:100%; }
+.sigma-address-field > label { display:block; margin-bottom:8px; font-size:14px; font-weight:600; color:#065f46; }
+.sigma-address-field > input { width:100%; min-width:0; box-sizing:border-box; padding:12px 14px; border:1px solid #a7f3d0; border-radius:8px; color:#064e3b; background:#fff; font:inherit; }
+.sigma-address-field > input:focus { outline:2px solid #059669; outline-offset:1px; }
+.sigma-address-options { position:absolute; top:100%; left:0; right:0; max-height:280px; overflow-y:auto; overscroll-behavior:contain; background:white; border:1px solid #a7f3d0; border-radius:8px; box-shadow:0 8px 20px #064e3b24; z-index:30; }
+.sigma-address-options button { display:flex; flex-direction:column; text-align:left; gap:5px; padding:12px 14px; width:100%; border:0; border-bottom:1px solid #e2e8f0; background:#fff; color:#064e3b; cursor:pointer; font:inherit; font-size:14px; overflow-wrap:anywhere; }
+.sigma-address-options button:hover,.sigma-address-options button[aria-selected=true] { background:#ecfdf5; }
+.sigma-address-options span { color:#64748b; font-size:12px; }
+.sigma-address-status { color:#065f46; font-size:13px; line-height:1.5; margin:10px 0; }
+.sigma-address-retry { padding:8px 12px; border:1px solid #059669; border-radius:8px; color:#065f46; background:white; margin-bottom:12px; cursor:pointer; }
+.sigma-address-credit { display:block; color:#475569; font-size:11px; margin:8px 0; line-height:1.5; }
+.sigma-address-credit a { color:#047857; }

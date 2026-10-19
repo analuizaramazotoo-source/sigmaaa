@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { Link } from 'react-router-dom';
 import { perform, saveProfile } from '../../../services/originalScreens';
 import { useState } from "react";
@@ -6,7 +7,6 @@ import styles from './alterar.module.css';
 import arvoreLogo from "../../../assets/arvore.png";
 
 export default function Alterar() {
-  const [menuAberto, setMenuAberto] = useState(false);
   const [senhaAtual, setSenhaAtual] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
@@ -28,6 +28,17 @@ export default function Alterar() {
 
   return (
     <div className={styles.containerHome}>
+      <ResponsiveSidebar alwaysCollapsed className={styles.menuLateral}>
+        <nav className="sigma-citizen-navigation" aria-label="Menu do cidadão">
+          <Link to="/cidadao">Início</Link>
+          <Link to="/relatar-problema">Relatar problema</Link>
+          <Link to="/solicitar">Solicitar serviço</Link>
+          <Link to="/status">Minhas solicitações</Link>
+          <Link to="/chat">Chat com Gestão</Link>
+          <Link to="/perfil">Meu perfil</Link>
+        </nav>
+      </ResponsiveSidebar>
+
       {/* HEADER */}
       <header className={styles.headerHome}>
         <div className={styles.logoArea}>
@@ -42,79 +53,10 @@ export default function Alterar() {
           <button className={styles.btnVoltar} onClick={() => window.history.back()}>
             Voltar
           </button>
-          <button
-            className={styles.menuIcon}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            ⋮
-          </button>
         </div>
       </header>
 
       {/* OVERLAY */}
-      {menuAberto && (
-        <div
-          className={styles.overlay}
-          onClick={() => setMenuAberto(false)}
-        />
-      )}
-
-      {/* MENU LATERAL */}
-      <div
-        className={`${styles.menuLateral} ${
-          menuAberto ? styles.menuAberto : ""
-        }`}
-      >
-        <div className={styles.topoMenu}>
-          <button
-            className={styles.btnFechar}
-            onClick={() => setMenuAberto(false)}
-          >
-            ✕
-          </button>
-        </div>
-
-         <Link to="/">
-          <button className={`${styles.menuItem} ${styles.menuHome}`}>
-            🏠 Home
-          </button>
-        </Link>
-
-        <Link to="/relatar-problema">
-          <button className={styles.menuItem}>
-            📄 Relatar problema
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            📋 Solicitar serviço
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            📊 Status
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            💬 Chat com Gestão
-          </button>
-        </Link>
-
-        <Link to="/">
-          <button className={styles.menuItem}>
-            👤 Perfil
-          </button>
-        </Link>
-
-        <div className={styles.menuFooter}>
-          <img src={arvoreLogo} alt="logo" />
-          <h3>SECRETARIA DO MEIO AMBIENTE</h3>
-        </div>
-      </div>
 
       {/* CONTEÚDO */}
       <main className={styles.conteudo}>

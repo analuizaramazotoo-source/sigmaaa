@@ -537,3 +537,27 @@
   .contentGrid { grid-template-columns: 1fr; }
   .radioGroup, .formRowTwoCols { grid-template-columns: 1fr; }
 }
+@media (max-width:1024px) {
+.appContainer { flex-direction:column; }
+.mainWrapper { margin-left:0; min-width:0; width:100%; }
+.mainContent { margin-left:0; min-width:0; width:100%; }
+}
+
+@media (max-width:640px) {
+.uploadBox { flex-wrap:wrap; min-width:0; }
+.uploadBox > div { min-width:0; width:100%; overflow-wrap:anywhere; }
+.uploadBox input[type="file"] { width:100%; max-width:100%; }
+.radioCard { min-width:0; white-space:normal; }
+.radioCard > div { min-width:0; overflow-wrap:anywhere; }
+.radioCard input[type="radio"] { width:auto; flex-shrink:0; }
+.formGroup { min-width:0; }
+.formGroup :is(input,select,textarea) { max-width:100%; }
+.appContainer { width:100%; min-width:0; }
+.mainWrapper { width:100%; min-width:0; margin-left:0; }
+.header { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.headerRight { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.mainContent { min-width:0; max-width:100%; }
+.contentGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
+.formRowTwoCols { grid-template-columns:minmax(0,1fr); min-width:0; }
+.mainContent { padding:16px; }
+}

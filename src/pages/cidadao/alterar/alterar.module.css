@@ -372,3 +372,9 @@
     display: none;
   }
 }
+
+@media (max-width:640px) {
+.headerHome { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.headerRight { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
+.card { min-width:0; max-width:100%; }
+}

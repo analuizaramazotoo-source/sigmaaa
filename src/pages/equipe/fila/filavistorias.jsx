@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, useCollection, occurrenceView, canonicalStatus, refreshScreens } from '../../../services/originalScreens';
 import { useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -61,7 +62,7 @@ export default function FilaVistorias() {
   return (
     <div className={styles.appContainer}>
       {/* SIDEBAR PADRÃO DA EQUIPE */}
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
@@ -89,7 +90,7 @@ export default function FilaVistorias() {
         <div className={styles.sidebarFooter}>
           <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>

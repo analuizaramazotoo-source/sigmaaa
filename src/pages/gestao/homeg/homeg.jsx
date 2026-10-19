@@ -1,4 +1,7 @@
-import { api, perform, useCollection, occurrenceView, categoryId, canonicalStatus, refreshScreens, getSession, logout } from '../../../services/originalScreens';
+import ImageAttachments from '../../../components/ImageAttachments';
+import AddressMap from '../../../components/AddressMap';
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
+import { api, perform, useCollection, occurrenceView, categoryId, canonicalStatus, refreshScreens, getSession, logout, uploadFiles } from '../../../services/originalScreens';
 import { useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './homeg.module.css';
@@ -64,6 +67,9 @@ export default function Homeg() {
   const [fila] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), icon: /queimada/i.test(o.nome_categoria || '') ? Flame : /hídric/i.test(o.nome_categoria || '') ? Droplet : Trash2 }));
   const [activeFilter, setActiveFilter] = useState('todos');
   const [localizacao, setLocalizacao] = useState(null);
+  const [images, setImages] = useState([]);
+  const [salvo, setSalvo] = useState(null);
+  const [enviando, setEnviando] = useState(false);
 
   // Formulário
   const [formData, setFormData] = useState({
@@ -73,11 +79,12 @@ export default function Homeg() {
   });
 
   const handleCreateRecord = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); if (enviando) return; setEnviando(true);
     await perform(async () => {
-      await api('/ocorrencias', { method: 'POST', body: { titulo_ocorrencia: formData.title, logradouro_ocorrencia: formData.address, id_categoria: await categoryId(formData.category), ...coordinateBody(localizacao) }});
-      refreshScreens(); setFormData({ title: '', address: '', category: 'descarte' }); setLocalizacao(null); setModalNewRecord(false);
-    });
+      const record = salvo || await api('/ocorrencias', { method: 'POST', body: { titulo_ocorrencia: formData.title, logradouro_ocorrencia: formData.address, id_categoria: await categoryId(formData.category), ...coordinateBody(localizacao) }});
+      setSalvo(record); await uploadFiles(record.id_ocorrencia, images, file => setImages(current => current.filter(image => image !== file)));
+      setSalvo(null); refreshScreens(); setFormData({ title: '', address: '', category: 'descarte' }); setLocalizacao(null); setModalNewRecord(false);
+    }); setEnviando(false);
   };
 
   const handleUpdateStatus = async (newStatus) => {
@@ -97,10 +104,10 @@ export default function Homeg() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div style={{ display: 'flex', width: '100vw', minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
+    <div data-responsive-shell style={{ display: 'flex', width: '100%', minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
       
       {/* SIDEBAR */}
-      <aside 
+      <ResponsiveSidebar
         style={{ 
           width: '260px', 
           minWidth: '260px', 
@@ -251,7 +258,7 @@ export default function Homeg() {
           <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 'bold' }}>Prefeitura Municipal</div>
           <div style={{ fontSize: '10px', color: '#94a3b8' }}>Secretaria do Meio Ambiente</div>
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
@@ -555,16 +562,7 @@ export default function Homeg() {
                 />
               </label>
 
-              <label>
-                Endereço / Localização
-                <input 
-                  type="text" 
-                  placeholder="Ex: Av. Principal, nº 100 - Bairro Verde"
-                  value={formData.address}
-                  onChange={(e) => setFormData({...formData, address: e.target.value})}
-                  required
-                />
-              </label>
+              <AddressMap address={formData.address} onAddressChange={value => setFormData(prev => ({ ...prev, address: value }))} label="Endereço / Localização" selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
 
               <label>
                 Categoria
@@ -578,11 +576,10 @@ export default function Homeg() {
                   <option value="som">Poluição Sonora</option>
                 </select>
               </label>
-
-              <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={240} />
+              <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
               <div className={styles.modalActions}>
-                <button type="button" onClick={() => setModalNewRecord(false)} className={styles.btnCancel}>Cancelar</button>
-                <button type="submit" className={styles.btnPrimaryModal}>Salvar ocorrência</button>
+                <button type="button" disabled={enviando} onClick={() => setModalNewRecord(false)} className={styles.btnCancel}>Cancelar</button>
+                <button type="submit" disabled={enviando} className={styles.btnPrimaryModal}>{enviando ? 'Enviando...' : 'Salvar ocorrência'}</button>
               </div>
             </form>
           </div>

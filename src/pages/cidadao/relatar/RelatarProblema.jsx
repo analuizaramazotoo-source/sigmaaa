@@ -1,3 +1,4 @@
+import ImageAttachments from '../../../components/ImageAttachments';
 import { api, perform, getSession, useCollection, uploadFiles, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,7 +11,7 @@ import {
 } from 'lucide-react';
 
 import styles from './RelatarProblema.module.css';
-import TupaMap from '../../../components/TupaMap';
+import AddressMap from '../../../components/AddressMap';
 import { coordinateBody } from '../../../services/mapCoordinates';
 
 export default function RelatarProblema() {
@@ -19,14 +20,14 @@ export default function RelatarProblema() {
   const [salvo, setSalvo] = useState(null);
   const [enviando, setEnviando] = useState(false);
   const [localizacao, setLocalizacao] = useState(null);
+  const [images, setImages] = useState([]);
 
   const [formData, setFormData] = useState({
     titulo: '',
     categoria: '',
     data: '',
     endereco: '',
-    descricao: '',
-    arquivos: null
+    descricao: ''
   });
 
   const handleChange = (e) => {
@@ -45,7 +46,7 @@ export default function RelatarProblema() {
         data_ocorrencia: formData.data, logradouro_ocorrencia: formData.endereco,
         descricao_ocorrencia: formData.descricao, ...coordinateBody(localizacao)
       }});
-      setSalvo(record); await uploadFiles(record.id_ocorrencia, formData.arquivos);
+      setSalvo(record); await uploadFiles(record.id_ocorrencia, images, file => setImages(current => current.filter(image => image !== file)));
       refreshScreens(); alert(`Relato salvo. Protocolo: ${record.protocolo_ocorrencia}`); navigate('/status');
     }); setEnviando(false);
   };
@@ -154,15 +155,7 @@ export default function RelatarProblema() {
 
                   {/* Endereço / Localização */}
                   <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                    <label htmlFor="endereco">Endereço / Localização do Ocorrido *</label>
-                    <input 
-                      type="text" 
-                      id="endereco" 
-                      placeholder="Rua, Número, Bairro e Ponto de Referência" 
-                      value={formData.endereco}
-                      onChange={handleChange}
-                      required 
-                    />
+                    <AddressMap address={formData.endereco} onAddressChange={value => setFormData(prev => ({ ...prev, endereco: value }))} label="Endereço / Localização do Ocorrido *" selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
                   </div>
 
                   {/* Descrição Detalhada */}
@@ -178,8 +171,7 @@ export default function RelatarProblema() {
                   </div>
 
                 </div>
-
-                <TupaMap selectedLocation={localizacao} onPick={setLocalizacao} height={280} />
+                <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
                 {/* BOTÕES DE AÇÃO */}
                 <div className={styles.actions}>
                   <button 

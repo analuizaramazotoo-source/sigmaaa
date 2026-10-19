@@ -1,3 +1,4 @@
+import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { downloadReport } from '../../../services/downloadDocument';
 import { useCollection } from '../../../services/originalScreens';
 import { useState } from 'react';
@@ -68,7 +69,7 @@ export default function Leis() {
   return (
     <div className={styles.appContainer}>
       {/* SIDEBAR PADRÃO DA EQUIPE */}
-      <aside className={styles.sidebar}>
+      <ResponsiveSidebar className={styles.sidebar}>
         <div className={styles.brandHeader} onClick={() => navigate('/homee')} style={{ cursor: 'pointer' }}>
           <div className={styles.logoIcon}>
             <img src={arvoreLogo} alt="Logo Meio Ambiente" className={styles.brandImg} />
@@ -96,7 +97,7 @@ export default function Leis() {
         <div className={styles.sidebarFooter}>
           <img src={prefeituraLogo} alt="Logo Prefeitura" className={styles.footerLogoImg} />
         </div>
-      </aside>
+      </ResponsiveSidebar>
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>

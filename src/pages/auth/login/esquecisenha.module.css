@@ -223,3 +223,11 @@
     padding: 1.5rem;
   }
 }
+@media (max-width:1024px) {
+.appContainer { flex-direction:column; }
+}
+
+@media (max-width:640px) {
+.appContainer { width:100%; min-width:0; }
+.authCard { min-width:0; max-width:100%; }
+}
