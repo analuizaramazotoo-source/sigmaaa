@@ -1,5 +1,6 @@
 import ImageAttachments from '../../../components/ImageAttachments';
 import AddressMap from '../../../components/AddressMap';
+import OccurrenceLocationEditor from '../../../components/OccurrenceLocationEditor';
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, useCollection, occurrenceView, categoryId, canonicalStatus, refreshScreens, getSession, logout, uploadFiles } from '../../../services/originalScreens';
 import { useState} from 'react';
@@ -504,6 +505,7 @@ export default function Homeg() {
             <div className={styles.statusChangeBody}>
               <strong>{selectedOcorrencia.title || selectedOcorrencia.titulo}</strong>
               <p>{selectedOcorrencia.address || selectedOcorrencia.descricao}</p>
+              <OccurrenceLocationEditor key={selectedOcorrencia.id} occurrence={selectedOcorrencia} onSaved={row => setSelectedOcorrencia(current => occurrenceView({ ...current, ...row }))} />
               
               <div className={styles.statusOptionsList}>
                 <button 

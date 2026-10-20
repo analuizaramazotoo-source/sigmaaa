@@ -1,0 +1,17 @@
+.sigma-location-editor {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+}
+.sigma-location-editor p { margin: 8px 0; }
+.sigma-location-editor button {
+  border: 1px solid #059669;
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: #065f46;
+  background: white;
+  cursor: pointer;
+}
+.sigma-location-editor button:disabled { opacity: .55; cursor: default; }
