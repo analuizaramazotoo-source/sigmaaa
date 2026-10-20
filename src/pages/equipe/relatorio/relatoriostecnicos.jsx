@@ -1,8 +1,8 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { downloadReport } from '../../../services/downloadDocument';
 import { api, perform, useCollection, occurrenceView, refreshScreens, uploadFiles } from '../../../services/originalScreens';
-import { useState,  useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import styles from './relatoriostecnicos.module.css';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
@@ -29,13 +29,17 @@ import {
 export default function RelatoriosTecnicos() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const [params] = useSearchParams();
+  const previewUrls = useRef(new Set());
+  const [enviando, setEnviando] = useState(false);
+  useEffect(() => { const urls = previewUrls.current; return () => { for (const url of urls) URL.revokeObjectURL(url); }; }, []);
 
   // ESTADOS DO FORMULÁRIO
-  const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState('');
-  const [tituloRelatorio, setTituloRelatorio] = useState('');
+  const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState(() => params.get('ocorrencia') || '');
+  const [tituloRelatorio, setTituloRelatorio] = useState(null);
   const [tipoRelatorio, setTipoRelatorio] = useState('Vistoria de Campo');
   const [observacoesTecnicas, setObservacoesTecnicas] = useState('');
-  const [parecerTecnico, setParecerTecnico] = useState('Procedente - Requer Medidas Corretivas');
+  const [parecerTecnico, setParecerTecnico] = useState('');
   const [mensagemSucesso, setMensagemSucesso] = useState(false);
 
   // ESTADO DE ANEXOS / FOTOS
@@ -44,6 +48,8 @@ export default function RelatoriosTecnicos() {
   // OCORRÊNCIAS DA FILA (LOCALSTORAGE)
   const [ocorrenciasDisponiveis] = useCollection('/ocorrencias', occurrenceView);
   const [relatorioSalvo, setRelatorioSalvo] = useState(null);
+  const ocorrenciaAtual = ocorrenciasDisponiveis.find(o => String(o.id) === ocorrenciaVinculada);
+  const tituloAtual = tituloRelatorio ?? (ocorrenciaAtual ? `Relatório Técnico: ${ocorrenciaAtual.titulo}` : '');
 
   // HISTÓRICO DE RELATÓRIOS ENVIADOS
   const [relatoriosEnviados] = useCollection('/relatorios', item => ({ ...item, id: `REL-${item.id_relatorio}`, titulo: item.titulo, data: new Date(item.data_criacao).toLocaleDateString('pt-BR'), parecer: item.parecer, status: 'Enviado', corStatus: 'verde' }));
@@ -55,7 +61,7 @@ export default function RelatoriosTecnicos() {
     const item = ocorrenciasDisponiveis.find(o => String(o.id) === String(id));
     if (item) {
       setTituloRelatorio(`Relatório Técnico: ${item.titulo || item.title}`);
-      setObservacoesTecnicas(`Vistoria realizada no endereço ${item.descricao || item.address}. Constatada a situação no local e aplicadas as medidas iniciais.`);
+      setObservacoesTecnicas('');
     }
   };
 
@@ -71,14 +77,17 @@ export default function RelatoriosTecnicos() {
       return isLt10M && isValidType;
     });
 
-    const arquivosComPreview = novosArquivos.map(file => ({
+    const arquivosComPreview = novosArquivos.map(file => {
+      const preview = file.type.startsWith('image/') ? URL.createObjectURL(file) : null;
+      if (preview) previewUrls.current.add(preview);
+      return {
       id: Math.random().toString(36).substr(2, 9),
       file,
       nome: file.name,
       tamanho: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+      preview,
       isPdf: file.type === 'application/pdf'
-    }));
+    }; });
 
     setArquivosAnexados(prev => [...prev, ...arquivosComPreview]);
   };
@@ -90,6 +99,8 @@ export default function RelatoriosTecnicos() {
   };
 
   const handleRemoveAnexo = (id) => {
+    const preview = arquivosAnexados.find(item => item.id === id)?.preview;
+    if (preview) { URL.revokeObjectURL(preview); previewUrls.current.delete(preview); }
     setArquivosAnexados(prev => prev.filter(item => item.id !== id));
   };
 
@@ -103,13 +114,17 @@ export default function RelatoriosTecnicos() {
 
   // ENVIAR RELATÓRIO
   const handleEnviarRelatorio = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); if (enviando) return; setEnviando(true);
     await perform(async () => {
-      const record = relatorioSalvo || await api('/relatorios', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), titulo: tituloRelatorio || 'Relatório de Vistoria Operacional', tipo: tipoRelatorio, observacoes: observacoesTecnicas, parecer: parecerTecnico }});
-      setRelatorioSalvo(record); await uploadFiles(record.id_ocorrencia, arquivosAnexados.map(a => a.file));
+      const record = relatorioSalvo || await api('/relatorios', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), titulo: tituloAtual, tipo: tipoRelatorio, observacoes: observacoesTecnicas, parecer: parecerTecnico }});
+      setRelatorioSalvo(record); await uploadFiles(record.id_ocorrencia, arquivosAnexados.map(a => a.file), file => {
+        const preview = arquivosAnexados.find(item => item.file === file)?.preview;
+        if (preview) { URL.revokeObjectURL(preview); previewUrls.current.delete(preview); }
+        setArquivosAnexados(current => current.filter(item => item.file !== file));
+      });
       refreshScreens(); setMensagemSucesso(true); setTituloRelatorio(''); setObservacoesTecnicas(''); setOcorrenciaVinculada(''); setArquivosAnexados([]); setRelatorioSalvo(null);
       setTimeout(() => setMensagemSucesso(false), 3000);
-    });
+    }); setEnviando(false);
   };
 
   // MENU LATERAL PADRONIZADO DA EQUIPE
@@ -214,7 +229,7 @@ export default function RelatoriosTecnicos() {
                 {/* VINCULAÇÃO DE OCORRÊNCIA */}
                 <div className={styles.formGroup}>
                   <label>Vistoria / Ocorrência Correspondente</label>
-                  <select value={ocorrenciaVinculada} onChange={handleSelecionarOcorrencia} required>
+                  <select aria-label="Vistoria / Ocorrência Correspondente" disabled={enviando || Boolean(relatorioSalvo)} value={ocorrenciaVinculada} onChange={handleSelecionarOcorrencia} required>
                     <option value="">-- Selecione uma Ocorrência Ativa --</option>
                     {ocorrenciasDisponiveis.map(o => (
                       <option key={o.id} value={o.id}>
@@ -231,7 +246,8 @@ export default function RelatoriosTecnicos() {
                     <input 
                       type="text" 
                       placeholder="Ex: Vistoria de Corte Irregular em Área Urbana"
-                      value={tituloRelatorio}
+                      aria-label="Título do Relatório"
+                      value={tituloAtual}
                       onChange={(e) => setTituloRelatorio(e.target.value)}
                       required
                     />
@@ -251,7 +267,8 @@ export default function RelatoriosTecnicos() {
                 {/* PARECER TÉCNICO DA EQUIPE */}
                 <div className={styles.formGroup}>
                   <label>Parecer Conclusivo do Fiscal</label>
-                  <select value={parecerTecnico} onChange={(e) => setParecerTecnico(e.target.value)}>
+                  <select aria-label="Parecer Conclusivo do Fiscal" required value={parecerTecnico} onChange={(e) => setParecerTecnico(e.target.value)}>
+                    <option value="" disabled>Selecione o parecer da vistoria</option>
                     <option value="Procedente - Requer Medidas Corretivas">Procedente - Requer Medidas Corretivas</option>
                     <option value="Procedente - Notificação/Auto Emitido">Procedente - Notificação/Auto Emitido</option>
                     <option value="Improcedente - Denúncia Não Confirmada">Improcedente - Denúncia Não Confirmada</option>
@@ -265,6 +282,7 @@ export default function RelatoriosTecnicos() {
                   <textarea 
                     rows={4}
                     placeholder="Descreva detalhadamente o estado do local, equipamentos utilizados, condições ambientais e depoimentos..."
+                    aria-label="Constatações de Campo"
                     value={observacoesTecnicas}
                     onChange={(e) => setObservacoesTecnicas(e.target.value)}
                     required
@@ -357,7 +375,7 @@ export default function RelatoriosTecnicos() {
 
                 {/* BOTÃO DE AÇÃO */}
                 <div className={styles.formActions}>
-                  <button type="submit" className={styles.btnEnviar}>
+                  <button type="submit" disabled={enviando} className={styles.btnEnviar}>
                     <Send size={16} /> Enviar Relatório à Gestão
                   </button>
                 </div>

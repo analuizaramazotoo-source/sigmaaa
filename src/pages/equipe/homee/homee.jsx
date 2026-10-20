@@ -254,7 +254,7 @@ export default function HomeE() {
             </div>
             <div className={styles.modalActions}>
               <button type="button" onClick={() => setSelectedVistoria(null)} className={styles.btnCancel}>Fechar</button>
-              <button type="button" onClick={() => { setSelectedVistoria(null); navigate('/autoe'); }} className={styles.btnPrimaryModal}>Emitir Auto/Notificação</button>
+              <button type="button" onClick={() => navigate(`/autoe?ocorrencia=${selectedVistoria.id}`)} className={styles.btnPrimaryModal}>Emitir Auto/Notificação</button>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './relatoriosTecnicos.module.css';
 import { 
-  ArrowLeft, BarChart2, Download, Calendar, Filter, FileSpreadsheet, FileText,
+  ArrowLeft, BarChart2, Download, Calendar, Filter, FileText,
   Shield, Map as MapIcon, ClipboardList, HelpCircle, Home as HomeIcon, CheckCircle2
 } from 'lucide-react';
 
@@ -14,9 +14,8 @@ export default function RelatoriosTecnicos() {
   const [relatorios] = useCollection('/relatorios');
   const location = useLocation();
 
-  const [periodoSelect, setPeriodoSelect] = useState('mensal');
-  const [periodoAtivo, setPeriodoAtivo] = useState('mensal');
-  const [filtroTipo, setFiltroTipo] = useState('todos');
+  const [periodoSelect, setPeriodoSelect] = useState('todos');
+  const [periodoAtivo, setPeriodoAtivo] = useState('todos');
   const [notificationMsg, setNotificationMsg] = useState('');
 
   const isActive = (path) => location.pathname === path;
@@ -28,15 +27,15 @@ export default function RelatoriosTecnicos() {
     setTimeout(() => setNotificationMsg(''), 3000);
   };
 
-  const handleDownload = async (item) => {
-    if (await downloadReport(item.record, item.tipo)) {
-      setNotificationMsg(`Download iniciado: ${item.nomeArquivo}`); setTimeout(() => setNotificationMsg(''), 4000);
+  const handleDownload = async (item, formato) => {
+    if (await downloadReport(item, formato)) {
+      setNotificationMsg(`Download iniciado: relatório ${item.id_relatorio} (${formato === 'pdf' ? 'PDF' : 'CSV'})`); setTimeout(() => setNotificationMsg(''), 4000);
     }
   };
 
   const now = new Date();
   const inicio = new Date(now.getFullYear(), periodoAtivo === 'mensal' ? now.getMonth() : periodoAtivo === 'trimestral' ? Math.floor(now.getMonth() / 3) * 3 : 0, 1);
-  const listaExibida = relatorios.filter(r => new Date(r.data_criacao) >= inicio).flatMap(r => ['pdf', 'excel'].map(tipo => ({ id: `${r.id_relatorio}-${tipo}`, titulo: r.titulo, descricao: r.observacoes, record: r, tipo, formato: tipo === 'pdf' ? 'PDF' : 'CSV', tamanho: 'Dados do relatório', nomeArquivo: `relatorio-${r.id_relatorio}.${tipo === 'pdf' ? 'pdf' : 'csv'}` }))).filter(item => filtroTipo === 'todos' || item.tipo === filtroTipo);
+  const listaExibida = relatorios.filter(r => periodoAtivo === 'todos' || new Date(r.data_criacao) >= inicio);
 
   return (
     <div className={styles.appContainer}>
@@ -132,39 +131,17 @@ export default function RelatoriosTecnicos() {
               </div>
               <div style={{ flex: 1 }}>
                 <h2>Central de Relatórios e Exportação</h2>
-                <p>Gere consolidados operacionais e estatísticos para acompanhamento da gestão.</p>
+                <p>Consulte os relatórios enviados pela equipe e baixe cada documento em PDF ou CSV.</p>
               </div>
 
-              {/* FILTRO RÁPIDO DE FORMATO */}
-              <div className={styles.formatFilter}>
-                <button 
-                  type="button" 
-                  className={filtroTipo === 'todos' ? styles.filterBtnActive : styles.filterBtn}
-                  onClick={() => setFiltroTipo('todos')}
-                >
-                  Todos
-                </button>
-                <button 
-                  type="button" 
-                  className={filtroTipo === 'pdf' ? styles.filterBtnActive : styles.filterBtn}
-                  onClick={() => setFiltroTipo('pdf')}
-                >
-                  PDF
-                </button>
-                <button 
-                  type="button" 
-                  className={filtroTipo === 'excel' ? styles.filterBtnActive : styles.filterBtn}
-                  onClick={() => setFiltroTipo('excel')}
-                >
-                  CSV
-                </button>
-              </div>
+
             </div>
 
             <div className={styles.filterBar}>
               <div className={styles.filterItem}>
                 <Calendar size={18} className={styles.filterIcon} />
-                <select value={periodoSelect} onChange={(e) => setPeriodoSelect(e.target.value)}>
+                <select aria-label="Período dos relatórios" value={periodoSelect} onChange={(e) => setPeriodoSelect(e.target.value)}>
+                  <option value="todos">Todos os períodos</option>
                   <option value="mensal">Período: Mensal (mês atual)</option>
                   <option value="trimestral">Período: Trimestral (trimestre atual)</option>
                   <option value="anual">Período: Anual (ano atual)</option>
@@ -183,30 +160,27 @@ export default function RelatoriosTecnicos() {
             <div className={styles.gridRelatorios}>
               {listaExibida.length > 0 ? (
                 listaExibida.map((item) => (
-                  <div key={item.id} className={styles.cardRelatorio}>
+                  <div key={item.id_relatorio} className={styles.cardRelatorio}>
                     <div className={styles.infoRelatorio}>
-                      <div className={item.tipo === 'pdf' ? styles.badgePdf : styles.badgeExcel}>
-                        {item.tipo === 'pdf' ? <FileText size={20} /> : <FileSpreadsheet size={20} />}
+                      <div className={styles.badgePdf}>
+                        <FileText size={20} />
                       </div>
                       <div>
                         <h3 className={styles.tituloRelatorio}>{item.titulo}</h3>
-                        <p className={styles.descRelatorio}>{item.descricao}</p>
-                        <span className={styles.metaRelatorio}>{item.formato} • {item.tamanho}</span>
+                        <p className={styles.descRelatorio}>{item.observacoes}</p>
+                        <span className={styles.metaRelatorio}>REL-{item.id_relatorio} • {item.tipo || 'Relatório técnico'}</span>
                       </div>
                     </div>
-                    <button 
-                      type="button"
-                      className={styles.btnDownload}
-                      onClick={() => handleDownload(item)}
-                    >
-                      <Download size={16} /> Baixar
-                    </button>
+                    <div className={styles.downloadActions}>
+                      <button type="button" className={styles.btnDownload} onClick={() => handleDownload(item, 'pdf')}><Download size={16} /> PDF</button>
+                      <button type="button" className={styles.btnDownload} onClick={() => handleDownload(item, 'excel')}><Download size={16} /> CSV</button>
+                    </div>
                   </div>
                 ))
               ) : (
                 <div className={styles.emptyState}>
                   <BarChart2 size={40} color="#059669" />
-                  <p>Nenhum relatório encontrado com o formato selecionado.</p>
+                  <p>Nenhum relatório encontrado neste período.</p>
                 </div>
               )}
             </div>

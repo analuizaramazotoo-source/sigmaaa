@@ -268,7 +268,7 @@ export default function FilaVistorias() {
 
                     <button 
                       className={styles.btnAcaoRelatorio}
-                      onClick={() => navigate('/relatorioe')}
+                      onClick={() => navigate(`/relatorioe?ocorrencia=${itemSelecionado.id}`)}
                     >
                       Emitir Relatório de Campo
                     </button>

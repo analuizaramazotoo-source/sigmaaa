@@ -2,7 +2,7 @@ import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, useCollection, occurrenceView, refreshScreens, uploadFiles } from '../../../services/originalScreens';
 import { downloadReport } from '../../../services/downloadDocument';
 import { useState} from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import styles from './autosnotificacoes.module.css';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
@@ -27,14 +27,17 @@ import {
 
 export default function AutosNotificacoes() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const [enviando, setEnviando] = useState(false);
+  const [leis] = useCollection('/legislacao');
 
   // ESTADOS DO FORMULÁRIO
   const [tipoDocumento, setTipoDocumento] = useState('notificacao');
-  const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState('');
+  const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState(() => params.get('ocorrencia') || '');
   const [autuadoNome, setAutuadoNome] = useState('');
   const [autuadoDocumento, setAutuadoDocumento] = useState('');
-  const [localInfracao, setLocalInfracao] = useState('');
-  const [artigoLei, setArtigoLei] = useState('Art. 70 da Lei Nº 9.605/1998 - Crimes Ambientais');
+  const [localInfracao, setLocalInfracao] = useState(null);
+  const [artigoLei, setArtigoLei] = useState('');
   const [descricaoInfracao, setDescricaoInfracao] = useState('');
   const [valorMulta, setValorMulta] = useState('');
   const [mensagemSucesso, setMensagemSucesso] = useState(false);
@@ -43,6 +46,7 @@ export default function AutosNotificacoes() {
 
   // LISTA DE OCORRÊNCIAS PARA VINCULAR (LOCALSTORAGE)
   const [ocorrenciasDisponiveis] = useCollection('/ocorrencias', occurrenceView);
+  const enderecoAtual = localInfracao ?? ocorrenciasDisponiveis.find(o => String(o.id) === ocorrenciaVinculada)?.address ?? '';
 
   // HISTÓRICO DE AUTOS EMITIDOS
   const [autosEmitidos] = useCollection('/autos', item => ({ ...item, id: `AUTO-${item.id_auto}`, tipo: item.tipo === 'notificacao' ? 'Notificação Preventiva' : 'Auto de Infração', infrator: item.autuado_nome, data: new Date(item.data_criacao).toLocaleDateString('pt-BR'), status: item.status, corStatus: item.status === 'entregue' ? 'verde' : 'amarelo' }));
@@ -54,25 +58,23 @@ export default function AutosNotificacoes() {
     const item = ocorrenciasDisponiveis.find(o => String(o.id) === String(id));
     if (item) {
       setLocalInfracao(item.address || item.descricao || '');
-      if (!descricaoInfracao) {
-        setDescricaoInfracao(`Constatado no local: ${item.titulo}. Vistoria realizada em campo.`);
-      }
+      setDescricaoInfracao('');
     }
   };
 
   // EMITIR DOCUMENTO
   const handleEmitirDocumento = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); if (enviando) return; setEnviando(true);
     await perform(async () => {
       const record = autoSalvo || await api('/autos', { method: 'POST', body: {
         id_ocorrencia: Number(ocorrenciaVinculada), tipo: tipoDocumento === 'notificacao' ? 'notificacao' : 'infracao',
         autuado_nome: autuadoNome || 'Não identificado / Em apuração', autuado_documento: autuadoDocumento,
-        local_infracao: localInfracao, artigo_lei: artigoLei, descricao_infracao: descricaoInfracao,
+        local_infracao: enderecoAtual, artigo_lei: artigoLei, descricao_infracao: descricaoInfracao,
         valor_multa: Number(String(valorMulta).replace(',', '.') || 0)
-      }}); setAutoSalvo(record); await uploadFiles(record.id_ocorrencia, arquivos); setAutoSalvo(null); setArquivos([]); refreshScreens(); setMensagemSucesso(true);
+      }}); setAutoSalvo(record); await uploadFiles(record.id_ocorrencia, arquivos, file => setArquivos(current => current.filter(item => item !== file))); setAutoSalvo(null); setArquivos([]); refreshScreens(); setMensagemSucesso(true);
       setAutuadoNome(''); setAutuadoDocumento(''); setLocalInfracao(''); setDescricaoInfracao(''); setValorMulta(''); setOcorrenciaVinculada('');
       setTimeout(() => setMensagemSucesso(false), 3000);
-    });
+    }); setEnviando(false);
   };
 
   // MENU LATERAL PADRONIZADO DA EQUIPE
@@ -216,7 +218,7 @@ export default function AutosNotificacoes() {
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
                     <label>Vistoria / Ocorrência Vinculada</label>
-                    <select value={ocorrenciaVinculada} onChange={handleSelecionarOcorrencia} required>
+                    <select aria-label="Vistoria / Ocorrência Vinculada" disabled={enviando || Boolean(autoSalvo)} value={ocorrenciaVinculada} onChange={handleSelecionarOcorrencia} required>
                       <option value="">-- Selecione uma Ocorrência da Fila --</option>
                       {ocorrenciasDisponiveis.map(o => (
                         <option key={o.id} value={o.id}>
@@ -257,7 +259,8 @@ export default function AutosNotificacoes() {
                   <input 
                     type="text" 
                     placeholder="Rua, Número, Bairro e Ponto de Referência"
-                    value={localInfracao}
+                    aria-label="Local do Fato / Endereço Completo"
+                    value={enderecoAtual}
                     onChange={(e) => setLocalInfracao(e.target.value)}
                     required
                   />
@@ -265,11 +268,9 @@ export default function AutosNotificacoes() {
 
                 <div className={styles.formGroup}>
                   <label>Fundamentação Legal / Legislação Aplicada</label>
-                  <select value={artigoLei} onChange={(e) => setArtigoLei(e.target.value)}>
-                    <option value="Art. 70 da Lei Nº 9.605/1998 - Crimes Ambientais">Art. 70 da Lei Nº 9.605/1998 - Crimes Ambientais</option>
-                    <option value="Lei Municipal de Proteção à Arborização Urbana">Lei Municipal de Proteção à Arborização Urbana</option>
-                    <option value="Código Ambiental do Município - Art. 12">Código Ambiental do Município - Art. 12</option>
-                  </select>
+                  <input aria-label="Fundamentação Legal / Legislação Aplicada" list="normas-cadastradas" value={artigoLei} onChange={(e) => setArtigoLei(e.target.value)} placeholder="Informe a norma e o artigo aplicáveis ao caso" />
+                  <datalist id="normas-cadastradas">{leis.map(lei => <option key={lei.id_lei} value={lei.titulo} />)}</datalist>
+                  <Link to="/leise">Consultar legislação cadastrada</Link>
                 </div>
 
                 {/* DESCRIÇÃO DA INFRAÇÃO */}
@@ -309,10 +310,7 @@ export default function AutosNotificacoes() {
 
                 {/* AÇÕES */}
                 <div className={styles.formActions}>
-                  <button type="button" className={styles.btnRascunho} onClick={() => perform(async () => { await api('/autos', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), tipo: tipoDocumento === 'notificacao' ? 'notificacao' : 'infracao', autuado_nome: autuadoNome || 'Em apuração', descricao_infracao: descricaoInfracao || 'Rascunho', status: 'rascunho', artigo_lei: artigoLei, local_infracao: localInfracao } }); refreshScreens(); })}>
-                    Salvar Rascunho
-                  </button>
-                  <button type="submit" className={styles.btnEmitir}>
+                  <button type="submit" disabled={enviando} className={styles.btnEmitir}>
                     <Send size={16} /> Emitir e Registrar
                   </button>
                 </div>
