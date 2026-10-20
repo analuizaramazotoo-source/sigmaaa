@@ -5,13 +5,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './perfil.module.css';
 import { 
   Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, Bell, ChevronDown, Shield,
-  LogOut, Settings, Save, Key, Mail, Phone, BadgeCheck, Camera, ArrowLeft
+  HelpCircle, ChevronDown, Shield,
+  LogOut, Settings, Save, Key, Mail, Phone, BadgeCheck, ArrowLeft
 } from 'lucide-react';
 
 export default function Perfil() {
   const navigate = useNavigate();
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [modalLogout, setModalLogout] = useState(false);
 
@@ -78,34 +77,6 @@ export default function Perfil() {
           </div>
 
           <div className={styles.headerRight}>
-            {/* NOTIFICAÇÕES */}
-            <div className={styles.popoverContainer}>
-              <button 
-                type="button"
-                className={styles.iconButton} 
-                onClick={() => {
-                  setShowNotifications(!showNotifications);
-                  setShowUserDropdown(false);
-                }}
-                aria-label="Notificações Internas"
-              >
-                <Bell size={18} />
-              </button>
-
-              {showNotifications && (
-                <div className={styles.popoverMenu}>
-                  <div className={styles.popoverHeader}>
-                    <strong>Notificações Internas</strong>
-                  </div>
-                  <ul className={styles.notificationList}>
-                    <li>Sem notificações disponíveis.</li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            <div className={styles.dividerVertical} />
-
             {/* DROPDOWN USUÁRIO */}
             <div className={styles.popoverContainer}>
               <button 
@@ -113,7 +84,6 @@ export default function Perfil() {
                 className={styles.userDropdown}
                 onClick={() => {
                   setShowUserDropdown(!showUserDropdown);
-                  setShowNotifications(false);
                 }}
               >
                 <div className={styles.avatar}>{userData.name.slice(0, 2).toUpperCase()}</div>
@@ -204,9 +174,7 @@ export default function Perfil() {
               <div className={styles.profileBadgeWrapper}>
                 <div className={styles.profileAvatarWrapper}>
                   <div className={styles.profileAvatar}>{userData.name.slice(0, 2).toUpperCase()}</div>
-                  <button type="button" className={styles.avatarChangeBtn} title="Alterar Foto">
-                    <Camera size={14} />
-                  </button>
+
                 </div>
 
                 <div>

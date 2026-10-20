@@ -69,7 +69,7 @@ export async function uploadFiles(occurrenceId, files, onUploaded = () => {}) {
 }
 export async function saveProfile(body) {
   const usuario = await api('/usuarios/me', { method: 'PATCH', body });
-  setSession({ ...getSession(), usuario }); return usuario;
+  setSession({ ...getSession(), usuario: { ...getSession()?.usuario, ...usuario } }); return usuario;
 }
 export function downloadText(name, text) {
   const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));

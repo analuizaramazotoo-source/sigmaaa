@@ -1,7 +1,7 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { getSession, perform, saveProfile } from '../../../services/originalScreens';
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from './perfil.module.css';
 
 import prefeituraLogo from "../../../assets/prefeitura.png";
@@ -12,20 +12,15 @@ import {
   Mail, 
   Phone, 
   FileBadge, 
-  Lock, 
   ArrowLeft, 
   Save, 
   KeyRound, 
-  Eye, 
-  EyeOff, 
   ShieldCheck,
   CheckCircle2
 } from "lucide-react";
 
 export default function Perfil() {
   const navigate = useNavigate();
-  const [senhaVisivel, setSenhaVisivel] = useState(false);
-  const [confirmarSenhaVisivel, setConfirmarSenhaVisivel] = useState(false);
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
   const [formData, setFormData] = useState({
@@ -33,8 +28,6 @@ export default function Perfil() {
     email: getSession()?.usuario.email_usuario || "",
     celular: getSession()?.usuario.telefone_usuario || "",
     cpf: getSession()?.usuario.cpf_usuario || "",
-    senha: "",
-    confirmarSenha: ""
   });
 
   const handleChange = (e) => {
@@ -45,11 +38,9 @@ export default function Perfil() {
   const handleSalvar = async (e) => {
     e.preventDefault();
     await perform(async () => {
-      if (formData.senha && formData.senha !== formData.confirmarSenha) throw new Error('As senhas não coincidem.');
       const body = { nome_usuario: formData.nome, email_usuario: formData.email, telefone_usuario: formData.celular, cpf_usuario: formData.cpf };
-      if (formData.senha) Object.assign(body, { senha_usuario: formData.senha, senha_atual: window.prompt('Informe a senha atual para confirmar a alteração:') });
       await saveProfile(body); setMensagemSucesso('Perfil atualizado com sucesso!');
-      setFormData(f => ({ ...f, senha: '', confirmarSenha: '' })); setTimeout(() => setMensagemSucesso(''), 4000);
+      setTimeout(() => setMensagemSucesso(''), 4000);
     });
   };
 
@@ -199,53 +190,7 @@ export default function Perfil() {
                 <span>Alterar Senha de Acesso</span>
               </div>
 
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="senha">Nova Senha</label>
-                  <div className={styles.inputWithIcon}>
-                    <Lock size={18} className={styles.inputIcon} />
-                    <input 
-                      id="senha"
-                      name="senha"
-                      type={senhaVisivel ? "text" : "password"} 
-                      placeholder="Deixe em branco para não alterar"
-                      value={formData.senha}
-                      onChange={handleChange}
-                      minLength={8}
-                    />
-                    <button 
-                      type="button" 
-                      className={styles.togglePassBtn}
-                      onClick={() => setSenhaVisivel(!senhaVisivel)}
-                    >
-                      {senhaVisivel ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="confirmarSenha">Confirmar Nova Senha</label>
-                  <div className={styles.inputWithIcon}>
-                    <Lock size={18} className={styles.inputIcon} />
-                    <input 
-                      id="confirmarSenha"
-                      name="confirmarSenha"
-                      type={confirmarSenhaVisivel ? "text" : "password"} 
-                      placeholder="Confirme a nova senha"
-                      value={formData.confirmarSenha}
-                      onChange={handleChange}
-                      minLength={8}
-                    />
-                    <button 
-                      type="button" 
-                      className={styles.togglePassBtn}
-                      onClick={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
-                    >
-                      {confirmarSenhaVisivel ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <Link className={styles.btnSalvar} to="/alterar">Alterar minha senha</Link>
 
               <div className={styles.formActions}>
                 <button type="submit" className={styles.btnSalvar}>

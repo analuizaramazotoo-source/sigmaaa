@@ -1,12 +1,17 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
-import { Link } from 'react-router-dom';
-import { perform, saveProfile } from '../../../services/originalScreens';
+import { Link, useNavigate } from 'react-router-dom';
+import { getSession, perform, saveProfile } from '../../../services/originalScreens';
 import { useState } from "react";
 import styles from './alterar.module.css';
 
 import arvoreLogo from "../../../assets/arvore.png";
 
 export default function Alterar() {
+  const navigate = useNavigate();
+  const role = getSession()?.usuario.tipo_usuario;
+  const inicio = role === 'gestao' ? '/homeg' : role === 'equipe' ? '/homee' : '/cidadao';
+  const perfil = role === 'gestao' ? '/perfilg' : role === 'equipe' ? '/perfile' : '/perfil';
+  const [salvando, setSalvando] = useState(false);
   const [senhaAtual, setSenhaAtual] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
@@ -14,7 +19,9 @@ export default function Alterar() {
   const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
-  async function handleSalvar() {
+  async function handleSalvar(event) {
+    event.preventDefault();
+    if (salvando) return;
     if (!senhaAtual || !novaSenha || !confirmarSenha) {
       alert("Preencha todos os campos.");
       return;
@@ -23,18 +30,22 @@ export default function Alterar() {
       alert("As senhas não coincidem.");
       return;
     }
+    setSalvando(true);
     await perform(async () => { await saveProfile({ senha_usuario: novaSenha, senha_atual: senhaAtual }); setSenhaAtual(''); setNovaSenha(''); setConfirmarSenha(''); alert('Senha alterada com sucesso!'); });
+    setSalvando(false);
   }
 
   return (
     <div className={styles.containerHome}>
       <ResponsiveSidebar alwaysCollapsed className={styles.menuLateral}>
         <nav className="sigma-citizen-navigation" aria-label="Menu do cidadão">
-          <Link to="/cidadao">Início</Link>
+          <Link to={inicio}>Início</Link>
+          {role === 'cidadao' && <>
           <Link to="/relatar-problema">Relatar problema</Link>
           <Link to="/status">Minhas solicitações</Link>
           <Link to="/chat">Chat com Gestão</Link>
-          <Link to="/perfil">Meu perfil</Link>
+          </>}
+          <Link to={perfil}>Meu perfil</Link>
         </nav>
       </ResponsiveSidebar>
 
@@ -49,7 +60,7 @@ export default function Alterar() {
         </div>
 
         <div className={styles.headerRight}>
-          <button className={styles.btnVoltar} onClick={() => window.history.back()}>
+          <button className={styles.btnVoltar} onClick={() => navigate(perfil)}>
             Voltar
           </button>
         </div>
@@ -65,7 +76,7 @@ export default function Alterar() {
         </div>
 
         {/* Card do formulário */}
-        <div className={styles.card}>
+        <form className={styles.card} onSubmit={handleSalvar}>
           <h2 className={styles.cardTitulo}>ALTERAR SENHA:</h2>
           <p className={styles.cardSubtitulo}>
             Digite sua senha atual e escolha uma nova.
@@ -73,10 +84,11 @@ export default function Alterar() {
 
           {/* Senha Atual */}
           <div className={styles.campoGrupo}>
-            <label className={styles.label}>Senha Atual</label>
+            <label className={styles.label} htmlFor="senha-atual">Senha Atual</label>
             <div className={styles.inputWrapper}>
               <input
                 className={styles.input}
+                id="senha-atual" required maxLength={128} autoComplete="current-password"
                 type={mostrarSenhaAtual ? "text" : "password"}
                 value={senhaAtual}
                 onChange={(e) => setSenhaAtual(e.target.value)}
@@ -94,12 +106,13 @@ export default function Alterar() {
 
           {/* Nova Senha */}
           <div className={styles.campoGrupo}>
-            <label className={styles.label}>Nova Senha</label>
+            <label className={styles.label} htmlFor="nova-senha">Nova Senha</label>
             <div className={styles.inputWrapper}>
               <input
                 className={styles.input}
                 type={mostrarNovaSenha ? "text" : "password"}
                 value={novaSenha}
+                id="nova-senha" required minLength={8} maxLength={128} autoComplete="new-password"
                 onChange={(e) => setNovaSenha(e.target.value)}
                 placeholder="Inserir Nova Senha..."
               />
@@ -115,12 +128,13 @@ export default function Alterar() {
 
           {/* Confirmar Nova Senha */}
           <div className={styles.campoGrupo}>
-            <label className={styles.label}>Confirmar Nova Senha</label>
+            <label className={styles.label} htmlFor="confirmar-senha">Confirmar Nova Senha</label>
             <div className={styles.inputWrapper}>
               <input
                 className={styles.input}
                 type={mostrarConfirmar ? "text" : "password"}
                 value={confirmarSenha}
+                id="confirmar-senha" required minLength={8} maxLength={128} autoComplete="new-password"
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 placeholder="Confirme a Senha..."
               />
@@ -134,10 +148,10 @@ export default function Alterar() {
             </div>
           </div>
 
-          <button className={styles.btnSalvar} onClick={handleSalvar}>
-            Salvar Nova Senha
+          <button type="submit" disabled={salvando} className={styles.btnSalvar}>
+            {salvando ? 'Salvando...' : 'Salvar Nova Senha'}
           </button>
-        </div>
+        </form>
       </main>
 
       {/* FOOTER */}

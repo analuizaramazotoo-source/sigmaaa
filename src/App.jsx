@@ -1,4 +1,5 @@
 import { Guard, ConnectionFeedback } from './components/OriginalGuard';
+import NotFound from './components/NotFound';
 import Chat from './pages/cidadao/chat/chat';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
@@ -82,6 +83,7 @@ function App() {
         <Route path="/relatorioe" element={<Guard roles={['gestao', 'equipe']}><RelatoriosTecnicos /></Guard>} />
         <Route path="/perfile" element={<Guard roles={['gestao', 'equipe']}><PerfilEquipe /></Guard>} />
         <Route path="/chat" element={<Guard><Chat /></Guard>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ConnectionFeedback />
     </Router>
