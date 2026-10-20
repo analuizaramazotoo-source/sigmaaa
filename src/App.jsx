@@ -1,13 +1,12 @@
 import { Guard, ConnectionFeedback } from './components/OriginalGuard';
 import Chat from './pages/cidadao/chat/chat';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
 // Telas Gerais e Cidadão
 import Home from "./pages/home/home";
 import Homec from "./pages/cidadao/homec/homec";
 import RelatarProblema from "./pages/cidadao/relatar/RelatarProblema";
-import Solicitar from "./pages/cidadao/solicitar/solicitar";
 import Perfil from "./pages/cidadao/perfil/perfil";
 import Status from "./pages/cidadao/status/status";
 import Alterar from "./pages/cidadao/alterar/alterar";
@@ -57,7 +56,7 @@ function App() {
         {/* ROTAS CIDADÃO */}
         <Route path="/cidadao" element={<Guard><Homec /></Guard>} />
         <Route path="/relatar-problema" element={<Guard><RelatarProblema /></Guard>} />
-        <Route path="/solicitar" element={<Guard><Solicitar /></Guard>} />
+        <Route path="/solicitar" element={<Guard><Navigate to="/relatar-problema" replace /></Guard>} />
         <Route path="/status" element={<Guard><Status /></Guard>} />
         <Route path="/denuncia" element={<Guard><DenunciaUrgente /></Guard>} />
         <Route path="/perfil" element={<Guard><Perfil /></Guard>} />

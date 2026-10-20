@@ -32,7 +32,6 @@ export default function Alterar() {
         <nav className="sigma-citizen-navigation" aria-label="Menu do cidadão">
           <Link to="/cidadao">Início</Link>
           <Link to="/relatar-problema">Relatar problema</Link>
-          <Link to="/solicitar">Solicitar serviço</Link>
           <Link to="/status">Minhas solicitações</Link>
           <Link to="/chat">Chat com Gestão</Link>
           <Link to="/perfil">Meu perfil</Link>

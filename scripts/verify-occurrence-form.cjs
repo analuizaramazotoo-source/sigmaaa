@@ -45,7 +45,7 @@ async function main() {
   page.on('pageerror', error => errors.push(error.message));
   page.on('dialog', dialog => dialog.accept());
   try {
-    for (const route of ['/relatar-problema', '/solicitar', '/denuncia', '/homeg']) {
+    for (const route of ['/relatar-problema', '/denuncia', '/homeg']) {
       console.log('Testando autocomplete e fotos:', route);
       await page.goto(base + route, { waitUntil: 'domcontentloaded' });
       if (route === '/homeg') await page.getByRole('button', { name: 'Novo Registro Interno' }).click();
@@ -90,9 +90,6 @@ async function main() {
         await page.getByLabel('Título do Relato *').fill('Teste com endereço e imagem');
         await page.getByLabel('Categoria do Problema *').selectOption('1');
         await page.getByLabel('Data da Ocorrência *').fill('2026-10-19');
-      } else if (route === '/solicitar') {
-        await page.getByLabel('Problema / Serviço *').fill('Serviço de teste');
-        await page.getByLabel('Descrição Detalhada *').fill('Descrição do teste');
       } else if (route === '/denuncia') {
         await page.getByLabel('Tipo de Crime / Emergência *').selectOption('queimada_grave');
         await page.getByLabel('Descrição da Situação *').fill('Descrição do teste');
@@ -108,7 +105,7 @@ async function main() {
         await submit.click();
       }
       if (route === '/homeg') await page.getByText('Novo Registro de Ocorrência Interna', { exact: true }).waitFor({ state: 'hidden' });
-      else if (route === '/denuncia') await page.getByText(/TESTE-3/).waitFor();
+      else if (route === '/denuncia') await page.getByText(/TESTE-2/).waitFor();
       else await page.waitForURL('**/status');
       assert.equal(created.length, before + 1, 'Uma única ocorrência é criada, inclusive ao tentar novamente');
       assert.equal(created.at(-1).latitude_ocorrencia, -21.933611);
@@ -116,9 +113,9 @@ async function main() {
       assert.equal(created.at(-1).logradouro_ocorrencia, 'Rua Aimorés, 123');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2), true);
     }
-    assert.equal(uploads.length, 5, 'Fotos enviadas uma vez, sem repetir a primeira ao tentar novamente');
+    assert.equal(uploads.length, 4, 'Fotos enviadas uma vez, sem repetir a primeira ao tentar novamente');
     assert.equal(errors.length, 0);
-    const result = { forms: 4, records: created.length, photos: uploads.length, mapClicks: 0, errors };
+    const result = { forms: 3, records: created.length, photos: uploads.length, mapClicks: 0, errors };
     fs.writeFileSync(path.resolve('artifacts/endereco-fotos/resultado.json'), JSON.stringify(result, null, 2));
     console.log(result);
   } finally { await browser.close(); }

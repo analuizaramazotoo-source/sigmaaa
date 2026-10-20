@@ -5,7 +5,6 @@ import { getSession, logout } from '../../../services/api';
 
 import {
   FileWarning,
-  MapPin,
   Search,
   HelpCircle,
   ChevronDown,
@@ -124,22 +123,9 @@ export default function Homec() {
                   </div>
                   <h3>Relatar um Problema</h3>
                 </div>
-                <p>Utilize este espaço para descrever detalhadamente qualquer problema encontrado.</p>
+                <p>Relate um problema ou solicite atendimento ambiental em Tupã, com endereço e fotos.</p>
                 <Link to="/relatar-problema" className={styles.btnCard}>
                   ENVIAR RELATO
-                </Link>
-              </div>
-
-              <div className={`${styles.cardAction} ${styles.cardVerde}`}>
-                <div className={styles.cardHeaderArea}>
-                  <div className={styles.cardIconBadge}>
-                    <MapPin size={22} />
-                  </div>
-                  <h3>Solicitar Serviço</h3>
-                </div>
-                <p>Faça solicitações ambientais e acompanhe todo o andamento.</p>
-                <Link to="/solicitar" className={styles.btnCard}>
-                  PREENCHER SOLICITAÇÃO
                 </Link>
               </div>
 
@@ -150,7 +136,7 @@ export default function Homec() {
                   </div>
                   <h3>Acompanhar Solicitação</h3>
                 </div>
-                <p>Consulte o andamento das suas solicitações em tempo real.</p>
+                <p>Consulte seus protocolos, veja o andamento e converse com a gestão sobre cada solicitação.</p>
                 <Link to="/status" className={styles.btnCard}>
                   MINHAS SOLICITAÇÕES
                 </Link>
@@ -216,7 +202,7 @@ export default function Homec() {
         </main>
 
         <footer className={styles.footerGlobal}>
-          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+          <p>© 2026 Sistema Ambiental • Atendimento ao cidadão de Tupã/SP.</p>
         </footer>
       </div>
 

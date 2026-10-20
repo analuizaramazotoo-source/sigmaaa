@@ -105,7 +105,7 @@ export default function RelatarProblema() {
                 <div>
                   <h2>Relatar um Problema Ambiental</h2>
                   <p>
-                    Preencha os campos abaixo para que nossa equipe possa analisar e tomar as providências necessárias.
+                    Relate um problema ou solicite atendimento ambiental em Tupã. Escolha a categoria, informe o endereço e anexe fotos, se desejar.
                   </p>
                 </div>
               </div>

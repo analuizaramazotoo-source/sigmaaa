@@ -79,7 +79,7 @@ async function main() {
     await page.getByLabel('Endereço / Localização do Ocorrido *').fill('Rua Inexistente');
     await page.getByText(/Nenhuma rua encontrada em Tupã/).waitFor();
     assert.equal(await page.getByText(/Local marcado:/).count(), 0, 'Endereço alterado não mantém o ponto anterior');
-    for (const [route, label] of [['/solicitar', 'Endereço / Localização *'], ['/denuncia', 'Endereço Exato / Ponto de Localização *'], ['/homeg', 'Endereço / Localização']]) {
+    for (const [route, label] of [['/solicitar', 'Endereço / Localização do Ocorrido *'], ['/denuncia', 'Endereço Exato / Ponto de Localização *'], ['/homeg', 'Endereço / Localização']]) {
       await page.goto(base + route, { waitUntil: 'domcontentloaded' });
       if (route === '/homeg') await page.getByRole('button', { name: 'Novo Registro Interno' }).click();
       await page.getByLabel(label, { exact: true }).fill('Rua Aimorés, 123');
