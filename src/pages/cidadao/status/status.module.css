@@ -319,6 +319,17 @@
   color: var(--brand-dark);
 }
 
+.btnMensagem {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--brand-primary);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .footerGlobal {
   text-align: center;
   font-size: 0.75rem;

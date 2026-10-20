@@ -52,7 +52,7 @@ export default function FilaVistorias() {
                         (item.descricao || item.address || '').toLowerCase().includes(busca.toLowerCase());
 
     if (filtroStatus === 'todos') return atendeBusca;
-    if (filtroStatus === 'pendentes') return atendeBusca && item.corStatus === 'vermelho';
+    if (filtroStatus === 'pendentes') return atendeBusca && ['aberta', 'em_analise'].includes(item.status_ocorrencia);
     if (filtroStatus === 'andamento') return atendeBusca && item.corStatus === 'amarelo';
     if (filtroStatus === 'concluidos') return atendeBusca && item.corStatus === 'verde';
 

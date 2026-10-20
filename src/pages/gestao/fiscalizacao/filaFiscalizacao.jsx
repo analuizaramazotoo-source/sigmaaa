@@ -1,7 +1,7 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
 import { useState} from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams, Link } from 'react-router-dom';
 import styles from './filaFiscalizacao.module.css';
 import { 
   ArrowLeft, ClipboardList, Flame, Trash2, Clock, 
@@ -13,26 +13,31 @@ export default function FilaFiscalizacao() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [chamados] = useCollection('/ocorrencias?status=aberta', occurrenceView);
+  const [ocorrencias] = useCollection('/ocorrencias', occurrenceView);
+  const chamados = ocorrencias.filter(item => ['aberta', 'em_analise'].includes(item.status_ocorrencia));
+  const [params, setParams] = useSearchParams();
   const [equipes] = useCollection('/equipes');
   const [equipeDestino, setEquipeDestino] = useState('');
   const [filterType, setFilterType] = useState('todos');
   const [selectedChamado, setSelectedChamado] = useState(null);
   const [chamadoParaAssumir, setChamadoParaAssumir] = useState(null);
   const [notificationMsg, setNotificationMsg] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   const handleConfirmAssumir = async () => {
-    if (!chamadoParaAssumir) return;
+    if (!chamadoParaAssumir || enviando) return;
+    setEnviando(true);
     await perform(async () => {
       if (!equipeDestino) throw new Error('Selecione uma equipe para assumir o chamado.');
       await api(`/ocorrencias/${chamadoParaAssumir.id}/assumir`, { method: 'POST', body: { id_equipe: Number(equipeDestino) }});
       refreshScreens(); setNotificationMsg(`Chamado #${chamadoParaAssumir.id} encaminhado à equipe.`); setChamadoParaAssumir(null); setSelectedChamado(null); setTimeout(() => setNotificationMsg(''), 4000);
-    });
+    }); setEnviando(false);
   };
 
   const isActive = (path) => location.pathname === path;
 
   const chamadosFiltrados = chamados.filter(item => {
+    if (params.get('ocorrencia') && String(item.id) !== params.get('ocorrencia')) return false;
     if (filterType === 'urgente') return item.urgente;
     if (filterType === 'rotina') return !item.urgente;
     return true;
@@ -121,6 +126,7 @@ export default function FilaFiscalizacao() {
         </header>
 
         <main className={styles.mainContent}>
+          {params.get('ocorrencia') && <p>Exibindo o chamado selecionado. <button type="button" className={styles.btnCancel} onClick={() => setParams({})}>Ver todos os chamados</button></p>}
           {notificationMsg && (
             <div className={`${styles.infoBanner} ${styles.status_success}`}>
               <div className={styles.infoContent}>
@@ -200,7 +206,7 @@ export default function FilaFiscalizacao() {
                         className={styles.btnSubmit}
                         onClick={() => setChamadoParaAssumir(item)}
                       >
-                        <UserCheck size={16} /> Assumir Chamado
+                        <UserCheck size={16} /> Encaminhar à equipe
                       </button>
                     </div>
                   </div>
@@ -266,7 +272,7 @@ export default function FilaFiscalizacao() {
                   setChamadoParaAssumir(selectedChamado);
                 }}
               >
-                <UserCheck size={16} /> Assumir Esta Demanda
+                <UserCheck size={16} /> Encaminhar à equipe
               </button>
             </div>
           </div>
@@ -284,7 +290,7 @@ export default function FilaFiscalizacao() {
             <p style={{ color: '#047857', fontSize: '0.9rem', margin: '0 0 1.5rem 0' }}>
               Deseja encaminhar o chamado <strong>#{chamadoParaAssumir.id} - {chamadoParaAssumir.titulo}</strong> para uma equipe?
             </p>
-            <label>Equipe responsável<select value={equipeDestino} onChange={e => setEquipeDestino(e.target.value)} style={{ width: '100%', padding: 10, margin: '10px 0 20px', border: '1px solid #d1fae5', borderRadius: 8 }}><option value="">Selecione</option>{equipes.map(e => <option key={e.id_equipe} value={e.id_equipe}>{e.nome_equipe}</option>)}</select></label>
+            <label>Equipe responsável<select disabled={enviando} value={equipeDestino} onChange={e => setEquipeDestino(e.target.value)} style={{ width: '100%', padding: 10, margin: '10px 0 20px', border: '1px solid #d1fae5', borderRadius: 8 }}><option value="">Selecione</option>{equipes.filter(e => e.status_equipe !== 'inativa').map(e => <option key={e.id_equipe} value={e.id_equipe}>{e.nome_equipe}</option>)}</select></label>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
               <button type="button" onClick={() => setChamadoParaAssumir(null)} className={styles.btnCancel}>
                 Cancelar
@@ -292,9 +298,10 @@ export default function FilaFiscalizacao() {
               <button 
                 type="button" 
                 onClick={handleConfirmAssumir} 
+                disabled={enviando || !equipeDestino}
                 className={styles.btnSubmit}
               >
-                Sim, Assumir Chamado
+                {enviando ? 'Encaminhando...' : 'Confirmar encaminhamento'}
               </button>
             </div>
           </div>

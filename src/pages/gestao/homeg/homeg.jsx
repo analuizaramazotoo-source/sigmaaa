@@ -18,7 +18,6 @@ const STATS_DATA = [
   { 
     id: 'total',
     title: "Total do Município", 
-    value: "124", 
     subtitle: "Ocorrências no sistema", 
     icon: ClipboardCheck,
     variant: 'neutral'
@@ -26,7 +25,6 @@ const STATS_DATA = [
   { 
     id: 'analise',
     title: "Aguardando Triagem", 
-    value: "18", 
     subtitle: "Requer análise do fiscal", 
     icon: Clock,
     variant: 'warning'
@@ -34,7 +32,6 @@ const STATS_DATA = [
   { 
     id: 'andamento',
     title: "Ocorrências em Campo",
-    value: "89", 
     subtitle: "Ações fiscais em curso", 
     icon: Settings,
     variant: 'info'
@@ -42,7 +39,6 @@ const STATS_DATA = [
   { 
     id: 'resolvidas',
     title: "Concluídas",
-    value: "17", 
     subtitle: "Demandas finalizadas", 
     icon: CheckCircle2,
     variant: 'success'
@@ -516,12 +512,18 @@ export default function Homeg() {
                 >
                   <Clock size={16} /> Marcar como "Pendente triagem"
                 </button>
-                <button 
-                  className={`${styles.statusOptionBtn} ${styles.status_andamento}`}
-                  onClick={() => handleUpdateStatus("Em campo", "andamento", "amarelo")}
+                <button
+                  className={`${styles.statusOptionBtn} ${styles.status_analise}`}
+                  onClick={() => handleUpdateStatus('Em análise')}
                 >
-                  <Settings size={16} /> Marcar como "Em campo"
+                  <Clock size={16} /> Marcar como "Em análise"
                 </button>
+                {['aberta', 'em_analise'].includes(selectedOcorrencia.status_ocorrencia) && <button 
+                  className={`${styles.statusOptionBtn} ${styles.status_andamento}`}
+                  onClick={() => navigate(`/fila-fiscalizacao?ocorrencia=${selectedOcorrencia.id}`)}
+                >
+                  <Settings size={16} /> Encaminhar à equipe
+                </button>}
                 <button 
                   className={`${styles.statusOptionBtn} ${styles.status_resolvida}`}
                   onClick={() => handleUpdateStatus("Fiscalizado", "resolvida", "verde")}
@@ -537,6 +539,7 @@ export default function Homeg() {
               </div>
             </div>
             <div className={styles.modalActions}>
+              <Link to={`/chat?ocorrencia=${selectedOcorrencia.id}`} className={styles.btnCancel}>Mensagens da solicitação</Link>
               <button onClick={() => setSelectedOcorrencia(null)} className={styles.btnCancel}>Cancelar</button>
             </div>
           </div>

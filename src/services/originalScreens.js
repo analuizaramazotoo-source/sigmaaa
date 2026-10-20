@@ -6,21 +6,32 @@ export function refreshScreens() { window.dispatchEvent(new Event('sigma:refresh
 export function reportError(error) { window.dispatchEvent(new CustomEvent('sigma:error', { detail: error.message || String(error) })); }
 export async function perform(action) { try { return await action(); } catch (error) { reportError(error); return null; } }
 export function useCollection(path, mapper = value => value) {
-  const [items, setItems] = useState([]);
+  const [snapshot, setSnapshot] = useState({ path: null, items: [], loading: true, error: '' });
   const mapperRef = useRef(mapper);
   useEffect(() => { mapperRef.current = mapper; });
   useEffect(() => {
     if (!path) return;
-    let active = true, reported = false;
+    let active = true, reported = false, controller;
     const read = async () => {
-      try { const rows = await api(path); if (active) { setItems(rows.map(mapperRef.current)); reported = false; } }
-      catch (error) { if (active && !reported) { reportError(error); reported = true; } }
+      controller?.abort();
+      const request = new AbortController(); controller = request;
+      try {
+        const rows = await api(path, { signal: request.signal });
+        if (active && !request.signal.aborted) { setSnapshot({ path, items: rows.map(mapperRef.current), loading: false, error: '' }); reported = false; }
+      } catch (error) {
+        if (active && !request.signal.aborted) {
+          setSnapshot(previous => ({ path, items: previous.path === path ? previous.items : [], loading: false, error: error.message }));
+          if (!reported) { reportError(error); reported = true; }
+        }
+      }
     };
-    read(); const timer = setInterval(read, 15000);
+    read(); const timer = setInterval(() => { if (!document.hidden) read(); }, 15000);
     window.addEventListener('focus', read); window.addEventListener('sigma:refresh', read);
-    return () => { active = false; clearInterval(timer); window.removeEventListener('focus', read); window.removeEventListener('sigma:refresh', read); };
+    return () => { active = false; controller?.abort(); clearInterval(timer); window.removeEventListener('focus', read); window.removeEventListener('sigma:refresh', read); };
   }, [path]);
-  return [items, setItems];
+  const current = snapshot.path === path ? snapshot : { items: [], loading: Boolean(path), error: '' };
+  const setItems = update => setSnapshot(previous => ({ path, loading: false, error: '', items: typeof update === 'function' ? update(previous.path === path ? previous.items : []) : update }));
+  return [current.items, setItems, { loading: current.loading, error: current.error }];
 }
 export const userName = () => getSession()?.usuario?.nome_usuario || '';
 export const statusLabels = { aberta: 'Pendente triagem', em_analise: 'Em análise', em_andamento: 'Em campo', resolvida: 'Fiscalizado', arquivada: 'Arquivado' };
@@ -30,7 +41,8 @@ export function occurrenceView(o) {
   const stateType = o.status_ocorrencia === 'resolvida' ? 'resolvida' : o.status_ocorrencia === 'em_andamento' ? 'andamento' : o.status_ocorrencia === 'arquivada' ? 'naoAtendida' : 'analise';
   const color = stateType === 'resolvida' ? 'verde' : stateType === 'andamento' ? 'amarelo' : 'vermelho';
   const hasCoordinates = Boolean(coordinatesInTupa(o));
-  const date = o.data_ocorrencia ? new Date(o.data_ocorrencia).toLocaleDateString('pt-BR') : '';
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(o.data_ocorrencia || '');
+  const date = dateOnly ? `${dateOnly[3]}/${dateOnly[2]}/${dateOnly[1]}` : o.data_ocorrencia ? new Date(o.data_ocorrencia).toLocaleDateString('pt-BR') : '';
   return { ...o, id: o.id_ocorrencia, title: o.titulo_ocorrencia, titulo: o.titulo_ocorrencia, address: o.logradouro_ocorrencia || '', endereco: o.logradouro_ocorrencia || '', local: o.logradouro_ocorrencia || '', descricao: o.descricao_ocorrencia || '', date, data: date, status: statusLabels[o.status_ocorrencia] || o.status_ocorrencia, statusType: stateType, corStatus: color, prioridade: urgent ? 'Alta' : 'Média', urgente: urgent, tipo: type, hasCoordinates, cor: color === 'verde' ? '#10b981' : color === 'amarelo' ? '#f59e0b' : '#ef4444' };
 }
 export function canonicalStatus(label) {

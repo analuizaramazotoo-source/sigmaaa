@@ -13,24 +13,22 @@ import {
 const etapas = [
   { label: "Enviado", cor: "#e74c3c" },
   { label: "Análise", cor: "#e67e22" },
-  { label: "Equipe a caminho", cor: "#f1c40f" },
-  { label: "Resolvendo", cor: "#27ae60" },
+  { label: "Em atendimento", cor: "#27ae60" },
   { label: "Concluído", cor: "#196f3d" },
 ];
 
 const mensagens = [
   "Sua solicitação foi enviada com sucesso.",
   "Sua solicitação está sendo analisada pela equipe.",
-  "A equipe da prefeitura está a caminho do local da ocorrência.",
-  "A equipe está resolvendo o problema no local.",
+  "Sua solicitação está em atendimento. Consulte as mensagens para mais detalhes.",
   "Problema resolvido com sucesso. Obrigado!",
 ];
 
 export default function Status() {
-  const [solicitacoes] = useCollection('/ocorrencias', occurrenceView);
+  const [solicitacoes, , consulta] = useCollection('/ocorrencias', occurrenceView);
   const [selecionada, setSelecionada] = useState('');
   const solicitacao = solicitacoes.find(o => String(o.id) === selecionada) || solicitacoes[0];
-  const etapaAtiva = solicitacao ? ({ aberta: 0, em_analise: 1, em_andamento: 3, resolvida: 4, arquivada: 0 }[solicitacao.status_ocorrencia] ?? 0) : -1;
+  const etapaAtiva = solicitacao ? ({ aberta: 0, em_analise: 1, em_andamento: 2, resolvida: 3, arquivada: -1 }[solicitacao.status_ocorrencia] ?? -1) : -1;
   const navigate = useNavigate();
 
   return (
@@ -83,15 +81,16 @@ export default function Status() {
                 </div>
                 <div>
                   <h2>Status da Solicitação</h2>
-                  <p>Acompanhe o andamento em tempo real do seu chamado</p>
+                  <p>Veja o andamento e as mensagens de cada solicitação</p>
                 </div>
               </div>
 
               <div className={styles.statusBox}>
-                <select aria-label="Solicitação" value={solicitacao?.id || ''} onChange={e => setSelecionada(e.target.value)}>
+                <select aria-label="Solicitação" disabled={!solicitacoes.length} value={solicitacao?.id || ''} onChange={e => setSelecionada(e.target.value)}>
                   {solicitacoes.map(o => <option key={o.id} value={o.id}>{o.protocolo_ocorrencia} — {o.titulo}</option>)}
                 </select>
-                <p>{solicitacao ? `${solicitacao.protocolo_ocorrencia} — ${solicitacao.endereco}` : 'Nenhuma solicitação cadastrada.'}</p>
+                <p>{solicitacao ? `${solicitacao.protocolo_ocorrencia} — ${solicitacao.endereco}` : consulta.loading ? 'Carregando suas solicitações...' : consulta.error ? 'Não foi possível carregar suas solicitações. Tente atualizar a página.' : 'Nenhuma solicitação cadastrada.'}</p>
+                {solicitacao ? <Link className={styles.btnMensagem} to={`/chat?ocorrencia=${solicitacao.id}`}>Ver mensagens / falar com a gestão</Link> : !consulta.loading && !consulta.error && <Link className={styles.btnMensagem} to="/relatar-problema">Registrar meu primeiro relato</Link>}
               </div>
               {/* TIMELINE DE ETAPAS */}
               <div className={styles.timelineWrapper}>
