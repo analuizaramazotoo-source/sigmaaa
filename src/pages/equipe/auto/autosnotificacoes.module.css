@@ -561,3 +561,5 @@
 .formRowTwoCols { grid-template-columns:minmax(0,1fr); min-width:0; }
 .mainContent { padding:16px; }
 }
+
+.documentFields { display:flex; flex-direction:column; gap:1.5rem; border:0; margin:0; padding:0; min-width:0; }

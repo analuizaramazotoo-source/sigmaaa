@@ -6,3 +6,5 @@
 .sigma-map-note { margin: 0; padding: 0 12px 10px; color: #475569; font-size: 12px; }
 .sigma-map .leaflet-popup-content { line-height: 1.6; overflow-wrap: anywhere; }
 .sigma-map .leaflet-control-attribution { font-size: 10px; }
+
+.sigma-map-popup-action { margin-top:8px; padding:6px 10px; border:1px solid #a7f3d0; border-radius:6px; background:#f0fdf4; color:#065f46; cursor:pointer; }

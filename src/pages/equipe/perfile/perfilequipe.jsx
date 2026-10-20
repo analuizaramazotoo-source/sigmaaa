@@ -1,7 +1,7 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, logout } from '../../../services/originalScreens';
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './perfilequipe.module.css';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
@@ -88,7 +88,6 @@ export default function PerfilEquipe() {
           </div>
 
           <div className={styles.headerRight}>
-            <Link to="/alterar">Alterar minha senha</Link>
             <div className={styles.userProfileActive}>
               <div className={styles.userAvatar}>
                 <Users size={18} />

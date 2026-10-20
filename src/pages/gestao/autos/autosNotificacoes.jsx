@@ -18,6 +18,7 @@ export default function AutosNotificacoes() {
   const [modalNovoAuto, setModalNovoAuto] = useState(false);
   const [selectedAuto, setSelectedAuto] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [salvando, setSalvando] = useState(false);
 
   // Formulário de Novo Auto
   const [formData, setFormData] = useState({
@@ -37,19 +38,21 @@ export default function AutosNotificacoes() {
   };
 
   const handleCreateAuto = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); if (salvando) return; setSalvando(true);
     await perform(async () => {
       const result = await api('/autos', { method: 'POST', body: { id_ocorrencia: Number(formData.id_ocorrencia), tipo: formData.status === 'Autuado' ? 'infracao' : 'notificacao', tipo_infracao: formData.tipo, autuado_nome: formData.infrator, descricao_infracao: formData.descricao, status: ({ Notificado: 'notificado', Autuado: 'autuado', 'Em Análise': 'em_analise' })[formData.status] }});
       refreshScreens(); setModalNovoAuto(false); setFormData({ id_ocorrencia: '', infrator: '', tipo: 'Descarte Irregular', status: 'Notificado', descricao: '' }); setSuccessMessage(`Documento AUTO-${result.id_auto} salvo.`); setTimeout(() => setSuccessMessage(''), 4000);
-    });
+    }); setSalvando(false);
   };
 
   const handleUpdateStatus = async (autoId, novoStatus) => {
+    if (salvando) return;
+    setSalvando(true);
     await perform(async () => {
       const item = autos.find(a => a.id === autoId); if (!item) return;
       await api(`/autos/${item.id_auto}`, { method: 'PATCH', body: { status: ({ Notificado: 'notificado', Autuado: 'autuado', 'Em Análise': 'em_analise' })[novoStatus] }});
       refreshScreens(); setSelectedAuto(prev => prev ? { ...prev, status: novoStatus, statusClass: getStatusClass(novoStatus) } : null); setSuccessMessage(`Status atualizado para ${novoStatus}.`); setTimeout(() => setSuccessMessage(''), 4000);
-    });
+    }); setSalvando(false);
   };
 
   const isActive = (path) => location.pathname === path;
@@ -174,7 +177,7 @@ export default function AutosNotificacoes() {
                 className={styles.btnSubmit}
                 onClick={() => setModalNovoAuto(true)}
               >
-                <Plus size={18} /> Novo Auto de Infração
+                <Plus size={18} /> Novo Auto / Notificação
               </button>
             </div>
 
@@ -239,8 +242,8 @@ export default function AutosNotificacoes() {
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <div className={styles.modalHeader}>
-              <h3>Emitir Novo Auto de Infração</h3>
-              <button type="button" onClick={() => setModalNovoAuto(false)} className={styles.closeBtnModal}>
+              <h3>Emitir Auto / Notificação</h3>
+              <button type="button" disabled={salvando} onClick={() => setModalNovoAuto(false)} className={styles.closeBtnModal}>
                 <X size={18} />
               </button>
             </div>
@@ -287,21 +290,22 @@ export default function AutosNotificacoes() {
               </div>
 
               <label>
-                Descrição / Fundamentação
+                Descrição / Fundamentação *
                 <textarea 
                   rows="3"
                   placeholder="Relate brevemente a irregularidade constatada..."
+                  required
                   value={formData.descricao}
                   onChange={(e) => setFormData({...formData, descricao: e.target.value})}
                 />
               </label>
 
               <div className={styles.modalActions}>
-                <button type="button" onClick={() => setModalNovoAuto(false)} className={styles.btnCancel}>
+                <button type="button" disabled={salvando} onClick={() => setModalNovoAuto(false)} className={styles.btnCancel}>
                   Cancelar
                 </button>
-                <button type="submit" className={styles.btnSubmit}>
-                  <FileCheck size={16} /> Emitir Documento
+                <button type="submit" disabled={salvando} className={styles.btnSubmit}>
+                  <FileCheck size={16} /> {salvando ? 'Salvando...' : 'Emitir Documento'}
                 </button>
               </div>
             </form>
@@ -357,6 +361,7 @@ export default function AutosNotificacoes() {
                   <button 
                     type="button"
                     onClick={() => handleUpdateStatus(selectedAuto.id, 'Notificado')}
+                    disabled={salvando}
                     className={styles.statusOptionBtn}
                   >
                     Notificado
@@ -364,6 +369,7 @@ export default function AutosNotificacoes() {
                   <button 
                     type="button"
                     onClick={() => handleUpdateStatus(selectedAuto.id, 'Autuado')}
+                    disabled={salvando}
                     className={styles.statusOptionBtn}
                   >
                     Autuado
@@ -371,6 +377,7 @@ export default function AutosNotificacoes() {
                   <button 
                     type="button"
                     onClick={() => handleUpdateStatus(selectedAuto.id, 'Em Análise')}
+                    disabled={salvando}
                     className={styles.statusOptionBtn}
                   >
                     Em Análise

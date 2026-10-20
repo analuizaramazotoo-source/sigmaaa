@@ -1,3 +1,4 @@
+import ImageAttachments from '../../../components/ImageAttachments';
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { api, perform, useCollection, occurrenceView, refreshScreens, uploadFiles } from '../../../services/originalScreens';
 import { downloadReport } from '../../../services/downloadDocument';
@@ -19,7 +20,6 @@ import {
   Send,
   FileCheck,
   AlertTriangle,
-  Upload,
   CheckCircle2,
   Clock,
   ArrowLeft
@@ -44,7 +44,7 @@ export default function AutosNotificacoes() {
   const [arquivos, setArquivos] = useState([]);
   const [autoSalvo, setAutoSalvo] = useState(null);
 
-  // LISTA DE OCORRÊNCIAS PARA VINCULAR (LOCALSTORAGE)
+  // OCORRÊNCIAS DISPONÍVEIS PARA VINCULAR
   const [ocorrenciasDisponiveis] = useCollection('/ocorrencias', occurrenceView);
   const enderecoAtual = localInfracao ?? ocorrenciasDisponiveis.find(o => String(o.id) === ocorrenciaVinculada)?.address ?? '';
 
@@ -177,6 +177,7 @@ export default function AutosNotificacoes() {
               )}
 
               <form onSubmit={handleEmitirDocumento} className={styles.formContainer}>
+                <fieldset className={styles.documentFields} disabled={enviando || Boolean(autoSalvo)}>
                 
                 {/* TIPO DE DOCUMENTO */}
                 <div className={styles.formGroup}>
@@ -270,7 +271,6 @@ export default function AutosNotificacoes() {
                   <label>Fundamentação Legal / Legislação Aplicada</label>
                   <input aria-label="Fundamentação Legal / Legislação Aplicada" list="normas-cadastradas" value={artigoLei} onChange={(e) => setArtigoLei(e.target.value)} placeholder="Informe a norma e o artigo aplicáveis ao caso" />
                   <datalist id="normas-cadastradas">{leis.map(lei => <option key={lei.id_lei} value={lei.titulo} />)}</datalist>
-                  <Link to="/leise">Consultar legislação cadastrada</Link>
                 </div>
 
                 {/* DESCRIÇÃO DA INFRAÇÃO */}
@@ -299,14 +299,9 @@ export default function AutosNotificacoes() {
                 )}
 
                 {/* ANEXAR FOTOS */}
-                <div className={styles.uploadBox}>
-                  <Upload size={20} className={styles.uploadIcon} />
-                  <div>
-                    <strong>Anexar Registros Fotográficos (Evidências)</strong>
-                    <span>Arraste as fotos ou clique para carregar arquivos da fiscalização</span>
-                    <input type="file" accept="image/png,image/jpeg,application/pdf" multiple onChange={e => setArquivos(Array.from(e.target.files))} />
-                  </div>
-                </div>
+                </fieldset>
+                {autoSalvo && !enviando && <p role="status">Documento AUTO-{autoSalvo.id_auto} registrado. Confira os anexos pendentes e envie novamente para concluir.</p>}
+                <ImageAttachments allowDocuments files={arquivos} onChange={setArquivos} disabled={enviando} />
 
                 {/* AÇÕES */}
                 <div className={styles.formActions}>

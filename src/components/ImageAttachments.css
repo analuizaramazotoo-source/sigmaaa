@@ -16,3 +16,9 @@
 .sigma-photo-dialog button { display:inline-flex; flex-shrink:0; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid #a7f3d0; border-radius:8px; background:#f0fdf4; color:#065f46; cursor:pointer; }
 .sigma-photo-dialog img { display:block; width:auto; max-width:100%; height:auto; max-height:75dvh; object-fit:contain; margin:auto; }
 .sigma-image-attachments .sigma-image-error { color:#b91c1c; }
+.sigma-image-attachments.sigma-document-attachments { padding:0; border:0; background:transparent; }
+.sigma-document-attachments .sigma-file-dropzone { display:inline-flex; align-items:center; gap:8px; max-width:100%; padding:10px 16px; border:1px solid #b7dfce; border-radius:8px; background:#f4fbf7; color:#065f46; cursor:pointer; font:inherit; font-size:14px; font-weight:600; }
+.sigma-file-dropzone:hover:not(:disabled) { background:#e6f7ed; border-color:#059669; }
+.sigma-file-dropzone:focus-visible { outline:3px solid #10b981; outline-offset:3px; }
+.sigma-file-dropzone:disabled { opacity:.6; cursor:default; }
+.sigma-image-attachments .sigma-file-pdf { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:pointer; text-decoration:none; color:#065f46; }

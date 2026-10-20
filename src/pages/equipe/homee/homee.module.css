@@ -691,3 +691,7 @@
 .statsGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
 .mainContent { padding:16px; }
 }
+
+.requestCardSelectable { width:100%; text-align:left; font:inherit; }
+.requestCardSelectable[aria-pressed=true] { border-color:var(--brand-primary); background:#fff; }
+.requestCardSelectable:focus-visible { outline:2px solid var(--brand-primary); outline-offset:2px; }

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ImagePlus, X } from 'lucide-react';
+import { ImagePlus, FileText, X } from 'lucide-react';
 import './ImageAttachments.css';
 
 function Preview({ file, enlarged = false }) {
@@ -19,26 +19,40 @@ function PhotoDialog({ file, onClose }) {
     <div className="sigma-photo-dialog-content"><header><strong>{file.name}</strong><button type="button" onClick={onClose} aria-label="Fechar foto"><X size={22} /></button></header><Preview file={file} enlarged /></div>
   </dialog>, document.body);
 }
-export default function ImageAttachments({ files, onChange, disabled = false }) {
+function PdfPreview({ file }) {
+  const link = useRef(null);
+  useEffect(() => {
+    const url = URL.createObjectURL(file); link.current.href = url;
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+  return <a ref={link} className="sigma-image-thumb sigma-file-pdf" target="_blank" rel="noopener noreferrer" aria-label={`Abrir PDF ${file.name}`}><FileText size={28} /> PDF</a>;
+}
+export default function ImageAttachments({ files, onChange, disabled = false, allowDocuments = false }) {
   const id = useId(), [error, setError] = useState('');
+  const input = useRef(null);
   const [opened, setOpened] = useState(null);
   function select(event) {
     const incoming = Array.from(event.target.files || []);
     event.target.value = '';
-    if (incoming.some(file => !['image/jpeg', 'image/png'].includes(file.type) || file.size > 5 * 1024 * 1024)) {
-      setError('Escolha imagens JPG ou PNG com até 5 MB cada.'); return;
+    add(incoming);
+  }
+  function add(incoming) {
+    if (disabled) return;
+    const types = allowDocuments ? ['image/jpeg', 'image/png', 'application/pdf'] : ['image/jpeg', 'image/png'];
+    if (incoming.some(file => !types.includes(file.type) || file.size > 5 * 1024 * 1024)) {
+      setError(allowDocuments ? 'Escolha arquivos JPG, PNG ou PDF com até 5 MB cada.' : 'Escolha imagens JPG ou PNG com até 5 MB cada.'); return;
     }
     setError('');
     const combined = [...files];
     for (const file of incoming) if (!combined.some(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified)) combined.push(file);
     onChange(combined);
   }
-  return <section className="sigma-image-attachments" aria-label="Fotos da ocorrência">
-    <label htmlFor={id}><ImagePlus size={20} /> Anexar imagens da ocorrência (opcional)</label>
-    <p id={`${id}-help`}>Escolha fotos da galeria ou tire uma foto pelo celular. JPG ou PNG, até 5 MB por imagem.</p>
-    <input id={id} type="file" accept="image/jpeg,image/png" multiple disabled={disabled} onChange={select} aria-describedby={`${id}-help`} />
+  return <section className={`sigma-image-attachments${allowDocuments ? ' sigma-document-attachments' : ''}`} aria-label={allowDocuments ? 'Anexos do documento' : 'Fotos da ocorrência'}>
+    {!allowDocuments && <><label htmlFor={id}><ImagePlus size={20} /> Anexar imagens da ocorrência (opcional)</label><p id={`${id}-help`}>Escolha fotos da galeria ou tire uma foto pelo celular. JPG ou PNG, até 5 MB por imagem.</p></>}
+    <input ref={input} aria-label={allowDocuments ? 'Anexar imagens' : undefined} hidden={allowDocuments} id={id} type="file" accept={allowDocuments ? 'image/jpeg,image/png,application/pdf' : 'image/jpeg,image/png'} multiple disabled={disabled} onChange={select} aria-describedby={allowDocuments ? undefined : `${id}-help`} />
+    {allowDocuments && <button type="button" className="sigma-file-dropzone" disabled={disabled} onClick={() => input.current?.click()} onDragOver={event => event.preventDefault()} onDrop={event => { event.preventDefault(); add(Array.from(event.dataTransfer.files || [])); }}><ImagePlus size={18} aria-hidden="true" /> Anexar imagens</button>}
     {error && <p role="alert" className="sigma-image-error">{error}</p>}
-    {files.length > 0 && <ul>{files.map((file, i) => <li key={`${file.name}-${file.size}-${file.lastModified}`}><button className="sigma-image-thumb" type="button" aria-label={`Abrir foto ${file.name}`} onClick={() => setOpened(file)}><Preview file={file} /></button><span>{file.name}</span><button className="sigma-image-remove" type="button" disabled={disabled} aria-label={`Remover imagem ${file.name}`} onClick={() => onChange(files.filter((_, index) => index !== i))}><X size={16} /> Remover</button></li>)}</ul>}
+    {files.length > 0 && <ul>{files.map((file, i) => <li key={`${file.name}-${file.size}-${file.lastModified}`}>{file.type === 'application/pdf' ? <PdfPreview file={file} /> : <button className="sigma-image-thumb" type="button" aria-label={`Abrir foto ${file.name}`} onClick={() => setOpened(file)}><Preview file={file} /></button>}<span>{file.name}</span><button className="sigma-image-remove" type="button" disabled={disabled} aria-label={`Remover ${allowDocuments ? 'arquivo' : 'imagem'} ${file.name}`} onClick={() => onChange(files.filter((_, index) => index !== i))}><X size={16} /> Remover</button></li>)}</ul>}
     {opened && <PhotoDialog file={opened} onClose={() => setOpened(null)} />}
   </section>;
 }

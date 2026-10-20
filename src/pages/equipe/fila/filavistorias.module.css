@@ -594,3 +594,5 @@
 .contentGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
 .mainContent { padding:16px; }
 }
+
+.detailActions button:disabled { opacity:.55; cursor:default; }

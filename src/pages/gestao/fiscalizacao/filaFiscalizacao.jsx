@@ -3,6 +3,7 @@ import { api, perform, useCollection, occurrenceView, refreshScreens } from '../
 import { useState} from 'react';
 import { useNavigate, useLocation, useSearchParams, Link } from 'react-router-dom';
 import styles from './filaFiscalizacao.module.css';
+import { normalizeAddress } from '../../../services/addressParts';
 import { 
   ArrowLeft, ClipboardList, Flame, Trash2, Clock, 
   Shield, Map as MapIcon, FileText, BarChart2, HelpCircle, Home as HomeIcon,
@@ -13,7 +14,8 @@ export default function FilaFiscalizacao() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [ocorrencias] = useCollection('/ocorrencias', occurrenceView);
+  const [ocorrencias, , consulta] = useCollection('/ocorrencias', occurrenceView);
+  const [busca, setBusca] = useState('');
   const chamados = ocorrencias.filter(item => ['aberta', 'em_analise'].includes(item.status_ocorrencia));
   const [params, setParams] = useSearchParams();
   const [equipes] = useCollection('/equipes');
@@ -38,6 +40,7 @@ export default function FilaFiscalizacao() {
 
   const chamadosFiltrados = chamados.filter(item => {
     if (params.get('ocorrencia') && String(item.id) !== params.get('ocorrencia')) return false;
+    if (!normalizeAddress([item.protocolo_ocorrencia, item.titulo, item.endereco, item.descricao, item.nome_categoria].join(' ')).includes(normalizeAddress(busca))) return false;
     if (filterType === 'urgente') return item.urgente;
     if (filterType === 'rotina') return !item.urgente;
     return true;
@@ -176,6 +179,7 @@ export default function FilaFiscalizacao() {
             </div>
 
             <div className={styles.listaChamados}>
+              <label className={styles.buscaChamados}>Buscar chamados<input type="search" value={busca} onChange={event => setBusca(event.target.value)} placeholder="Protocolo, título ou endereço..." /></label>
               {chamadosFiltrados.length > 0 ? (
                 chamadosFiltrados.map(item => (
                   <div key={item.id} className={styles.cardChamado}>
@@ -188,6 +192,7 @@ export default function FilaFiscalizacao() {
                           #{item.id} - {item.titulo}
                           {item.urgente && <span className={styles.badgeUrgente}>Urgente</span>}
                         </strong>
+                        <small>{item.protocolo_ocorrencia}</small>
                         <span className={styles.localChamado}>{item.local} • <small>{item.data}</small></span>
                       </div>
                     </div>
@@ -214,8 +219,8 @@ export default function FilaFiscalizacao() {
               ) : (
                 <div className={styles.emptyState}>
                   <CheckCircle2 size={48} color="#059669" />
-                  <h3>Nenhum chamado pendente no momento!</h3>
-                  <p>Todas as ocorrências deste filtro já foram atribuídas a equipes em campo.</p>
+                  <h3>{consulta.loading ? 'Carregando chamados...' : consulta.error ? 'Não foi possível carregar os chamados.' : 'Nenhum chamado encontrado.'}</h3>
+                  <p>{consulta.error ? 'Atualize a página para tentar novamente.' : consulta.loading ? 'Aguarde a consulta das ocorrências.' : 'Confira a busca e os filtros selecionados.'}</p>
                 </div>
               )}
             </div>

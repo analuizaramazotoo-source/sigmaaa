@@ -1,9 +1,10 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { useCollection, occurrenceView, getSession, logout } from '../../../services/originalScreens';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './homee.module.css';
 import TupaMap from '../../../components/TupaMap';
+import { coordinatesInTupa } from '../../../services/mapCoordinates';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
 import prefeituraLogo from '../../../assets/prefeitura.png';
@@ -31,6 +32,14 @@ export default function HomeE() {
 
   const [modalLogout, setModalLogout] = useState(false);
   const [selectedVistoria, setSelectedVistoria] = useState(null);
+  const [mapSelection, setMapSelection] = useState(null);
+  const mapSection = useRef(null), focusRequest = useRef(0);
+  const selectOnMap = useCallback(item => {
+    setMapSelection({ ...item, focusRequest: ++focusRequest.current });
+    mapSection.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  }, []);
+  const clearMapSelection = useCallback(() => setMapSelection(null), []);
+  const closeDetails = () => { setSelectedVistoria(null); clearMapSelection(); };
   const [isLogoutHovered, setIsLogoutHovered] = useState(false);
 
   const handleConfirmLogout = async () => {
@@ -160,7 +169,7 @@ export default function HomeE() {
               </div>
               <div className={styles.statData}>
                 <span className={styles.statTitle}>Pendentes</span>
-                <strong className={styles.statValue}>{vistorias.filter(v => v.status_ocorrencia === 'em_andamento').length}</strong>
+                <strong className={styles.statValue}>{vistorias.filter(v => ['aberta', 'em_analise'].includes(v.status_ocorrencia)).length}</strong>
                 <span className={styles.statSubtitle}>Aguardando ida a campo</span>
               </div>
             </div>
@@ -172,7 +181,7 @@ export default function HomeE() {
               <div className={styles.statData}>
                 <span className={styles.statTitle}>Concluídas</span>
                 <strong className={styles.statValue}>{vistorias.filter(v => v.status_ocorrencia === 'resolvida').length}</strong>
-                <span className={styles.statSubtitle}>Relatórios finalizados</span>
+                <span className={styles.statSubtitle}>Vistorias concluídas</span>
               </div>
             </div>
           </section>
@@ -181,11 +190,12 @@ export default function HomeE() {
             <div className={styles.cardSection}>
               <div className={styles.cardHeader}>
                 <h3>Mapa Tático de Campo</h3>
-                <span className={styles.badgeSub}>3 PONTOS ATIVOS</span>
+                <span className={styles.badgeSub}>{vistorias.filter(item => coordinatesInTupa(item)).length} PONTOS NO MAPA</span>
               </div>
 
-              <div className={styles.mapCanvasWrapper}>
-                <TupaMap occurrences={vistorias} onOccurrenceClick={setSelectedVistoria} height={360} />
+              <div className={styles.mapCanvasWrapper} ref={mapSection}>
+                <TupaMap occurrences={vistorias} selectedLocation={mapSelection} onOccurrenceClick={selectOnMap} onOccurrenceDetails={setSelectedVistoria} onSelectionClear={clearMapSelection} focusSelectedOccurrence height={360} />
+                {mapSelection && !coordinatesInTupa(mapSelection) && <p role="status">A vistoria #{mapSelection.id} ainda não tem localização válida em Tupã. A gestão precisa corrigir o endereço para exibi-la no mapa.</p>}
 
                 <div className={styles.mapLegend}>
                   <span>Legenda:</span>
@@ -208,10 +218,13 @@ export default function HomeE() {
                 {vistorias.map((item) => {
                   const ItemIcon = item.icon;
                   return (
-                    <div 
+                    <button
+                      type="button"
                       key={item.id} 
                       className={styles.requestCardSelectable}
-                      onClick={() => setSelectedVistoria(item)}
+                      aria-label={`Ver vistoria ${item.id} no mapa: ${item.titulo}`}
+                      aria-pressed={mapSelection?.id === item.id}
+                      onClick={() => selectOnMap(item)}
                     >
                       <div className={styles.requestIcon}>
                         <ItemIcon size={18} />
@@ -225,7 +238,7 @@ export default function HomeE() {
                           {item.status}
                         </span>
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
@@ -244,7 +257,7 @@ export default function HomeE() {
           <div className={styles.modalContent}>
             <div className={styles.modalHeader}>
               <h3>Vistoria #{selectedVistoria.id}</h3>
-              <button type="button" onClick={() => setSelectedVistoria(null)} className={styles.closeBtnModal}>X</button>
+              <button type="button" aria-label="Fechar detalhes da vistoria" onClick={closeDetails} className={styles.closeBtnModal}>X</button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
               <div><strong>Título:</strong> {selectedVistoria.titulo}</div>
@@ -253,7 +266,7 @@ export default function HomeE() {
               <div><strong>Status:</strong> <span className={`${styles.badgeStatus} ${styles[`status_${selectedVistoria.statusType}`]}`}>{selectedVistoria.status}</span></div>
             </div>
             <div className={styles.modalActions}>
-              <button type="button" onClick={() => setSelectedVistoria(null)} className={styles.btnCancel}>Fechar</button>
+              <button type="button" onClick={closeDetails} className={styles.btnCancel}>Fechar</button>
               <button type="button" onClick={() => navigate(`/autoe?ocorrencia=${selectedVistoria.id}`)} className={styles.btnPrimaryModal}>Emitir Auto/Notificação</button>
             </div>
           </div>

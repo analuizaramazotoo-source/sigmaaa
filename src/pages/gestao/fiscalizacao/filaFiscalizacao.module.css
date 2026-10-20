@@ -461,3 +461,6 @@
 .modalContent { min-width:0; max-width:100%; }
 .mainContent { padding:16px; }
 }
+
+.buscaChamados { display:flex; flex-direction:column; gap:8px; color:#065f46; font-size:14px; margin-bottom:16px; }
+.buscaChamados input { width:100%; min-width:0; padding:12px; border:1px solid #a7f3d0; border-radius:8px; font:inherit; }

@@ -3,6 +3,7 @@ import { api, perform, useCollection, occurrenceView, canonicalStatus, refreshSc
 import { useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './filavistorias.module.css';
+import { normalizeAddress } from '../../../services/addressParts';
 
 // CAMINHOS DE IMPORTAÇÃO DAS IMAGENS
 import prefeituraLogo from '../../../assets/prefeitura.png';
@@ -26,14 +27,18 @@ import {
 export default function FilaVistorias() {
   const navigate = useNavigate();
 
-  const [vistorias] = useCollection('/ocorrencias', occurrenceView);
+  const [vistorias, , consulta] = useCollection('/ocorrencias', occurrenceView);
+  const [atualizando, setAtualizando] = useState(false);
   const [itemSelecionado, setItemSelecionado] = useState(null);
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
 
   // MARCAR COMO CONCLUÍDO / CONCLUIR VISTORIA
   const handleAtualizarStatus = async (id, novoStatus) => {
-    await perform(async () => { const value = await api(`/ocorrencias/${id}`, { method: 'PATCH', body: { status_ocorrencia: canonicalStatus(novoStatus) }}); setItemSelecionado(occurrenceView(value)); refreshScreens(); });
+    if (atualizando) return;
+    setAtualizando(true);
+    await perform(async () => { const value = await api(`/ocorrencias/${id}`, { method: 'PATCH', body: { status_ocorrencia: canonicalStatus(novoStatus) }}); setItemSelecionado(current => occurrenceView({ ...current, ...value })); refreshScreens(); });
+    setAtualizando(false);
   };
 
   // NAVEGAÇÃO DA SIDEBAR PADRONIZADA (IGUAL À HOME DA EQUIPE)
@@ -48,8 +53,7 @@ export default function FilaVistorias() {
 
   // FILTRAGEM E BUSCA
   const vistoriasFiltradas = vistorias.filter(item => {
-    const atendeBusca = (item.titulo || item.title || '').toLowerCase().includes(busca.toLowerCase()) ||
-                        (item.descricao || item.address || '').toLowerCase().includes(busca.toLowerCase());
+    const atendeBusca = normalizeAddress([item.protocolo_ocorrencia, item.titulo, item.endereco, item.descricao, item.nome_categoria].join(' ')).includes(normalizeAddress(busca));
 
     if (filtroStatus === 'todos') return atendeBusca;
     if (filtroStatus === 'pendentes') return atendeBusca && ['aberta', 'em_analise'].includes(item.status_ocorrencia);
@@ -146,7 +150,8 @@ export default function FilaVistorias() {
                   <Search size={16} className={styles.searchIcon} />
                   <input 
                     type="text" 
-                    placeholder="Buscar por título ou local..."
+                    aria-label="Buscar vistorias"
+                    placeholder="Protocolo, título ou endereço..."
                     value={busca}
                     onChange={(e) => setBusca(e.target.value)}
                   />
@@ -184,7 +189,7 @@ export default function FilaVistorias() {
                 {vistoriasFiltradas.length === 0 ? (
                   <div className={styles.emptyState}>
                     <AlertCircle size={32} />
-                    <p>Nenhuma vistoria encontrada com os filtros selecionados.</p>
+                    <p>{consulta.loading ? 'Carregando vistorias...' : consulta.error ? 'Não foi possível carregar as vistorias. Atualize a página para tentar novamente.' : 'Nenhuma vistoria encontrada com os filtros selecionados.'}</p>
                   </div>
                 ) : (
                   vistoriasFiltradas.map((item) => (
@@ -201,6 +206,7 @@ export default function FilaVistorias() {
                       </div>
 
                       <h4 className={styles.vistoriaTitle}>{item.titulo || item.title}</h4>
+                      <small>{item.protocolo_ocorrencia}</small>
                       <p className={styles.vistoriaDesc}>{item.descricao || item.address}</p>
 
                       <div className={styles.cardFooter}>
@@ -252,8 +258,10 @@ export default function FilaVistorias() {
                   </div>
 
                   <div className={styles.detailActions}>
+                    {['aberta', 'em_analise'].includes(itemSelecionado.status_ocorrencia) && <p>Inicie a vistoria para habilitar a conclusão.</p>}
                     <button 
                       className={styles.btnAcaoAmarelo}
+                      disabled={atualizando || !['aberta', 'em_analise'].includes(itemSelecionado.status_ocorrencia)}
                       onClick={() => handleAtualizarStatus(itemSelecionado.id, 'Em Andamento', 'amarelo')}
                     >
                       Iniciar Vistoria
@@ -261,6 +269,7 @@ export default function FilaVistorias() {
 
                     <button 
                       className={styles.btnAcaoVerde}
+                      disabled={atualizando || itemSelecionado.status_ocorrencia !== 'em_andamento'}
                       onClick={() => handleAtualizarStatus(itemSelecionado.id, 'Já Visitado', 'verde')}
                     >
                       <CheckCircle2 size={16} /> Marcar como Concluído

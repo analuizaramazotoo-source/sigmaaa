@@ -1,7 +1,8 @@
+import ImageAttachments from '../../../components/ImageAttachments';
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
 import { downloadReport } from '../../../services/downloadDocument';
 import { api, perform, useCollection, occurrenceView, refreshScreens, uploadFiles } from '../../../services/originalScreens';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import styles from './relatoriostecnicos.module.css';
 
@@ -17,22 +18,16 @@ import {
   BookOpen, 
   Users, 
   Send,
-  Upload,
   CheckCircle2,
   Clock,
   Download,
   ArrowLeft,
-  X,
-  FileCheck
 } from 'lucide-react';
 
 export default function RelatoriosTecnicos() {
   const navigate = useNavigate();
-  const fileInputRef = useRef(null);
   const [params] = useSearchParams();
-  const previewUrls = useRef(new Set());
   const [enviando, setEnviando] = useState(false);
-  useEffect(() => { const urls = previewUrls.current; return () => { for (const url of urls) URL.revokeObjectURL(url); }; }, []);
 
   // ESTADOS DO FORMULÁRIO
   const [ocorrenciaVinculada, setOcorrenciaVinculada] = useState(() => params.get('ocorrencia') || '');
@@ -45,7 +40,7 @@ export default function RelatoriosTecnicos() {
   // ESTADO DE ANEXOS / FOTOS
   const [arquivosAnexados, setArquivosAnexados] = useState([]);
 
-  // OCORRÊNCIAS DA FILA (LOCALSTORAGE)
+  // OCORRÊNCIAS DA FILA
   const [ocorrenciasDisponiveis] = useCollection('/ocorrencias', occurrenceView);
   const [relatorioSalvo, setRelatorioSalvo] = useState(null);
   const ocorrenciaAtual = ocorrenciasDisponiveis.find(o => String(o.id) === ocorrenciaVinculada);
@@ -65,63 +60,12 @@ export default function RelatoriosTecnicos() {
     }
   };
 
-  // MÉTODOS DE ANEXO DE ARQUIVOS
-  const processarArquivos = (files) => {
-    const novosArquivos = Array.from(files).filter(file => {
-      const isLt10M = file.size / 1024 / 1024 <= 5;
-      const isValidType = ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type);
-
-      if (!isLt10M) alert(`O arquivo "${file.name}" ultrapassa o limite de 5MB.`);
-      if (!isValidType) alert(`O arquivo "${file.name}" não é suportado. Envie JPG, PNG ou PDF.`);
-
-      return isLt10M && isValidType;
-    });
-
-    const arquivosComPreview = novosArquivos.map(file => {
-      const preview = file.type.startsWith('image/') ? URL.createObjectURL(file) : null;
-      if (preview) previewUrls.current.add(preview);
-      return {
-      id: Math.random().toString(36).substr(2, 9),
-      file,
-      nome: file.name,
-      tamanho: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-      preview,
-      isPdf: file.type === 'application/pdf'
-    }; });
-
-    setArquivosAnexados(prev => [...prev, ...arquivosComPreview]);
-  };
-
-  const handleFileSelect = (e) => {
-    if (e.target.files) {
-      processarArquivos(e.target.files);
-    }
-  };
-
-  const handleRemoveAnexo = (id) => {
-    const preview = arquivosAnexados.find(item => item.id === id)?.preview;
-    if (preview) { URL.revokeObjectURL(preview); previewUrls.current.delete(preview); }
-    setArquivosAnexados(prev => prev.filter(item => item.id !== id));
-  };
-
-  const handleDragOver = (e) => e.preventDefault();
-  const handleDrop = (e) => {
-    e.preventDefault();
-    if (e.dataTransfer.files) {
-      processarArquivos(e.dataTransfer.files);
-    }
-  };
-
   // ENVIAR RELATÓRIO
   const handleEnviarRelatorio = async (e) => {
     e.preventDefault(); if (enviando) return; setEnviando(true);
     await perform(async () => {
       const record = relatorioSalvo || await api('/relatorios', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), titulo: tituloAtual, tipo: tipoRelatorio, observacoes: observacoesTecnicas, parecer: parecerTecnico }});
-      setRelatorioSalvo(record); await uploadFiles(record.id_ocorrencia, arquivosAnexados.map(a => a.file), file => {
-        const preview = arquivosAnexados.find(item => item.file === file)?.preview;
-        if (preview) { URL.revokeObjectURL(preview); previewUrls.current.delete(preview); }
-        setArquivosAnexados(current => current.filter(item => item.file !== file));
-      });
+      setRelatorioSalvo(record); await uploadFiles(record.id_ocorrencia, arquivosAnexados, file => setArquivosAnexados(current => current.filter(item => item !== file)));
       refreshScreens(); setMensagemSucesso(true); setTituloRelatorio(''); setObservacoesTecnicas(''); setOcorrenciaVinculada(''); setArquivosAnexados([]); setRelatorioSalvo(null);
       setTimeout(() => setMensagemSucesso(false), 3000);
     }); setEnviando(false);
@@ -225,6 +169,7 @@ export default function RelatoriosTecnicos() {
               )}
 
               <form onSubmit={handleEnviarRelatorio} className={styles.formContainer}>
+                <fieldset className={styles.documentFields} disabled={enviando || Boolean(relatorioSalvo)}>
                 
                 {/* VINCULAÇÃO DE OCORRÊNCIA */}
                 <div className={styles.formGroup}>
@@ -289,89 +234,9 @@ export default function RelatoriosTecnicos() {
                   />
                 </div>
 
-                {/* ANEXAR ARQUIVOS / FOTOS */}
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  style={{ display: 'none' }} 
-                  multiple 
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  onChange={handleFileSelect}
-                />
-
-                <div 
-                  className={styles.uploadBox}
-                  onClick={() => fileInputRef.current?.click()}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <Upload size={20} className={styles.uploadIcon} />
-                  <div>
-                    <strong>Anexar Fotos da Vistoria / Documentos Suportados</strong>
-                    <span>Formatos aceitos: JPG, PNG ou PDF (Máx. 5MB)</span>
-                  </div>
-                </div>
-
-                {/* LISTAGEM DE ARQUIVOS ANEXADOS */}
-                {arquivosAnexados.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '12px' }}>
-                    {arquivosAnexados.map((item) => (
-                      <div 
-                        key={item.id}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          backgroundColor: '#f0fdf4',
-                          border: '1px solid #bbf7d0',
-                          borderRadius: '8px',
-                          padding: '6px 12px',
-                          fontSize: '12px',
-                          color: '#065f46'
-                        }}
-                      >
-                        {item.preview ? (
-                          <img 
-                            src={item.preview} 
-                            alt={item.nome} 
-                            style={{ width: '32px', height: '32px', objectFit: 'cover', borderRadius: '4px' }}
-                          />
-                        ) : (
-                          <FileCheck size={24} color="#059669" />
-                        )}
-                        <div>
-                          <strong style={{ display: 'block', maxWidth: '140px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {item.nome}
-                          </strong>
-                          <span style={{ fontSize: '10px', color: '#047857' }}>{item.tamanho}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveAnexo(item.id);
-                          }}
-                          style={{
-                            border: 'none',
-                            background: '#fee2e2',
-                            color: '#dc2626',
-                            borderRadius: '50%',
-                            width: '20px',
-                            height: '20px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: '6px'
-                          }}
-                        >
-                          <X size={12} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                </fieldset>
+                {relatorioSalvo && !enviando && <p role="status">Relatório REL-{relatorioSalvo.id_relatorio} registrado. Confira os anexos pendentes e envie novamente para concluir.</p>}
+                <ImageAttachments allowDocuments files={arquivosAnexados} onChange={setArquivosAnexados} disabled={enviando} />
 
                 {/* BOTÃO DE AÇÃO */}
                 <div className={styles.formActions}>
