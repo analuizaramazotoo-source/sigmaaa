@@ -12,7 +12,7 @@ async function main() {
   const browser = await chromium.launch({ headless: true, channel: process.env.UI_BROWSER_CHANNEL || 'msedge' });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   await context.addInitScript(value => sessionStorage.setItem('sigma_session', JSON.stringify({ token: 'teste-ui', usuario: value })), user);
-  const messages = [], documents = [], uploads = [], patches = [], errors = [];
+  const documents = [], uploads = [], patches = [], errors = [];
   let failPhoto = true;
   await context.route('https://tile.openstreetmap.org/**', route => route.abort());
   await context.route('**/api/**', async route => {
@@ -29,14 +29,6 @@ async function main() {
     if (resource === '/equipes') data = [{ id_equipe: 1, nome_equipe: 'Equipe ativa', status_equipe: 'disponivel' }];
     if (resource === '/equipes/minha') data = null;
     if (resource === '/legislacao') data = [{ id_lei: 1, titulo: 'Norma cadastrada para o teste', conteudo: 'Resumo do teste', url_oficial: 'https://example.com' }];
-    if (/\/ocorrencias\/\d+\/mensagens$/.test(resource)) {
-      const id = Number(resource.split('/')[2]);
-      if (req.method() === 'POST') { messages.push({ ...req.postDataJSON(), id }); data = { id_mensagem: 100 }; }
-      else {
-        if (id === 12) await new Promise(resolve => setTimeout(resolve, 600));
-        data = [{ id_mensagem: 1, id_remetente: 99, nome_usuario: 'Atendimento', mensagem: `Mensagem exclusiva ${id}` }, ...messages.filter(m => m.id === id).map((m, i) => ({ ...m, id_mensagem: i + 100, id_remetente: 1, nome_usuario: 'Teste' }))];
-      }
-    }
     if (['/relatorios', '/autos'].includes(resource)) {
       if (req.method() === 'POST') {
         await new Promise(resolve => setTimeout(resolve, 150));
@@ -68,20 +60,10 @@ async function main() {
     await page.goto(base + '/status');
     await page.getByRole('combobox', { name: 'Solicitação' }).selectOption('12');
     assert.equal(await page.getByText('Equipe a caminho', { exact: true }).count(), 0);
-    await page.getByRole('link', { name: 'Ver mensagens / falar com a gestão' }).click();
-    await page.waitForURL('**/chat?ocorrencia=12');
-    await page.getByText('Mensagem exclusiva 12', { exact: false }).waitFor();
-    await page.getByRole('combobox', { name: 'Solicitação' }).selectOption('11');
-    await page.getByText('Mensagem exclusiva 11', { exact: false }).waitFor();
-    await page.getByRole('textbox', { name: 'Mensagem', exact: true }).fill('Rascunho da primeira');
-    await page.getByRole('combobox', { name: 'Solicitação' }).selectOption('12');
-    assert.equal(await page.getByText('Mensagem exclusiva 11', { exact: false }).count(), 0);
-    assert.equal(await page.getByRole('textbox', { name: 'Mensagem', exact: true }).inputValue(), '');
-    await page.getByRole('textbox', { name: 'Mensagem', exact: true }).fill('Mensagem pelo Enter');
-    await page.getByRole('textbox', { name: 'Mensagem', exact: true }).press('Enter');
-    await page.waitForFunction(() => document.querySelector('[aria-label="Mensagem"]').value === '');
-    assert.deepEqual(messages, [{ id: 12, mensagem: 'Mensagem pelo Enter' }]);
-    console.log('Painel unificado, rota antiga, acompanhamento e mensagens por protocolo: OK');
+    assert.equal(await page.locator('a[href^="/chat"]').count(), 0);
+    await page.goto(base + '/chat');
+    await page.getByRole('heading', { name: 'Página não encontrada' }).waitFor();
+    console.log('Painel unificado, rota antiga e acompanhamento: OK');
 
     await page.goto(base + '/fila-fiscalizacao');
     await page.getByText('Análise de descarte', { exact: false }).waitFor();
@@ -149,7 +131,7 @@ async function main() {
     assert.equal(patches.length, 1); assert.equal(patches[0].latitude_ocorrencia, place.lat); assert.equal(patches[0].longitude_ocorrencia, place.lng);
     assert.equal(errors.length, 0);
     console.log('Autos com contexto, senha única, página inexistente e correção de localização: OK');
-    console.log({ errors, messages: messages.length, reports: documents.filter(d => d.resource === '/relatorios').length, autos: documents.filter(d => d.resource === '/autos').length, photos: uploads.length, locationCorrections: patches.length, realWrites: 0 });
+    console.log({ errors, reports: documents.filter(d => d.resource === '/relatorios').length, autos: documents.filter(d => d.resource === '/autos').length, photos: uploads.length, locationCorrections: patches.length, realWrites: 0 });
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

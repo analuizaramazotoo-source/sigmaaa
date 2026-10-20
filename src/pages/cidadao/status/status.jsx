@@ -17,10 +17,10 @@ const etapas = [
   { label: "Concluído", cor: "#196f3d" },
 ];
 
-const mensagens = [
+const descricoesEtapas = [
   "Sua solicitação foi enviada com sucesso.",
   "Sua solicitação está sendo analisada pela equipe.",
-  "Sua solicitação está em atendimento. Consulte as mensagens para mais detalhes.",
+  "Sua solicitação está em atendimento pela equipe responsável.",
   "Problema resolvido com sucesso. Obrigado!",
 ];
 
@@ -81,7 +81,7 @@ export default function Status() {
                 </div>
                 <div>
                   <h2>Status da Solicitação</h2>
-                  <p>Veja o andamento e as mensagens de cada solicitação</p>
+                  <p>Acompanhe o andamento de cada solicitação</p>
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ export default function Status() {
                   {solicitacoes.map(o => <option key={o.id} value={o.id}>{o.protocolo_ocorrencia} — {o.titulo}</option>)}
                 </select>
                 <p>{solicitacao ? `${solicitacao.protocolo_ocorrencia} — ${solicitacao.endereco}` : consulta.loading ? 'Carregando suas solicitações...' : consulta.error ? 'Não foi possível carregar suas solicitações. Tente atualizar a página.' : 'Nenhuma solicitação cadastrada.'}</p>
-                {solicitacao ? <Link className={styles.btnMensagem} to={`/chat?ocorrencia=${solicitacao.id}`}>Ver mensagens / falar com a gestão</Link> : !consulta.loading && !consulta.error && <Link className={styles.btnMensagem} to="/relatar-problema">Registrar meu primeiro relato</Link>}
+                {!solicitacao && !consulta.loading && !consulta.error && <Link className={styles.btnRegistro} to="/relatar-problema">Registrar meu primeiro relato</Link>}
               </div>
               {/* TIMELINE DE ETAPAS */}
               <div className={styles.timelineWrapper}>
@@ -132,7 +132,7 @@ export default function Status() {
 
               {/* MENSAGEM DO STATUS */}
               <div className={styles.statusBox}>
-                <p className={styles.mensagem}>{solicitacao?.status_ocorrencia === 'arquivada' ? 'Solicitação arquivada.' : mensagens[etapaAtiva] || 'Envie um relato para acompanhar o atendimento.'}</p>
+                <p className={styles.mensagem}>{solicitacao?.status_ocorrencia === 'arquivada' ? 'Solicitação arquivada.' : descricoesEtapas[etapaAtiva] || 'Envie um relato para acompanhar o atendimento.'}</p>
               </div>
 
             </div>

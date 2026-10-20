@@ -136,7 +136,7 @@ export default function Homec() {
                   </div>
                   <h3>Acompanhar Solicitação</h3>
                 </div>
-                <p>Consulte seus protocolos, veja o andamento e converse com a gestão sobre cada solicitação.</p>
+                <p>Consulte seus protocolos e acompanhe o andamento de cada solicitação.</p>
                 <Link to="/status" className={styles.btnCard}>
                   MINHAS SOLICITAÇÕES
                 </Link>

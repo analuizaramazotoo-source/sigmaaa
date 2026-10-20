@@ -541,7 +541,6 @@ export default function Homeg() {
               </div>
             </div>
             <div className={styles.modalActions}>
-              <Link to={`/chat?ocorrencia=${selectedOcorrencia.id}`} className={styles.btnCancel}>Mensagens da solicitação</Link>
               <button onClick={() => setSelectedOcorrencia(null)} className={styles.btnCancel}>Cancelar</button>
             </div>
           </div>

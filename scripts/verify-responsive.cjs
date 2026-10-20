@@ -10,7 +10,7 @@ const user = { id_usuario: 1, nome_usuario: 'Pessoa de teste com nome completo',
 const occurrence = { id_ocorrencia: 1, titulo_ocorrencia: 'Descarte de resíduos em Tupã', protocolo_ocorrencia: 'TESTE-001', nome_categoria: 'Resíduos', id_categoria: 1, logradouro_ocorrencia: 'Rua Aimorés, 123, Centro, Tupã/SP', descricao_ocorrencia: 'Registro fictício para verificar a interface.', status_ocorrencia: 'aberta', data_ocorrencia: '2026-10-19', latitude_ocorrencia: -21.933611, longitude_ocorrencia: -50.5125 };
 const team = { id_equipe: 1, nome_equipe: 'Equipe de teste', especialidade_equipe: 'Ambiental', status_equipe: 'disponivel', membros: [] };
 const place = { lat: -21.933611, lng: -50.5125, label: 'Rua Aimorés, Tupã/SP', approximate: true, postcode: '17600-000' };
-const routes = (process.env.UI_ROUTES || '/,/login,/logincidadao,/cadastro,/esqueci-senha,/cidadao,/relatar-problema,/solicitar,/status,/denuncia,/perfil,/alterar,/chat,/homeg,/geoprocessamento,/fila-fiscalizacao,/autos-notificacoes-gestao,/relatorios-tecnicos-gestao,/legislacao,/perfilg,/cadastrog,/config,/homee,/autoe,/filae,/leise,/relatorioe,/perfile,/cadastroeq').split(',');
+const routes = (process.env.UI_ROUTES || '/,/login,/logincidadao,/cadastro,/esqueci-senha,/cidadao,/relatar-problema,/solicitar,/status,/denuncia,/perfil,/alterar,/homeg,/geoprocessamento,/fila-fiscalizacao,/autos-notificacoes-gestao,/relatorios-tecnicos-gestao,/legislacao,/perfilg,/cadastrog,/config,/homee,/autoe,/filae,/leise,/relatorioe,/perfile,/cadastroeq').split(',');
 const widths = (process.env.UI_WIDTHS || '360,390,768,1024,1440').split(',').map(Number);
 async function main() {
   const browser = await chromium.launch({ headless: true, channel: process.env.UI_BROWSER_CHANNEL || 'msedge' });
@@ -53,7 +53,7 @@ async function main() {
         }
         const menu = page.getByRole('button', { name: 'Abrir menu', exact: true });
         if (await page.locator('.sigma-sidebar').count()) {
-          if (width <= 1024 || ['/chat', '/alterar'].includes(route)) {
+          if (width <= 1024 || ['/alterar'].includes(route)) {
             assert.equal(await menu.count(), 1, `${route}: um botão de menu`);
             await menu.click(); await page.getByRole('dialog', { name: 'Menu lateral' }).waitFor({ state: 'visible' });
             assert.equal(await page.locator('#root').evaluate(el => el.inert), true);
