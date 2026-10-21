@@ -16,7 +16,8 @@ export async function api(path, options = {}) {
   } catch { throw new Error('Não foi possível conectar ao servidor. Verifique se o back-end está iniciado.'); }
   const result = await response.json().catch(() => ({ mensagem: 'Resposta inválida do servidor.' }));
   if (response.status === 401 && !path.startsWith('/auth/')) {
-    sessionStorage.removeItem('sigma_session'); window.location.assign('/login');
+    const staff = ['gestao', 'equipe'].includes(getSession()?.usuario.tipo_usuario);
+    sessionStorage.removeItem('sigma_session'); window.location.assign(staff ? '/acesso-servidor' : '/login');
   }
   if (!response.ok || !result.sucesso) throw new Error(result.mensagem || 'Não foi possível concluir a operação.');
   return result.dados;

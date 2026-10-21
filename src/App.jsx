@@ -48,7 +48,8 @@ function App() {
         <Route path="/" element={<Home />} />
         
         {/* LOGINS E CADASTROS DE AUTENTICAÇÃO */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login key="cidadao" />} />
+        <Route path="/acesso-servidor" element={<Login key="servidor" servidor />} />
         <Route path="/logincidadao" element={<LoginCidadao />} />
         <Route path="/cadastroeq" element={<Guard roles={['gestao']}><CadastroEquipe /></Guard>} />
         <Route path="/esqueci-senha" element={<EsqueciSenha />} /> {/* Rota adicionada */}

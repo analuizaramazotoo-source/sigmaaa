@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { getSession } from '../services/api';
 export function Guard({ children, roles }) {
   const user = getSession()?.usuario;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to={roles && !roles.includes('cidadao') ? '/acesso-servidor' : '/login'} replace />;
   if (roles && !roles.includes(user.tipo_usuario)) return <Navigate to={user.tipo_usuario === 'gestao' ? '/homeg' : user.tipo_usuario === 'equipe' ? '/homee' : '/cidadao'} replace />;
   return children;
 }

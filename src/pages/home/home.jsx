@@ -1,9 +1,8 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from './home.module.css';
-import { Users, User, ShieldCheck, LogIn } from "lucide-react";
+import { User, LogIn } from "lucide-react";
 
 function Home() {
-  const navigate = useNavigate();
 
   return (
     <div className={styles.container}>
@@ -43,80 +42,27 @@ function Home() {
         <div className={styles.heroSection}>
           <h1 className={styles.mainTitle}>SECRETARIA DO MEIO AMBIENTE</h1>
           <p className={styles.description}>
-            Selecione seu perfil abaixo para realizar o cadastro ou acesse sua conta.
+            Relate problemas ambientais em Tupã e acompanhe suas solicitações.
           </p>
         </div>
 
         {/* SEÇÃO DE SELEÇÃO DE PERFIL */}
         <div className={styles.profilesCard}>
-          <h2 className={styles.profilesTitle}>CRIAR CADASTRO POR PERFIL:</h2>
+          <h2 className={styles.profilesTitle}>PORTAL DO CIDADÃO</h2>
 
           <div className={styles.profilesGrid}>
-            {/* CARD EQUIPE */}
-            <div 
-              className={styles.profileBox}
-              onClick={() => navigate("/cadastroeq")}
-              style={{ cursor: "pointer" }}
-            >
-              <div className={styles.iconCircle}>
-                <Users size={36} />
-              </div>
-              <h3>Equipe</h3>
-              <p>Membros das equipes operacionais</p>
-              <button
-                className={styles.btnSelecionar}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/cadastroeq");
-                }}
-              >
-                Cadastrar
-              </button>
-            </div>
-
             {/* CARD CIDADÃO */}
-            <div 
-              className={styles.profileBox}
-              onClick={() => navigate("/cadastro")}
-              style={{ cursor: "pointer" }}
-            >
+            <div className={styles.profileBox}>
               <div className={styles.iconCircle}>
                 <User size={36} />
               </div>
               <h3>Cidadão</h3>
-              <p>Solicitação e relatos de serviços</p>
-              <button
-                className={styles.btnSelecionar}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/cadastro");
-                }}
-              >
-                Cadastrar
-              </button>
+              <p>Cadastre-se para relatar problemas e acompanhar o atendimento.</p>
+              <Link to="/cadastro" className={styles.btnSelecionar}>
+                Criar minha conta
+              </Link>
             </div>
 
-            {/* CARD GESTÃO */}
-            <div 
-              className={styles.profileBox}
-              onClick={() => navigate("/cadastrog")}
-              style={{ cursor: "pointer" }}
-            >
-              <div className={styles.iconCircle}>
-                <ShieldCheck size={36} />
-              </div>
-              <h3>Gestão</h3>
-              <p>Coordenação e administração</p>
-              <button
-                className={styles.btnSelecionar}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/cadastrog");
-                }}
-              >
-                Cadastrar Gestão
-              </button>
-            </div>
           </div>
 
           {/* PARTE INFERIOR: JÁ POSSUI CONTA? ENTRAR */}
@@ -132,6 +78,7 @@ function Home() {
           </div>
         </div>
       </main>
+      <footer className={styles.footer}><Link to="/acesso-servidor">Acesso de servidores</Link></footer>
     </div>
   );
 }

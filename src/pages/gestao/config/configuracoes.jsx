@@ -29,7 +29,7 @@ export default function Configuracoes() {
       <nav className={styles.tabs} aria-label="Configurações"><button aria-pressed={tab === 'contas'} onClick={() => { setTab('contas'); setMessage(''); }}>Contas</button><button aria-pressed={tab === 'equipes'} onClick={() => { setTab('equipes'); setMessage(''); }}>Equipes e integrantes</button><Link to="/perfilg">Meu perfil e senha</Link></nav>
       {message && <p className={styles.success} role="status">{message}</p>}
       {tab === 'contas' ? <div className={styles.contentGrid}>
-        <section className={styles.cardSection}><h2>Criar conta</h2><p>Cada pessoa precisa de um e-mail próprio. Depois, vincule os integrantes à equipe.</p>
+        <section className={styles.cardSection}><h2>Cadastrar servidor</h2><p>Somente a gestão pode criar contas de gestão e equipe. Cada pessoa precisa de um e-mail próprio. Depois, vincule os integrantes à equipe.</p>
           <form className={styles.modalForm} onSubmit={e => save(e, '/usuarios', user, () => setUser(emptyUser))}>
             {input('Nome completo *', 'nome_usuario', user, setUser, { required: true, autoComplete: 'name' })}
             {input('E-mail *', 'email_usuario', user, setUser, { required: true, type: 'email', autoComplete: 'email' })}

@@ -98,7 +98,7 @@ export default function PerfilEquipe() {
               </div>
             </div>
 
-            <button className={styles.btnLogout} onClick={() => perform(async () => { await logout(); navigate('/login'); })} title="Sair do Sistema">
+            <button className={styles.btnLogout} onClick={() => perform(async () => { await logout(); navigate('/acesso-servidor'); })} title="Sair do Sistema">
               <LogOut size={18} />
             </button>
           </div>

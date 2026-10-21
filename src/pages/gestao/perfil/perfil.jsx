@@ -25,7 +25,7 @@ export default function Perfil() {
   };
 
   const handleConfirmLogout = async () => {
-    try { await logout(); } finally { setModalLogout(false); navigate('/login'); }
+    try { await logout(); } finally { setModalLogout(false); navigate('/acesso-servidor'); }
   };
 
   return (

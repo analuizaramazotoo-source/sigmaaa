@@ -43,7 +43,7 @@ export default function HomeE() {
   const [isLogoutHovered, setIsLogoutHovered] = useState(false);
 
   const handleConfirmLogout = async () => {
-    try { await logout(); } finally { setModalLogout(false); navigate('/login'); }
+    try { await logout(); } finally { setModalLogout(false); navigate('/acesso-servidor'); }
   };
 
 

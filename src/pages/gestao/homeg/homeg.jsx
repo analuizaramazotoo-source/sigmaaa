@@ -90,7 +90,7 @@ export default function Homeg() {
   };
 
   const handleConfirmLogout = async () => {
-    try { await logout(); } finally { setModalLogout(false); navigate('/login'); }
+    try { await logout(); } finally { setModalLogout(false); navigate('/acesso-servidor'); }
   };
 
   const filteredFila = fila.filter(item => {
