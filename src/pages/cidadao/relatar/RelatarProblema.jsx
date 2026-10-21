@@ -192,7 +192,7 @@ export default function RelatarProblema() {
         </main>
 
         <footer className={styles.footerGlobal}>
-          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Atendimento ao cidadão de Tupã/SP.</p>
         </footer>
       </div>
     </div>

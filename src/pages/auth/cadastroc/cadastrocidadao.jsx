@@ -29,6 +29,7 @@ function CadastroCidadao() {
   // Ao cadastrar, valida e vai para a área do cidadão
   const handleCadastrar = async (e) => {
     e.preventDefault();
+    if (enviando) return;
 
     if (senha !== confirmarSenha) {
       alert("As senhas não coincidem. Verifique e tente novamente.");
@@ -84,8 +85,8 @@ function CadastroCidadao() {
               {/* ÁREA DOS INPUTS OBRIGATÓRIOS */}
               <div className={styles.inputsArea}>
                 <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>Nome Completo *</label>
-                  <input
+                  <label className={styles.inputLabel} htmlFor="cadastro-nome">Nome Completo *</label>
+                  <input id="cadastro-nome"
                     type="text"
                     placeholder="Digite seu nome completo"
                     className={styles.inputField}
@@ -96,8 +97,8 @@ function CadastroCidadao() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>E-mail *</label>
-                  <input
+                  <label className={styles.inputLabel} htmlFor="cadastro-email">E-mail *</label>
+                  <input id="cadastro-email"
                     type="email"
                     placeholder="seu.email@exemplo.com"
                     className={styles.inputField}
@@ -109,8 +110,8 @@ function CadastroCidadao() {
 
                 <div className={styles.inputRow}>
                   <div className={styles.inputGroup}>
-                    <label className={styles.inputLabel}>Celular *</label>
-                    <input
+                    <label className={styles.inputLabel} htmlFor="cadastro-celular">Celular *</label>
+                    <input id="cadastro-celular"
                       type="tel"
                       placeholder="(00) 00000-0000"
                       maxLength={11}
@@ -122,11 +123,11 @@ function CadastroCidadao() {
                   </div>
 
                   <div className={styles.inputGroup}>
-                    <label className={styles.inputLabel}>CPF *</label>
-                    <input
+                    <label className={styles.inputLabel} htmlFor="cadastro-cpf">CPF *</label>
+                    <input id="cadastro-cpf"
                       type="text"
                       placeholder="000.000.000-00"
-                      maxLength={11}
+                      maxLength={11} minLength={11} inputMode="numeric"
                       value={cpf}
                       onInput={(e) => handleOnlyNumbers(e, setCpf)}
                       className={styles.inputField}
@@ -136,10 +137,11 @@ function CadastroCidadao() {
                 </div>
 
                 <div className={styles.senhaGroup}>
+                  <p id="cadastro-senha-ajuda" style={{ gridColumn: '1 / -1', fontSize: 12, color: '#047857' }}>Use uma senha com 8 a 128 caracteres.</p>
                   <div className={styles.inputGroup}>
-                    <label className={styles.inputLabel}>Senha *</label>
-                    <input
-                      type="password"
+                    <label className={styles.inputLabel} htmlFor="cadastro-senha">Senha *</label>
+                    <input id="cadastro-senha"
+                      type="password" minLength={8} maxLength={128} autoComplete="new-password" aria-describedby="cadastro-senha-ajuda"
                       placeholder="••••••••"
                       className={styles.inputField}
                       value={senha}
@@ -149,9 +151,9 @@ function CadastroCidadao() {
                   </div>
 
                   <div className={styles.inputGroup}>
-                    <label className={styles.inputLabel}>Confirmar Senha *</label>
-                    <input
-                      type="password"
+                    <label className={styles.inputLabel} htmlFor="cadastro-confirmar">Confirmar Senha *</label>
+                    <input id="cadastro-confirmar"
+                      type="password" minLength={8} maxLength={128} autoComplete="new-password" aria-describedby="cadastro-senha-ajuda"
                       placeholder="••••••••"
                       className={styles.inputField}
                       value={confirmarSenha}

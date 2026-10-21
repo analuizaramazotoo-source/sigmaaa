@@ -1,15 +1,13 @@
-import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getSession, perform, saveProfile } from '../../../services/originalScreens';
 import { useState } from "react";
 import styles from './alterar.module.css';
 
-import arvoreLogo from "../../../assets/arvore.png";
+import { ArrowLeft, Eye, EyeOff, KeyRound, Trees } from 'lucide-react';
 
 export default function Alterar() {
   const navigate = useNavigate();
   const role = getSession()?.usuario.tipo_usuario;
-  const inicio = role === 'gestao' ? '/homeg' : role === 'equipe' ? '/homee' : '/cidadao';
   const perfil = role === 'gestao' ? '/perfilg' : role === 'equipe' ? '/perfile' : '/perfil';
   const [salvando, setSalvando] = useState(false);
   const [senhaAtual, setSenhaAtual] = useState("");
@@ -37,48 +35,28 @@ export default function Alterar() {
 
   return (
     <div className={styles.containerHome}>
-      <ResponsiveSidebar alwaysCollapsed className={styles.menuLateral}>
-        <nav className="sigma-citizen-navigation" aria-label="Menu do cidadão">
-          <Link to={inicio}>Início</Link>
-          {role === 'cidadao' && <>
-          <Link to="/relatar-problema">Relatar problema</Link>
-          <Link to="/status">Minhas solicitações</Link>
-          </>}
-          <Link to={perfil}>Meu perfil</Link>
-        </nav>
-      </ResponsiveSidebar>
-
-      {/* HEADER */}
       <header className={styles.headerHome}>
         <div className={styles.logoArea}>
-          <img src={arvoreLogo} alt="Logo Meio Ambiente" />
+          <span className={styles.logoIcon}><Trees size={24} aria-hidden="true" /></span>
           <div>
-            <p>SECRETARIA DO</p>
-            <h2>MEIO AMBIENTE</h2>
+            <p>SECRETARIA DO MEIO AMBIENTE</p>
+            <span className={styles.logoSubtitle}>Tupã • São Paulo</span>
           </div>
         </div>
 
-        <div className={styles.headerRight}>
+        <div>
           <button className={styles.btnVoltar} onClick={() => navigate(perfil)}>
-            Voltar
+            <ArrowLeft size={16} aria-hidden="true" /> Voltar
           </button>
         </div>
       </header>
 
-      {/* OVERLAY */}
-
       {/* CONTEÚDO */}
       <main className={styles.conteudo}>
-        {/* Título lateral esquerdo */}
-        <div className={styles.tituloLateral}>
-          <h1>ALTERAR SENHA</h1>
-        </div>
-
-        {/* Card do formulário */}
         <form className={styles.card} onSubmit={handleSalvar}>
-          <h2 className={styles.cardTitulo}>ALTERAR SENHA:</h2>
+          <div className={styles.cardHeading}><span className={styles.keyIcon}><KeyRound size={24} aria-hidden="true" /></span><div><h1 className={styles.cardTitulo}>Alterar senha</h1><p className={styles.cardSubtitulo}>Mantenha sua conta protegida.</p></div></div>
           <p className={styles.cardSubtitulo}>
-            Digite sua senha atual e escolha uma nova.
+            Digite sua senha atual e escolha uma nova com pelo menos 8 caracteres.
           </p>
 
           {/* Senha Atual */}
@@ -95,10 +73,12 @@ export default function Alterar() {
               />
               <button
                 className={styles.olhoBtn}
+                aria-label={mostrarSenhaAtual ? 'Ocultar senha atual' : 'Mostrar senha atual'}
+                aria-pressed={mostrarSenhaAtual}
                 onClick={() => setMostrarSenhaAtual(!mostrarSenhaAtual)}
                 type="button"
               >
-                {mostrarSenhaAtual ? "🙈" : "👁️"}
+                {mostrarSenhaAtual ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -117,10 +97,12 @@ export default function Alterar() {
               />
               <button
                 className={styles.olhoBtn}
+                aria-label={mostrarNovaSenha ? 'Ocultar nova senha' : 'Mostrar nova senha'}
+                aria-pressed={mostrarNovaSenha}
                 onClick={() => setMostrarNovaSenha(!mostrarNovaSenha)}
                 type="button"
               >
-                {mostrarNovaSenha ? "🙈" : "👁️"}
+                {mostrarNovaSenha ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -139,10 +121,12 @@ export default function Alterar() {
               />
               <button
                 className={styles.olhoBtn}
+                aria-label={mostrarConfirmar ? 'Ocultar confirmação da senha' : 'Mostrar confirmação da senha'}
+                aria-pressed={mostrarConfirmar}
                 onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
                 type="button"
               >
-                {mostrarConfirmar ? "🙈" : "👁️"}
+                {mostrarConfirmar ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -154,7 +138,7 @@ export default function Alterar() {
       </main>
 
       {/* FOOTER */}
-      <footer className={styles.footerHome}></footer>
+      <footer className={styles.footerHome}>Secretaria do Meio Ambiente • Tupã/SP</footer>
     </div>
   );
 }

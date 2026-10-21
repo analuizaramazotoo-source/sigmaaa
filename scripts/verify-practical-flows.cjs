@@ -101,7 +101,7 @@ async function main() {
     await page.getByRole('textbox', { name: 'Constatações de Campo' }).fill('Constatação informada pelo fiscal para o teste.');
     await page.getByRole('combobox', { name: 'Parecer Conclusivo do Fiscal' }).selectOption('Improcedente - Denúncia Não Confirmada');
     assert.equal(await page.locator('input[type="file"]').isVisible(), false);
-    const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.getByRole('button', { name: 'Anexar imagens' }).click()]);
+    const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.getByRole('button', { name: 'Escolher arquivos' }).click()]);
     await chooser.setFiles([image('preview.png'), { name: 'documento.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 teste') }]);
     const thumbnail = await page.getByRole('img', { name: 'Prévia de preview.png' }).boundingBox();
     assert.ok(thumbnail.width <= 80 && thumbnail.height <= 80);
@@ -112,7 +112,7 @@ async function main() {
     await page.locator('.sigma-image-attachments').screenshot({ path: 'artifacts/praticidade/anexos-equipe.png' });
     await page.getByRole('button', { name: 'Remover arquivo preview.png' }).click();
     await page.getByRole('button', { name: 'Remover arquivo documento.pdf' }).click();
-    await page.getByRole('button', { name: 'Anexar imagens' }).evaluate(element => {
+    await page.getByRole('button', { name: 'Escolher arquivos' }).evaluate(element => {
       const transfer = new DataTransfer();
       transfer.items.add(new File(['%PDF-1.4 teste'], 'arrastado.pdf', { type: 'application/pdf' }));
       element.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: transfer }));
@@ -192,6 +192,9 @@ async function main() {
     assert.equal(await page.locator('input[type="password"]').count(), 0);
     await page.getByRole('link', { name: 'Alterar minha senha' }).click();
     await page.getByLabel('Nova Senha', { exact: true }).waitFor();
+    assert.equal(await page.locator('.sigma-sidebar').count(), 0);
+    assert.equal(await page.getByRole('button', { name: /Abrir menu/ }).count(), 0);
+    await page.screenshot({ path: 'artifacts/praticidade/alterar-senha.png', fullPage: true });
     assert.equal(await page.getByLabel('Nova Senha', { exact: true }).getAttribute('minlength'), '8');
     await page.goto(base + '/perfilg');
     assert.equal(await page.getByRole('button', { name: 'Alterar Foto' }).count(), 0);

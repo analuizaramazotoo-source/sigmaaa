@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ImagePlus, FileText, X } from 'lucide-react';
+import { FileText, X } from 'lucide-react';
 import './ImageAttachments.css';
 
 function Preview({ file, enlarged = false }) {
@@ -48,9 +48,8 @@ export default function ImageAttachments({ files, onChange, disabled = false, al
     onChange(combined);
   }
   return <section className={`sigma-image-attachments${allowDocuments ? ' sigma-document-attachments' : ''}`} aria-label={allowDocuments ? 'Anexos do documento' : 'Fotos da ocorrência'}>
-    {!allowDocuments && <><label htmlFor={id}><ImagePlus size={20} /> Anexar imagens da ocorrência (opcional)</label><p id={`${id}-help`}>Escolha fotos da galeria ou tire uma foto pelo celular. JPG ou PNG, até 5 MB por imagem.</p></>}
-    <input ref={input} aria-label={allowDocuments ? 'Anexar imagens' : undefined} hidden={allowDocuments} id={id} type="file" accept={allowDocuments ? 'image/jpeg,image/png,application/pdf' : 'image/jpeg,image/png'} multiple disabled={disabled} onChange={select} aria-describedby={allowDocuments ? undefined : `${id}-help`} />
-    {allowDocuments && <button type="button" className="sigma-file-dropzone" disabled={disabled} onClick={() => input.current?.click()} onDragOver={event => event.preventDefault()} onDrop={event => { event.preventDefault(); add(Array.from(event.dataTransfer.files || [])); }}><ImagePlus size={18} aria-hidden="true" /> Anexar imagens</button>}
+    <input ref={input} aria-label={allowDocuments ? 'Anexar imagens' : 'Anexar imagens da ocorrência (opcional)'} hidden id={id} type="file" accept={allowDocuments ? 'image/jpeg,image/png,application/pdf' : 'image/jpeg,image/png'} multiple disabled={disabled} onChange={select} />
+    <button type="button" className="sigma-file-dropzone" disabled={disabled} onClick={() => input.current?.click()} onDragOver={event => event.preventDefault()} onDrop={event => { event.preventDefault(); add(Array.from(event.dataTransfer.files || [])); }}>Escolher arquivos</button>
     {error && <p role="alert" className="sigma-image-error">{error}</p>}
     {files.length > 0 && <ul>{files.map((file, i) => <li key={`${file.name}-${file.size}-${file.lastModified}`}>{file.type === 'application/pdf' ? <PdfPreview file={file} /> : <button className="sigma-image-thumb" type="button" aria-label={`Abrir foto ${file.name}`} onClick={() => setOpened(file)}><Preview file={file} /></button>}<span>{file.name}</span><button className="sigma-image-remove" type="button" disabled={disabled} aria-label={`Remover ${allowDocuments ? 'arquivo' : 'imagem'} ${file.name}`} onClick={() => onChange(files.filter((_, index) => index !== i))}><X size={16} /> Remover</button></li>)}</ul>}
     {opened && <PhotoDialog file={opened} onClose={() => setOpened(null)} />}

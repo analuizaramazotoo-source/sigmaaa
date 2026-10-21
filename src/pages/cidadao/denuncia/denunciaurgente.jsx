@@ -227,7 +227,7 @@ export default function DenunciaUrgente() {
                 </div>
                 <div className={styles.infoBox}>
                   <span>Prioridade:</span>
-                  <span className={styles.badgeUrgente}>Alta / Imputada</span>
+                  <span className={styles.badgeUrgente}>Alta</span>
                 </div>
               </div>
 
@@ -240,7 +240,7 @@ export default function DenunciaUrgente() {
       </main>
 
       <footer style={{ textAlign: 'center', fontSize: '12px', color: '#047857', padding: '20px', borderTop: '1px solid #d1fae5', marginTop: 'auto' }}>
-        <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+        <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Atendimento ao cidadão de Tupã/SP.</p>
       </footer>
     </div>
   );

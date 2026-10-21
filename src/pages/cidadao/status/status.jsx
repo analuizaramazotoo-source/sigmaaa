@@ -30,6 +30,11 @@ export default function Status() {
   const solicitacao = solicitacoes.find(o => String(o.id) === selecionada) || solicitacoes[0];
   const etapaAtiva = solicitacao ? ({ aberta: 0, em_analise: 1, em_andamento: 2, resolvida: 3, arquivada: -1 }[solicitacao.status_ocorrencia] ?? -1) : -1;
   const navigate = useNavigate();
+  let mensagemStatus = 'Envie um relato para acompanhar o atendimento.';
+  if (solicitacao) {
+    mensagemStatus = solicitacao.status_ocorrencia === 'arquivada' ? 'Solicitação arquivada.' : descricoesEtapas[etapaAtiva] || 'O status desta solicitação está indisponível. Entre em contato com a administração.';
+  } else if (consulta.loading) mensagemStatus = 'Carregando o andamento...';
+  else if (consulta.error) mensagemStatus = 'O andamento está indisponível no momento. Tente atualizar a página.';
 
   return (
     <div className={styles.appContainer}>
@@ -132,7 +137,7 @@ export default function Status() {
 
               {/* MENSAGEM DO STATUS */}
               <div className={styles.statusBox}>
-                <p className={styles.mensagem}>{solicitacao?.status_ocorrencia === 'arquivada' ? 'Solicitação arquivada.' : descricoesEtapas[etapaAtiva] || 'Envie um relato para acompanhar o atendimento.'}</p>
+                <p className={styles.mensagem}>{mensagemStatus}</p>
               </div>
 
             </div>
@@ -140,7 +145,7 @@ export default function Status() {
         </main>
 
         <footer className={styles.footerGlobal}>
-          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Uso Restrito a Servidores Autorizados.</p>
+          <p>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Atendimento ao cidadão de Tupã/SP.</p>
         </footer>
       </div>
     </div>

@@ -21,6 +21,7 @@ import {
 
 export default function Perfil() {
   const navigate = useNavigate();
+  const [salvando, setSalvando] = useState(false);
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
   const [formData, setFormData] = useState({
@@ -37,11 +38,14 @@ export default function Perfil() {
 
   const handleSalvar = async (e) => {
     e.preventDefault();
+    if (salvando) return;
+    setSalvando(true); setMensagemSucesso('');
     await perform(async () => {
       const body = { nome_usuario: formData.nome, email_usuario: formData.email, telefone_usuario: formData.celular, cpf_usuario: formData.cpf };
       await saveProfile(body); setMensagemSucesso('Perfil atualizado com sucesso!');
       setTimeout(() => setMensagemSucesso(''), 4000);
     });
+    setSalvando(false);
   };
 
   return (
@@ -102,7 +106,7 @@ export default function Perfil() {
         {/* CONTEÚDO CENTRAL */}
         <main className={styles.mainContent}>
           {mensagemSucesso && (
-            <div className={styles.alertSuccess}>
+            <div className={styles.alertSuccess} role="status">
               <CheckCircle2 size={18} />
               <span>{mensagemSucesso}</span>
             </div>
@@ -193,9 +197,9 @@ export default function Perfil() {
               <Link className={styles.btnSalvar} to="/alterar">Alterar minha senha</Link>
 
               <div className={styles.formActions}>
-                <button type="submit" className={styles.btnSalvar}>
+                <button type="submit" disabled={salvando} className={styles.btnSalvar}>
                   <Save size={18} />
-                  <span>Salvar Alterações</span>
+                  <span>{salvando ? 'Salvando...' : 'Salvar Alterações'}</span>
                 </button>
               </div>
             </form>
