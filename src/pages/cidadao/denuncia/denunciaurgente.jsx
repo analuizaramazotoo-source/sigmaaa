@@ -1,3 +1,4 @@
+import PendingAttachmentsNotice from '../../../components/PendingAttachmentsNotice';
 import ImageAttachments from '../../../components/ImageAttachments';
 import { api, perform, getSession, categoryId, uploadFiles, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
@@ -131,6 +132,8 @@ export default function DenunciaUrgente() {
               </div>
 
               <form className={styles.form} onSubmit={handleSubmit}>
+                <PendingAttachmentsNotice record={salvo} />
+                <fieldset disabled={enviando || Boolean(salvo)} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
                 <div className={styles.grid}>
                   
                   <div className={styles.fullWidth}>
@@ -198,6 +201,7 @@ export default function DenunciaUrgente() {
                   </div>
 
                 </div>
+                </fieldset>
                 <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
                 {/* BOTÃO DE AÇÃO APENAS ENVIAR */}
                 <div className={styles.actions}>

@@ -1,26 +1,19 @@
-import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
+import ManagementSidebar from '../../../components/ManagementSidebar';
 import { useCollection } from '../../../services/originalScreens';
 import { useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './legislacao.module.css';
-import { 
-  ArrowLeft, HelpCircle, BookOpen, Search, 
-  FileText, ExternalLink, Scale, ShieldCheck,
-  Shield, Map as MapIcon, ClipboardList, BarChart2, Home as HomeIcon,
-  X, CheckCircle2, Copy
-} from 'lucide-react';
+import { ArrowLeft, HelpCircle, BookOpen, Search, FileText, ExternalLink, Scale, ShieldCheck, X, CheckCircle2, Copy } from 'lucide-react';
 
 // Links atualizados com URLs reais e funcionais
 export default function Legislacao() {
   const navigate = useNavigate();
   const [documentos] = useCollection('/legislacao', l => ({ ...l, id: l.id_lei, descricao: (l.conteudo || '').split('\n\n')[1] || l.conteudo || '', categoria: l.categoria || '', conteudoCompleto: l.conteudo, linkDiario: l.url_oficial, data: '' }));
-  const location = useLocation();
 
   const [busca, setBusca] = useState('');
   const [docSelecionado, setDocSelecionado] = useState(null);
   const [notificationMsg, setNotificationMsg] = useState('');
 
-  const isActive = (path) => location.pathname === path;
 
   const docsFiltrados = documentos.filter(doc => 
     doc.titulo.toLowerCase().includes(busca.toLowerCase()) || 
@@ -42,52 +35,7 @@ export default function Legislacao() {
     <div className={styles.appContainer}>
       
       {/* SIDEBAR FIXA */}
-      <ResponsiveSidebar className={styles.sidebar}>
-        <div>
-          <div className={styles.brandHeader}>
-            <div className={styles.logoIcon}>
-              <Shield size={22} />
-            </div>
-            <div className={styles.brandText}>
-              <strong>SISTEMA DE GESTÃO</strong>
-              <span>MUNICIPAL AMBIENTAL</span>
-            </div>
-          </div>
-
-          <nav className={styles.navigation}>
-            <span className={styles.navCategory}>MENU DO GESTOR</span>
-
-            <Link to="/homeg" className={isActive('/homeg') ? styles.navItemActive : styles.navItem}>
-              <HomeIcon size={18} /> Home
-            </Link>
-
-            <Link to="/geoprocessamento" className={isActive('/geoprocessamento') ? styles.navItemActive : styles.navItem}>
-              <MapIcon size={18} /> Geoprocessamento
-            </Link>
-
-            <Link to="/fila-fiscalizacao" className={isActive('/fila-fiscalizacao') ? styles.navItemActive : styles.navItem}>
-              <ClipboardList size={18} /> Fila de Fiscalização
-            </Link>
-
-            <Link to="/autos-notificacoes-gestao" className={isActive('/autos-notificacoes-gestao') ? styles.navItemActive : styles.navItem}>
-              <FileText size={18} /> Autos e Notificações
-            </Link>
-
-            <Link to="/relatorios-tecnicos-gestao" className={isActive('/relatorios-tecnicos-gestao') ? styles.navItemActive : styles.navItem}>
-              <BarChart2 size={18} /> Relatórios Técnicos
-            </Link>
-
-            <Link to="/legislacao" className={isActive('/legislacao') ? styles.navItemActive : styles.navItem}>
-              <HelpCircle size={18} /> Legislação
-            </Link>
-          </nav>
-        </div>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.footerTitle}>Prefeitura Municipal</div>
-          <div className={styles.footerSubtitle}>Secretaria do Meio Ambiente</div>
-        </div>
-      </ResponsiveSidebar>
+      <ManagementSidebar />
 
       {/* CONTEÚDO PRINCIPAL DA TELA */}
       <div className={styles.mainWrapper}>

@@ -36,7 +36,14 @@ export async function downloadReport(report, format = 'pdf') {
 async function createDownload(report, format) {
   const fields = [['Título', report.titulo], ['Data', report.data_criacao], ['Ocorrência', report.id_ocorrencia], ['Tipo', report.tipo], ['Observações', report.observacoes], ['Parecer', report.parecer]];
   if (format === 'excel') {
-    const csv = '\ufeffCampo;Valor\r\n' + fields.map(([key, value]) => [key, value ?? ''].map(v => '"' + String(v).replaceAll('"', '""') + '"').join(';')).join('\r\n');
+    const csvCell = value => {
+      const text = String(value ?? '');
+      // Conteúdo de relatos deve ser texto, mesmo quando começa como uma fórmula do Excel.
+      const first = Array.from(text).find(char => char.charCodeAt(0) > 32 && char.trim());
+      const literal = first && ['=', '+', '@', '-'].includes(first) ? "'" + text : text;
+      return '"' + literal.replaceAll('"', '""') + '"';
+    };
+    const csv = '\ufeffCampo;Valor\r\n' + fields.map(row => row.map(csvCell).join(';')).join('\r\n');
     save(`relatorio-${report.id_relatorio}.csv`, csv, 'text/csv;charset=utf-8'); return true;
   }
   const images = [], attachments = [];

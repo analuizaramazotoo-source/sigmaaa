@@ -1,19 +1,16 @@
+import PendingAttachmentsNotice from '../../../components/PendingAttachmentsNotice';
+import StaffProfileLink from '../../../components/StaffProfileLink';
 import ImageAttachments from '../../../components/ImageAttachments';
 import AddressMap from '../../../components/AddressMap';
 import OccurrenceLocationEditor from '../../../components/OccurrenceLocationEditor';
-import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
+import ManagementSidebar from '../../../components/ManagementSidebar';
 import { api, perform, useCollection, occurrenceView, categoryId, canonicalStatus, refreshScreens, getSession, logout, uploadFiles } from '../../../services/originalScreens';
-import { useState} from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './homeg.module.css';
 import TupaMap from '../../../components/TupaMap';
 import { coordinateBody } from '../../../services/mapCoordinates';
-import { 
-  Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, ChevronDown, Plus, ClipboardCheck, 
-  Clock, Settings, CheckCircle2, Filter, Trash2, Flame, 
-  Droplet,  Leaf, Shield, ArrowUpRight, LogOut, User, Edit3, Home as HomeIcon
-} from 'lucide-react';
+import { Plus, ClipboardCheck, Clock, Settings, CheckCircle2, Filter, Trash2, Flame, Droplet, Leaf, ArrowUpRight, LogOut, Edit3 } from 'lucide-react';
 
 const STATS_DATA = [
   { 
@@ -48,9 +45,7 @@ const STATS_DATA = [
 
 export default function Homeg() {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isLogoutHovered, setIsLogoutHovered] = useState(false);
   
   // Modais
@@ -98,164 +93,12 @@ export default function Homeg() {
     return item.statusType === activeFilter;
   });
 
-  const isActive = (path) => location.pathname === path;
 
   return (
     <div data-responsive-shell style={{ display: 'flex', width: '100%', minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
       
       {/* SIDEBAR */}
-      <ResponsiveSidebar
-        style={{ 
-          width: '260px', 
-          minWidth: '260px', 
-          backgroundColor: '#ffffff', 
-          borderRight: '1px solid #e2e8f0',
-          display: 'flex', 
-          flexDirection: 'column', 
-          justifyContent: 'space-between',
-          height: '100vh',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100
-        }}
-      >
-        <div>
-          <div style={{ padding: '20px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #f1f5f9' }}>
-            <div style={{ backgroundColor: '#059669', color: '#fff', padding: '8px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Shield size={22} />
-            </div>
-            <div>
-              <strong style={{ fontSize: '13px', color: '#047857', display: 'block', lineHeight: '1.2' }}>SISTEMA DE GESTÃO</strong>
-              <span style={{ fontSize: '11px', color: '#059669', fontWeight: 'bold' }}>MUNICIPAL AMBIENTAL</span>
-            </div>
-          </div>
-
-          <nav style={{ padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#059669', letterSpacing: '0.5px', marginBottom: '8px', paddingLeft: '8px' }}>
-              MENU DO GESTOR
-            </span>
-
-            <Link
-              to="/homeg"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/homeg') ? '#059669' : 'transparent',
-                color: isActive('/homeg') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
-              <HomeIcon size={18} /> Home
-            </Link>
-
-            <Link
-              to="/geoprocessamento"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/geoprocessamento') ? '#059669' : 'transparent',
-                color: isActive('/geoprocessamento') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
-              <MapIcon size={18} /> Geoprocessamento
-            </Link>
-
-            <Link
-              to="/fila-fiscalizacao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/fila-fiscalizacao') ? '#059669' : 'transparent',
-                color: isActive('/fila-fiscalizacao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
-              <ClipboardList size={18} /> Fila de Fiscalização
-            </Link>
-
-            <Link
-              to="/autos-notificacoes-gestao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/autos-notificacoes-gestao') ? '#059669' : 'transparent',
-                color: isActive('/autos-notificacoes-gestao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
-              <FileText size={18} /> Autos e Notificações
-            </Link>
-
-            <Link
-              to="/relatorios-tecnicos-gestao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/relatorios-tecnicos-gestao') ? '#059669' : 'transparent',
-                color: isActive('/relatorios-tecnicos-gestao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
-              <BarChart2 size={18} /> Relatórios Técnicos
-            </Link>
-
-            <Link
-              to="/legislacao"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                backgroundColor: isActive('/legislacao') ? '#059669' : 'transparent',
-                color: isActive('/legislacao') ? '#ffffff' : '#047857',
-                transition: 'all 0.2s'
-              }}
-            >
-              <HelpCircle size={18} /> Legislação
-            </Link>
-          </nav>
-        </div>
-
-        <div style={{ padding: '16px', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
-          <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 'bold' }}>Prefeitura Municipal</div>
-          <div style={{ fontSize: '10px', color: '#94a3b8' }}>Secretaria do Meio Ambiente</div>
-        </div>
-      </ResponsiveSidebar>
+      <ManagementSidebar />
 
       {/* ÁREA PRINCIPAL */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
@@ -268,48 +111,7 @@ export default function Homeg() {
           </div>
 
           <div className={styles.headerRight}>
-            <div className={styles.popoverContainer}>
-              <button 
-                className={styles.userDropdown}
-                onClick={() => setShowUserDropdown(!showUserDropdown)}
-              >
-                <div className={styles.avatar}>{getSession()?.usuario.nome_usuario?.slice(0, 2).toUpperCase()}</div>
-                <div className={styles.userInfo}>
-                  <span className={styles.userName}>{getSession()?.usuario.nome_usuario}</span>
-                  <span className={styles.userRole}>{getSession()?.usuario.cargo_usuario || 'Gestão'} • Mat. {getSession()?.usuario.matricula_usuario || 'Não informada'}</span>
-                </div>
-                <ChevronDown size={16} className={styles.dropdownIcon} />
-              </button>
-
-              {showUserDropdown && (
-                <div className={styles.popoverMenuRight}>
-                  <div className={styles.userMenuHeader}>
-                    <strong>{getSession()?.usuario.nome_usuario}</strong>
-                    <span>Fiscal de Campo</span>
-                  </div>
-                  <div className={styles.menuDivider} />
-                  
-                  <Link to="/perfilg" className={styles.menuItemBtn}>
-                    <User size={16} /> Meu Perfil
-                  </Link>
-
-                  <Link to="/config" className={styles.menuItemBtn}>
-                    <Settings size={16} /> Configurações
-                  </Link>
-
-                  <div className={styles.menuDivider} />
-
-                  <button 
-                    className={styles.iconButton} 
-                    onClick={() => setModalLogout(true)} 
-                    title="Sair do Sistema"
-                    aria-label="Sair do Sistema"
-                  >
-                    <LogOut size={18} color="#dc2626" />
-                  </button>
-                </div>
-              )}
-            </div>
+            <StaffProfileLink name={getSession()?.usuario.nome_usuario} role={getSession()?.usuario.cargo_usuario || 'Gestão'} />
 
             {/* BOTÃO QUADRADO DE SAIR COM COMPOSTO DE HOVER */}
             <button 
@@ -555,6 +357,8 @@ export default function Homeg() {
               <button onClick={() => setModalNewRecord(false)} className={styles.closeBtnModal}>X</button>
             </div>
             <form onSubmit={handleCreateRecord} className={styles.modalForm}>
+              <PendingAttachmentsNotice record={salvo} />
+              <fieldset disabled={enviando || Boolean(salvo)} className={styles.occurrenceFields}>
               <label>
                 Título da Demanda
                 <input 
@@ -580,6 +384,7 @@ export default function Homeg() {
                   <option value="som">Poluição Sonora</option>
                 </select>
               </label>
+              </fieldset>
               <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
               <div className={styles.modalActions}>
                 <button type="button" disabled={enviando} onClick={() => setModalNewRecord(false)} className={styles.btnCancel}>Cancelar</button>

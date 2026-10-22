@@ -79,6 +79,7 @@ async function main() {
     await page.goto(base + '/filae');
     await page.getByRole('textbox', { name: 'Buscar vistorias' }).fill('TESTE-12');
     await page.getByRole('heading', { name: 'Análise de descarte', exact: true }).click();
+    await page.getByText('Localização / Endereço:', { exact: true }).locator('..').getByText('Rua Aimorés, 123', { exact: true }).waitFor();
     assert.equal(await page.getByRole('heading', { name: 'Descarte inicial', exact: true }).count(), 0);
     assert.equal(await page.getByRole('button', { name: 'Iniciar Vistoria', exact: true }).isEnabled(), true);
     assert.equal(await page.getByRole('button', { name: 'Marcar como Concluído' }).isDisabled(), true);
@@ -128,6 +129,7 @@ async function main() {
     await page.getByRole('button', { name: 'Enviar Relatório à Gestão' }).click();
     await page.getByText('Relatório enviado com sucesso à Secretaria do Meio Ambiente!').waitFor();
     assert.equal(documents.filter(d => d.resource === '/relatorios').length, 1);
+    assert.equal(await page.getByRole('combobox', { name: 'Parecer Conclusivo do Fiscal' }).inputValue(), '');
     assert.deepEqual(uploads, ['primeira.png', 'segunda.png']);
     console.log('Relatório vinculado, parecer explícito e retomada de anexos sem repetir: OK');
 

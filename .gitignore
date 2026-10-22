@@ -23,3 +23,8 @@ artifacts/
 *.njsproj
 *.sln
 *.sw?
+
+# Configuração local
+.env
+.env.*
+!.env.example

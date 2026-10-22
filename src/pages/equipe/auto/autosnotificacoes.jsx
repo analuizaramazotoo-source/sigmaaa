@@ -57,7 +57,7 @@ export default function AutosNotificacoes() {
     setOcorrenciaVinculada(id);
     const item = ocorrenciasDisponiveis.find(o => String(o.id) === String(id));
     if (item) {
-      setLocalInfracao(item.address || item.descricao || '');
+      setLocalInfracao(item.address || '');
       setDescricaoInfracao('');
     }
   };

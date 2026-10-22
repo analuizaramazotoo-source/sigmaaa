@@ -235,7 +235,7 @@ export default function FilaVistorias() {
                   <div className={styles.detailBody}>
                     <div className={styles.infoRow}>
                       <strong>Localização / Endereço:</strong>
-                      <p>{itemSelecionado.descricao || itemSelecionado.address}</p>
+                      <p>{itemSelecionado.endereco || itemSelecionado.address || 'Endereço não informado'}</p>
                     </div>
 
                     <div className={styles.infoGroupGrid}>

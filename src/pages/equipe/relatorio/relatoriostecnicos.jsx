@@ -56,7 +56,7 @@ export default function RelatoriosTecnicos() {
     const item = ocorrenciasDisponiveis.find(o => String(o.id) === String(id));
     if (item) {
       setTituloRelatorio(`Relatório Técnico: ${item.titulo || item.title}`);
-      setObservacoesTecnicas('');
+      setObservacoesTecnicas(''); setParecerTecnico('');
     }
   };
 
@@ -66,7 +66,7 @@ export default function RelatoriosTecnicos() {
     await perform(async () => {
       const record = relatorioSalvo || await api('/relatorios', { method: 'POST', body: { id_ocorrencia: Number(ocorrenciaVinculada), titulo: tituloAtual, tipo: tipoRelatorio, observacoes: observacoesTecnicas, parecer: parecerTecnico }});
       setRelatorioSalvo(record); await uploadFiles(record.id_ocorrencia, arquivosAnexados, file => setArquivosAnexados(current => current.filter(item => item !== file)));
-      refreshScreens(); setMensagemSucesso(true); setTituloRelatorio(''); setObservacoesTecnicas(''); setOcorrenciaVinculada(''); setArquivosAnexados([]); setRelatorioSalvo(null);
+      refreshScreens(); setMensagemSucesso(true); setParecerTecnico(''); setTipoRelatorio('Vistoria de Campo'); setTituloRelatorio(null); setObservacoesTecnicas(''); setOcorrenciaVinculada(''); setArquivosAnexados([]); setRelatorioSalvo(null);
       setTimeout(() => setMensagemSucesso(false), 3000);
     }); setEnviando(false);
   };

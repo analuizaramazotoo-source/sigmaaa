@@ -100,6 +100,8 @@ async function main() {
       if (route === '/relatar-problema') {
         await page.getByText('Falha simulada no segundo anexo').waitFor();
         assert.equal(created.length, before + 1);
+        assert.equal(await page.getByLabel('Título do Relato *').isDisabled(), true);
+        await page.getByText('Ocorrência TESTE-1 já registrada.', { exact: false }).waitFor();
         assert.equal(await page.getByRole('img', { name: 'Prévia de primeira.png' }).count(), 0);
         await page.getByRole('button', { name: 'Fechar', exact: true }).click();
         await submit.click();

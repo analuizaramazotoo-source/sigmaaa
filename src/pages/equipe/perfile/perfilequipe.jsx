@@ -1,5 +1,5 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
-import { api, perform, logout } from '../../../services/originalScreens';
+import { api } from '../../../services/originalScreens';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './perfilequipe.module.css';
@@ -15,7 +15,7 @@ import {
   BarChart2, 
   BookOpen, 
   Users, 
-  LogOut, 
+  ArrowLeft,
   Shield,
   Mail,
   Phone,
@@ -28,13 +28,20 @@ import {
 export default function PerfilEquipe() {
   const navigate = useNavigate();
 
+  const [consulta, setConsulta] = useState({ loading: true, error: '' });
   // DADOS DA EQUIPE E INTEGRANTES
   const [dadosEquipe, setDadosEquipe] = useState({ codigoEquipe: '', nomeEquipe: 'Nenhuma equipe vinculada', status: '', turno: 'Não informado', membros: [] });
-  useEffect(() => { perform(async () => {
-    const equipe = await api('/equipes/minha');
-    if (!equipe) return;
-    setDadosEquipe({ codigoEquipe: `EQP-${equipe.id_equipe}`, nomeEquipe: equipe.nome_equipe, status: equipe.status_equipe, turno: 'Não informado', membros: equipe.membros.map(m => ({ id: m.id_membro, nome: m.nome_usuario, cargo: m.funcao_na_equipe || '', matricula: m.matricula_usuario || '', email: m.email_usuario, telefone: m.telefone_usuario || '', lider: /líder|lider|encarregado/i.test(m.funcao_na_equipe || '') })) });
-  }); }, []);
+  useEffect(() => {
+    let active = true;
+    api('/equipes/minha').then(equipe => {
+      if (!active) return;
+      if (equipe) setDadosEquipe({ codigoEquipe: `EQP-${equipe.id_equipe}`, nomeEquipe: equipe.nome_equipe, status: equipe.status_equipe, turno: 'Não informado', membros: equipe.membros.map(m => ({ id: m.id_membro, nome: m.nome_usuario, cargo: m.funcao_na_equipe || '', matricula: m.matricula_usuario || '', email: m.email_usuario, telefone: m.telefone_usuario || '', lider: /líder|lider|encarregado/i.test(m.funcao_na_equipe || '') })) });
+      setConsulta({ loading: false, error: '' });
+    }).catch(error => { if (active) setConsulta({ loading: false, error: error.message }); });
+    return () => { active = false; };
+  }, []);
+
+  const nomeEquipe = consulta.loading ? 'Carregando equipe...' : consulta.error ? 'Equipe indisponível' : dadosEquipe.nomeEquipe;
 
   // MENU LATERAL
   const menuModulos = [
@@ -93,13 +100,13 @@ export default function PerfilEquipe() {
                 <Users size={18} />
               </div>
               <div className={styles.userInfo}>
-                <strong className={styles.userName}>{dadosEquipe.nomeEquipe}</strong>
+                <strong className={styles.userName}>{nomeEquipe}</strong>
                 <span className={styles.userRole}>Perfil do Grupo</span>
               </div>
             </div>
 
-            <button className={styles.btnLogout} onClick={() => perform(async () => { await logout(); navigate('/acesso-servidor'); })} title="Sair do Sistema">
-              <LogOut size={18} />
+            <button type="button" className={styles.btnVoltar} onClick={() => navigate('/homee')}>
+              <ArrowLeft size={16} aria-hidden="true" /> Voltar
             </button>
           </div>
         </header>
@@ -110,11 +117,12 @@ export default function PerfilEquipe() {
             {/* PAINEL SUPERIOR/ESQUERDO: CARTÃO DE IDENTIFICAÇÃO DA EQUIPE */}
             <section className={styles.teamCardSection}>
               <div className={styles.teamCardHeader}>
-                <div className={styles.codeBadge}>
+                {dadosEquipe.codigoEquipe && <div className={styles.codeBadge}>
                   <Shield size={20} />
                   <span>CÓDIGO: {dadosEquipe.codigoEquipe}</span>
-                </div>
-                <h2>{dadosEquipe.nomeEquipe}</h2>
+                </div>}
+                <h2>{nomeEquipe}</h2>
+                {!consulta.loading && !dadosEquipe.codigoEquipe && <p role={consulta.error ? 'alert' : 'status'}>{consulta.error || 'Peça à gestão para vincular sua conta em Configurações → Equipes e integrantes. Suas vistorias aparecerão após o encaminhamento ao grupo.'}</p>}
               </div>
 
               <div className={styles.teamStatsGrid}>
@@ -122,7 +130,7 @@ export default function PerfilEquipe() {
                   <Radio size={18} className={styles.statIcon} />
                   <div>
                     <span>Status Operacional</span>
-                    <strong>{dadosEquipe.status}</strong>
+                    <strong>{({ disponivel: 'Disponível', em_campo: 'Em campo', ocupada: 'Ocupada', inativa: 'Inativa' })[dadosEquipe.status] || 'Não informado'}</strong>
                   </div>
                 </div>
 
@@ -148,9 +156,10 @@ export default function PerfilEquipe() {
             <section className={styles.membrosSection}>
               <div className={styles.sectionHeader}>
                 <h3><Users size={18} /> Integrantes da Equipe</h3>
-                <span className={styles.subBadge}>● Equipe Sincronizada</span>
+                {dadosEquipe.codigoEquipe && <span className={styles.subBadge}>● Equipe sincronizada</span>}
               </div>
 
+              {!consulta.loading && dadosEquipe.membros.length === 0 && <p>{dadosEquipe.codigoEquipe ? 'Nenhum integrante cadastrado nesta equipe.' : 'Não há integrantes para exibir sem uma equipe vinculada.'}</p>}
               <div className={styles.membrosGrid}>
                 {dadosEquipe.membros.map((membro) => (
                   <div key={membro.id} className={styles.cardMembro}>

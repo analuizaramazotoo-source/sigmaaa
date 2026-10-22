@@ -1,46 +1,45 @@
-.appContainer { min-height:100vh; background:#f0fdf4; color:#064e3b; font-family:inherit; }
-.header { display:flex; justify-content:space-between; align-items:center; gap:16px; background:white; border-bottom:1px solid #d1fae5; padding:24px max(20px, calc((100vw - 1200px)/2)); }
-.header h1 { margin:0; font-size:26px; }
-.header p { margin:6px 0 0; color:#64748b; }
-.mainContent { padding:28px 20px; max-width:1200px; margin:auto; }
-.tabs { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:24px; }
-.tabs button,.tabs a { border:1px solid #a7f3d0; background:white; padding:12px 16px; border-radius:8px; color:#065f46; font:inherit; text-decoration:none; cursor:pointer; }
-.tabs button[aria-pressed=true] { color:white; background:#059669; border-color:#059669; }
+.appContainer { display:flex; min-height:100dvh; background:#f0fdf4; color:#064e3b; font-family:inherit; }
+.mainWrapper { display:flex; flex-direction:column; flex:1; min-width:0; }
+.header { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:75px; background:#fff; border-bottom:1px solid #d1fae5; padding:12px 2rem; }
+.header h1 { margin:0; font-size:1.2rem; line-height:1.2; font-weight:700; color:#065f46; }
+.header p { margin:4px 0 0; color:#047857; font-size:.8rem; }
+.headerRight { display:flex; align-items:center; gap:20px; min-width:0; }
+.btnVoltar { display:flex; align-items:center; justify-content:center; gap:6px; flex-shrink:0; border:0; padding:8px 16px; border-radius:6px; background:#fbc02d; color:#000; font:inherit; font-size:13px; font-weight:700; text-decoration:none; cursor:pointer; transition:background .2s; }
+.btnVoltar:hover { background:#f9a825; }
+.mainContent { flex:1; width:100%; min-width:0; max-width:1440px; padding:24px; margin:0 auto; }
+.tabs { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:12px; margin-bottom:24px; border:1px solid #d1fae5; border-radius:12px; background:#fff; box-shadow:0 2px 4px #0596690d; }
+.tabs button,.tabs a { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid transparent; background:transparent; padding:10px 16px; border-radius:8px; color:#047857; font:inherit; font-size:14px; font-weight:600; text-decoration:none; cursor:pointer; }
+.tabs button:hover,.tabs a:hover { background:#dcfce7; }
+.tabs button[aria-pressed=true] { color:white; background:#059669; }
 .tabs a { margin-left:auto; }
 .contentGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; align-items:start; }
-.cardSection { background:white; border:1px solid #d1fae5; border-radius:14px; padding:24px; }
-.cardSection h2 { font-size:18px; margin:0 0 16px; }
-.cardSection p { color:#64748b; font-size:14px; line-height:1.6; }
+.cardSection { min-width:0; background:#fff; border:1px solid #d1fae5; border-radius:18px; padding:24px; box-shadow:0 2px 4px #0596690d; }
+.cardHeader { display:flex; align-items:center; gap:10px; padding-bottom:16px; margin-bottom:20px; border-bottom:1px solid #d1fae5; color:#059669; }
+.cardHeader svg { flex-shrink:0; }
+.cardHeader h2 { margin:0; font-size:18px; line-height:1.4; color:#065f46; }
+.cardSection p { color:#047857; font-size:13px; line-height:1.6; margin:0 0 20px; }
 .modalForm { display:flex; flex-direction:column; gap:16px; }
-.modalForm label { display:flex; flex-direction:column; gap:7px; font-size:14px; font-weight:600; min-width:0; }
-.modalForm input,.modalForm select { width:100%; box-sizing:border-box; border:1px solid #cbd5e1; border-radius:8px; padding:11px 12px; color:#0f172a; background:white; font:inherit; font-weight:400; }
-.formRow { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.modalForm label { display:flex; flex-direction:column; gap:8px; font-size:14px; font-weight:500; min-width:0; }
+.modalForm input,.modalForm select { width:100%; min-width:0; box-sizing:border-box; border:1px solid #a7f3d0; border-radius:8px; padding:11px 12px; color:#064e3b; background:#fbfdfc; font:inherit; font-size:14px; font-weight:400; }
+.formRow { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
 .actions { display:flex; flex-wrap:wrap; gap:8px; }
-.btnPrimaryModal,.btnSecondary,.btnDanger { display:inline-flex; align-items:center; justify-content:center; border-radius:8px; padding:10px 16px; font:inherit; font-size:14px; font-weight:600; cursor:pointer; border:1px solid transparent; text-decoration:none; }
-.btnPrimaryModal { background:#059669; color:white; }
-.btnPrimaryModal:hover { background:#047857; }
-.btnSecondary { border-color:#d1fae5; background:#f0fdf4; color:#065f46; }
-.btnDanger { background:white; color:#b91c1c; border-color:#fecaca; }
-.recordList { list-style:none; padding:0; margin:24px 0 0; }
-.recordList li { display:flex; flex-direction:column; gap:8px; padding:16px 0; border-top:1px solid #e2e8f0; overflow-wrap:anywhere; }
-.recordList span,.recordList small { color:#64748b; font-size:13px; }
-.success { background:#d1fae5; border:1px solid #a7f3d0; padding:14px 18px; border-radius:8px; }
+.btnPrimaryModal,.btnSecondary,.btnDanger { display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:8px; padding:10px 16px; min-height:40px; font:inherit; font-size:14px; font-weight:600; cursor:pointer; border:1px solid transparent; text-decoration:none; }
+.btnPrimaryModal { background:#059669; color:#fff; }
+.btnPrimaryModal:hover:not(:disabled) { background:#047857; }
+.btnSecondary { border-color:#d1fae5; background:#f4fbf7; color:#065f46; }
+.btnSecondary:hover:not(:disabled) { background:#dcfce7; }
+.btnDanger { background:#fff; color:#b91c1c; border-color:#fecaca; }
+.btnDanger:hover:not(:disabled) { background:#fef2f2; }
+.recordList { display:flex; flex-direction:column; gap:12px; list-style:none; padding:0; margin:20px 0 0; }
+.recordList li { display:flex; flex-direction:column; align-items:flex-start; gap:8px; min-width:0; padding:16px; border:1px solid #d1fae5; border-radius:12px; background:#f4fbf7; overflow-wrap:anywhere; }
+.recordList li > strong { font-size:14px; }
+.recordList span { color:#047857; font-size:13px; }
+.recordList small { color:#047857; background:#dcfce7; border-radius:20px; padding:4px 10px; font-size:12px; font-weight:600; }
+.success { display:flex; align-items:center; gap:10px; background:#dcfce7; color:#065f46; border:1px solid #a7f3d0; padding:14px 18px; margin:0 0 24px; border-radius:12px; font-size:14px; }
+.success svg { flex-shrink:0; }
+.footer { padding:24px; text-align:center; border-top:1px solid #d1fae5; color:#047857; font-size:12px; line-height:1.6; }
 .appContainer button:disabled { opacity:.6; cursor:wait; }
-.appContainer :is(button,a,input,select):focus-visible { outline:3px solid #34d399; outline-offset:3px; }
-@media(max-width:850px) { .contentGrid { grid-template-columns:1fr; } }
-@media(max-width:550px) { .header { padding:20px 16px; } .header h1 { font-size:22px; } .mainContent { padding:20px 16px; } .formRow { grid-template-columns:1fr; } .tabs a { margin-left:0; } .cardSection { padding:20px; } }
-
-@media (max-width:1024px) {
-.appContainer { flex-direction:column; }
-.mainContent { margin-left:0; min-width:0; width:100%; }
-}
-
-@media (max-width:640px) {
-.appContainer { width:100%; min-width:0; }
-.header { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
-.actions { flex-wrap:wrap; height:auto; min-width:0; gap:12px; }
-.mainContent { min-width:0; max-width:100%; }
-.contentGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
-.formRow { grid-template-columns:minmax(0,1fr); min-width:0; }
-.mainContent { padding:16px; }
-}
+.appContainer :is(button,a,input,select):focus-visible { outline:2px solid #059669; outline-offset:3px; }
+@media(max-width:1200px) { .contentGrid { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:1024px) { .appContainer { flex-direction:column; } .mainWrapper { width:100%; } }
+@media(max-width:640px) { .header { flex-wrap:wrap; padding:16px; } .headerRight { flex-wrap:wrap; gap:12px; width:100%; justify-content:space-between; } .mainContent { padding:16px; } .cardSection { padding:20px; } .formRow { grid-template-columns:minmax(0,1fr); } .tabs { gap:6px; padding:8px; } .tabs button,.tabs a { padding:10px 12px; } .tabs a { margin-left:0; } .footer { padding:20px 16px; } }

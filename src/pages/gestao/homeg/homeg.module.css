@@ -1010,3 +1010,5 @@
 .statsGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
 .mainContent { padding:16px; }
 }
+
+.occurrenceFields { border:0; padding:0; margin:0; min-width:0; display:flex; flex-direction:column; gap:16px; }

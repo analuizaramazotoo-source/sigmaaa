@@ -1,18 +1,14 @@
-import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
+import ManagementSidebar from '../../../components/ManagementSidebar';
 import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './geoprocessamento.module.css';
 import TupaMap from '../../../components/TupaMap';
 import { coordinateBody, coordinatesInTupa } from '../../../services/mapCoordinates';
-import { 
-  ArrowLeft, Map as MapIcon, Layers, Filter,
-  Shield, ClipboardList, FileText, BarChart2, HelpCircle, Home as HomeIcon,
-  X } from 'lucide-react';
+import { ArrowLeft, Map as MapIcon, Layers, Filter, X } from 'lucide-react';
 
 export default function Geoprocessamento() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [pontosMapa] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), tipo: /queimada/i.test(o.nome_categoria || '') ? 'queimada' : /poda|desmat|vegetação/i.test(o.nome_categoria || '') ? 'app' : 'vistoria' }));
   const [ocorrenciaId, setOcorrenciaId] = useState('');
@@ -29,7 +25,6 @@ export default function Geoprocessamento() {
     vistorias: true
   });
 
-  const isActive = (path) => location.pathname === path;
 
   const toggleCamada = (chave) => {
     setCamadas(prev => ({ ...prev, [chave]: !prev[chave] }));
@@ -63,52 +58,7 @@ export default function Geoprocessamento() {
     <div className={styles.appContainer}>
       
       {/* SIDEBAR FIXA */}
-      <ResponsiveSidebar className={styles.sidebar}>
-        <div>
-          <div className={styles.brandHeader}>
-            <div className={styles.logoIcon}>
-              <Shield size={22} />
-            </div>
-            <div className={styles.brandText}>
-              <strong>SISTEMA DE GESTÃO</strong>
-              <span>MUNICIPAL AMBIENTAL</span>
-            </div>
-          </div>
-
-          <nav className={styles.navigation}>
-            <span className={styles.navCategory}>MENU DO GESTOR</span>
-
-            <Link to="/homeg" className={isActive('/homeg') ? styles.navItemActive : styles.navItem}>
-              <HomeIcon size={18} /> Home
-            </Link>
-
-            <Link to="/geoprocessamento" className={isActive('/geoprocessamento') ? styles.navItemActive : styles.navItem}>
-              <MapIcon size={18} /> Geoprocessamento
-            </Link>
-
-            <Link to="/fila-fiscalizacao" className={isActive('/fila-fiscalizacao') ? styles.navItemActive : styles.navItem}>
-              <ClipboardList size={18} /> Fila de Fiscalização
-            </Link>
-
-            <Link to="/autos-notificacoes-gestao" className={isActive('/autos-notificacoes-gestao') ? styles.navItemActive : styles.navItem}>
-              <FileText size={18} /> Autos e Notificações
-            </Link>
-
-            <Link to="/relatorios-tecnicos-gestao" className={isActive('/relatorios-tecnicos-gestao') ? styles.navItemActive : styles.navItem}>
-              <BarChart2 size={18} /> Relatórios Técnicos
-            </Link>
-
-            <Link to="/legislacao" className={isActive('/legislacao') ? styles.navItemActive : styles.navItem}>
-              <HelpCircle size={18} /> Legislação
-            </Link>
-          </nav>
-        </div>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.footerTitle}>Prefeitura Municipal</div>
-          <div className={styles.footerSubtitle}>Secretaria do Meio Ambiente</div>
-        </div>
-      </ResponsiveSidebar>
+      <ManagementSidebar />
 
       {/* CONTEÚDO PRINCIPAL DA TELA */}
       <div className={styles.mainWrapper}>

@@ -472,3 +472,6 @@
 .contentGrid { grid-template-columns:minmax(0,1fr); min-width:0; }
 .mainContent { padding:16px; }
 }
+
+.btnVoltar { display:flex; align-items:center; gap:6px; background:#fbc02d; color:#000; border:0; padding:8px 16px; border-radius:6px; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.btnVoltar:hover { background:#f9a825; }

@@ -1,16 +1,12 @@
-import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
+import ManagementSidebar from '../../../components/ManagementSidebar';
 import { api, perform, useCollection, occurrenceView, refreshScreens } from '../../../services/originalScreens';
-import { useState} from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './autosNotificacoes.module.css';
-import { 
-  ArrowLeft, FileText, Plus, Search, FileCheck, 
-  Shield, Map as MapIcon, ClipboardList, BarChart2, HelpCircle, Home as HomeIcon,
-  X, CheckCircle2} from 'lucide-react';
+import { ArrowLeft, FileText, Plus, Search, FileCheck, X, CheckCircle2 } from 'lucide-react';
 
 export default function AutosNotificacoes() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [ocorrencias] = useCollection('/ocorrencias', occurrenceView);
   const [autos] = useCollection('/autos', a => ({ ...a, id: `AUTO-${a.id_auto}`, infrator: a.autuado_nome, data: new Date(a.data_criacao).toLocaleDateString('pt-BR'), tipo: a.tipo_infracao || (a.tipo === 'infracao' ? 'Auto de Infração' : 'Notificação'), descricao: a.descricao_infracao, status: ({ notificado: 'Notificado', autuado: 'Autuado', em_analise: 'Em Análise', emitido: 'Autuado', entregue: 'Notificado', cancelado: 'Cancelado' })[a.status] || a.status, statusClass: a.status === 'em_analise' ? styles.statusAnalise : a.tipo === 'infracao' ? styles.statusAutuado : styles.statusNotificado }));
@@ -55,7 +51,6 @@ export default function AutosNotificacoes() {
     }); setSalvando(false);
   };
 
-  const isActive = (path) => location.pathname === path;
 
   const filteredAutos = autos.filter(item => 
     item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -67,52 +62,7 @@ export default function AutosNotificacoes() {
     <div className={styles.appContainer}>
       
       {/* SIDEBAR FIXA */}
-      <ResponsiveSidebar className={styles.sidebar}>
-        <div>
-          <div className={styles.brandHeader}>
-            <div className={styles.logoIcon}>
-              <Shield size={22} />
-            </div>
-            <div className={styles.brandText}>
-              <strong>SISTEMA DE GESTÃO</strong>
-              <span>MUNICIPAL AMBIENTAL</span>
-            </div>
-          </div>
-
-          <nav className={styles.navigation}>
-            <span className={styles.navCategory}>MENU DO GESTOR</span>
-
-            <Link to="/homeg" className={isActive('/homeg') ? styles.navItemActive : styles.navItem}>
-              <HomeIcon size={18} /> Home
-            </Link>
-
-            <Link to="/geoprocessamento" className={isActive('/geoprocessamento') ? styles.navItemActive : styles.navItem}>
-              <MapIcon size={18} /> Geoprocessamento
-            </Link>
-
-            <Link to="/fila-fiscalizacao" className={isActive('/fila-fiscalizacao') ? styles.navItemActive : styles.navItem}>
-              <ClipboardList size={18} /> Fila de Fiscalização
-            </Link>
-
-            <Link to="/autos-notificacoes-gestao" className={isActive('/autos-notificacoes-gestao') ? styles.navItemActive : styles.navItem}>
-              <FileText size={18} /> Autos e Notificações
-            </Link>
-
-            <Link to="/relatorios-tecnicos-gestao" className={isActive('/relatorios-tecnicos-gestao') ? styles.navItemActive : styles.navItem}>
-              <BarChart2 size={18} /> Relatórios Técnicos
-            </Link>
-
-            <Link to="/legislacao" className={isActive('/legislacao') ? styles.navItemActive : styles.navItem}>
-              <HelpCircle size={18} /> Legislação
-            </Link>
-          </nav>
-        </div>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.footerTitle}>Prefeitura Municipal</div>
-          <div className={styles.footerSubtitle}>Secretaria do Meio Ambiente</div>
-        </div>
-      </ResponsiveSidebar>
+      <ManagementSidebar />
 
       {/* CONTEÚDO PRINCIPAL DA TELA */}
       <div className={styles.mainWrapper}>

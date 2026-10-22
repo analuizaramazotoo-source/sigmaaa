@@ -169,8 +169,8 @@ export default function HomeE() {
               </div>
               <div className={styles.statData}>
                 <span className={styles.statTitle}>Pendentes</span>
-                <strong className={styles.statValue}>{vistorias.filter(v => ['aberta', 'em_analise'].includes(v.status_ocorrencia)).length}</strong>
-                <span className={styles.statSubtitle}>Aguardando ida a campo</span>
+                <strong className={styles.statValue}>{vistorias.filter(v => ['aberta', 'em_analise', 'em_andamento'].includes(v.status_ocorrencia)).length}</strong>
+                <span className={styles.statSubtitle}>Vistorias ainda não concluídas</span>
               </div>
             </div>
 
@@ -208,7 +208,7 @@ export default function HomeE() {
 
             <div className={styles.cardSection}>
               <div className={styles.cardHeader}>
-                <h3>Minhas Vistorias do Dia</h3>
+                <h3>Minhas Vistorias</h3>
                 <Link to="/filae" className={styles.linkActionBtn}>
                   Ver Fila Completa <ArrowUpRight size={14} />
                 </Link>

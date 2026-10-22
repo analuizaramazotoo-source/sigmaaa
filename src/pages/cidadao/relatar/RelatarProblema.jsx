@@ -1,3 +1,4 @@
+import PendingAttachmentsNotice from '../../../components/PendingAttachmentsNotice';
 import ImageAttachments from '../../../components/ImageAttachments';
 import { api, perform, getSession, useCollection, uploadFiles, refreshScreens } from '../../../services/originalScreens';
 import { useState } from 'react';
@@ -112,6 +113,8 @@ export default function RelatarProblema() {
 
               {/* FORMULÁRIO */}
               <form className={styles.form} onSubmit={handleSubmit}>
+                <PendingAttachmentsNotice record={salvo} />
+                <fieldset disabled={enviando || Boolean(salvo)} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
                 <div className={styles.grid}>
                   
                   {/* Título */}
@@ -171,11 +174,12 @@ export default function RelatarProblema() {
                   </div>
 
                 </div>
+                </fieldset>
                 <ImageAttachments files={images} onChange={setImages} disabled={enviando} />
                 {/* BOTÕES DE AÇÃO */}
                 <div className={styles.actions}>
                   <button 
-                    type="button" 
+                    type="button" disabled={enviando}
                     className={styles.btnSecondary}
                     onClick={() => navigate('/cidadao')}
                   >

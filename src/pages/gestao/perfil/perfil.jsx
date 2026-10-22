@@ -1,31 +1,23 @@
-import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
-import { api, getSession, perform, saveProfile, logout } from '../../../services/originalScreens';
+import StaffProfileLink from '../../../components/StaffProfileLink';
+import ManagementSidebar from '../../../components/ManagementSidebar';
+import { api, getSession, perform, saveProfile } from '../../../services/originalScreens';
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './perfil.module.css';
-import { 
-  Home, Map as MapIcon, ClipboardList, FileText, BarChart2, 
-  HelpCircle, ChevronDown, Shield,
-  LogOut, Settings, Save, Key, Mail, Phone, BadgeCheck, ArrowLeft
-} from 'lucide-react';
+import { Save, Key, Mail, Phone, BadgeCheck, ArrowLeft } from 'lucide-react';
 
 export default function Perfil() {
   const navigate = useNavigate();
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [modalLogout, setModalLogout] = useState(false);
 
   // Estado dos dados do Perfil
   const [userData, setUserData] = useState({ name: getSession()?.usuario.nome_usuario || '', email: getSession()?.usuario.email_usuario || '', phone: getSession()?.usuario.telefone_usuario || '', matricula: '', cargo: '', departamento: '', setor: '' });
   useEffect(() => { perform(async () => { const u = await api('/usuarios/me'); setUserData({ name: u.nome_usuario, email: u.email_usuario, phone: u.telefone_usuario || '', matricula: u.matricula_usuario || '', cargo: u.cargo_gestor || '', departamento: u.departamento_gestor || '', setor: u.setor_gestor || '' }); }); }, []);
 
+  const [salvando, setSalvando] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); await perform(async () => { await saveProfile({ nome_usuario: userData.name, email_usuario: userData.email, telefone_usuario: userData.phone }); setSavedSuccess(true); setTimeout(() => setSavedSuccess(false), 3000); });
-  };
-
-  const handleConfirmLogout = async () => {
-    try { await logout(); } finally { setModalLogout(false); navigate('/acesso-servidor'); }
+    e.preventDefault(); if (salvando) return; setSalvando(true); setSavedSuccess(false); await perform(async () => { await saveProfile({ nome_usuario: userData.name, email_usuario: userData.email, telefone_usuario: userData.phone }); setSavedSuccess(true); setTimeout(() => setSavedSuccess(false), 3000); }); setSalvando(false);
   };
 
   return (
@@ -33,38 +25,7 @@ export default function Perfil() {
       {/* OVERLAY PARA MOBILE */}
 
       {/* SIDEBAR OPERACIONAL */}
-      <ResponsiveSidebar className={styles.sidebar}>
-        <div className={styles.brandHeader}>
-          <div className={styles.logoIcon}>
-            <Shield size={24} />
-          </div>
-          <div className={styles.brandText}>
-            <strong>SISTEMA DE GESTÃO</strong>
-            <span>MUNICIPAL AMBIENTAL</span>
-          </div>
-        </div>
-
-        <nav className={styles.navigation}>
-          <Link to="/homeg" className={styles.navItem}>
-            <Home size={18} /> Painel Geral
-          </Link>
-          <Link to="/geoprocessamento" className={styles.navItem}>
-            <MapIcon size={18} /> Geoprocessamento
-          </Link>
-          <Link to="/fila-fiscalizacao" className={styles.navItem}>
-            <ClipboardList size={18} /> Fila de Fiscalização
-          </Link>
-          <Link to="/autos-notificacoes-gestao" className={styles.navItem}>
-            <FileText size={18} /> Autos e Notificações
-          </Link>
-          <Link to="/relatorios-tecnicos-gestao" className={styles.navItem}>
-            <BarChart2 size={18} /> Relatórios Técnicos
-          </Link>
-          <Link to="/legislacao" className={styles.navItem}>
-            <HelpCircle size={18} /> Legislação
-          </Link>
-        </nav>
-      </ResponsiveSidebar>
+      <ManagementSidebar />
 
       {/* ÁREA PRINCIPAL */}
       <div className={styles.mainWrapper}>
@@ -78,52 +39,7 @@ export default function Perfil() {
 
           <div className={styles.headerRight}>
             {/* DROPDOWN USUÁRIO */}
-            <div className={styles.popoverContainer}>
-              <button 
-                type="button"
-                className={styles.userDropdown}
-                onClick={() => {
-                  setShowUserDropdown(!showUserDropdown);
-                }}
-              >
-                <div className={styles.avatar}>{userData.name.slice(0, 2).toUpperCase()}</div>
-                <div className={styles.userInfo}>
-                  <span className={styles.userName}>{userData.name}</span>
-                  <span className={styles.userRole}>Mat. {userData.matricula}</span>
-                </div>
-                <ChevronDown size={16} className={styles.dropdownIcon} />
-              </button>
-
-              {showUserDropdown && (
-                <div className={styles.popoverMenuRight}>
-                  <div className={styles.userMenuHeader}>
-                    <strong>{userData.name}</strong>
-                    <span>{userData.cargo}</span>
-                  </div>
-                  <div className={styles.menuDivider} />
-                  
-                  {/* OPÇÃO CONFIGURAÇÕES -> NAVEGA PARA /CONFIG */}
-                  <button 
-                    type="button" 
-                    onClick={() => { setShowUserDropdown(false); navigate('/config'); }} 
-                    className={styles.menuItemBtn}
-                  >
-                    <Settings size={16} /> Configurações
-                  </button>
-
-                  <div className={styles.menuDivider} />
-
-                  {/* OPÇÃO SAIR DA CONTA -> ABRE MODAL */}
-                  <button 
-                    type="button"
-                    onClick={() => { setShowUserDropdown(false); setModalLogout(true); }} 
-                    className={`${styles.menuItemBtn} ${styles.dangerText}`}
-                  >
-                    <LogOut size={16} /> Sair da Conta
-                  </button>
-                </div>
-              )}
-            </div>
+            <StaffProfileLink name={userData.name} role={userData.cargo || 'Gestão'} active />
 
             {/* BOTÃO AMARELO DE VOLTAR */}
             <button 
@@ -198,7 +114,7 @@ export default function Perfil() {
                   <div className={styles.badgeFunctionalItem}>
                     <span>Status:</span>
                     <span className={`${styles.badgeStatus} ${styles.status_resolvida}`}>
-                      Ativo • Servidor Efetivo
+                      Conta ativa
                     </span>
                   </div>
                 </div>
@@ -258,8 +174,8 @@ export default function Perfil() {
                   >
                     <Key size={16} /> Alterar Senha
                   </button>
-                  <button type="submit" className={styles.btnPrimaryModal}>
-                    <Save size={16} /> Salvar Perfil
+                  <button type="submit" disabled={salvando} className={styles.btnPrimaryModal}>
+                    <Save size={16} /> {salvando ? 'Salvando...' : 'Salvar Perfil'}
                   </button>
                 </div>
               </form>
@@ -273,78 +189,7 @@ export default function Perfil() {
       </div>
 
       {/* MODAL DE CONFIRMAÇÃO DE SAÍDA */}
-      {modalLogout && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.4)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            width: '90%',
-            maxWidth: '380px',
-            textAlign: 'center',
-            padding: '2rem',
-            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)'
-          }}>
-            <div style={{
-              backgroundColor: '#fee2e2',
-              color: '#dc2626',
-              width: '50px',
-              height: '50px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem auto'
-            }}>
-              <LogOut size={24} />
-            </div>
-            <h3 style={{ margin: '0 0 0.5rem 0', color: '#065f46', fontSize: '1.2rem' }}>Encerrar Sessão</h3>
-            <p style={{ color: '#047857', fontSize: '0.95rem', margin: '0 0 1.5rem 0' }}>
-              Tem certeza que quer sair?
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-              <button 
-                type="button"
-                onClick={() => setModalLogout(false)} 
-                style={{
-                  backgroundColor: '#f1f5f9',
-                  color: '#475569',
-                  border: 'none',
-                  padding: '0.6rem 1.25rem',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
-                }}
-              >
-                Cancelar
-              </button>
-              <button 
-                type="button"
-                onClick={handleConfirmLogout} 
-                style={{
-                  backgroundColor: '#dc2626',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.6rem 1.25rem',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
-                }}
-              >
-                Sim, Quero Sair
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }

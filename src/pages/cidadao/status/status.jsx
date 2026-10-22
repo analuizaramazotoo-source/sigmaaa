@@ -91,9 +91,9 @@ export default function Status() {
               </div>
 
               <div className={styles.statusBox}>
-                <select aria-label="Solicitação" disabled={!solicitacoes.length} value={solicitacao?.id || ''} onChange={e => setSelecionada(e.target.value)}>
+                {solicitacoes.length > 0 && <select aria-label="Solicitação" disabled={!solicitacoes.length} value={solicitacao?.id || ''} onChange={e => setSelecionada(e.target.value)}>
                   {solicitacoes.map(o => <option key={o.id} value={o.id}>{o.protocolo_ocorrencia} — {o.titulo}</option>)}
-                </select>
+                </select>}
                 <p>{solicitacao ? `${solicitacao.protocolo_ocorrencia} — ${solicitacao.endereco}` : consulta.loading ? 'Carregando suas solicitações...' : consulta.error ? 'Não foi possível carregar suas solicitações. Tente atualizar a página.' : 'Nenhuma solicitação cadastrada.'}</p>
                 {!solicitacao && !consulta.loading && !consulta.error && <Link className={styles.btnRegistro} to="/relatar-problema">Registrar meu primeiro relato</Link>}
               </div>

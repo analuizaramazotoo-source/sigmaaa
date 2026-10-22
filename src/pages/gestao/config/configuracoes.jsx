@@ -1,6 +1,9 @@
+import ManagementSidebar from '../../../components/ManagementSidebar';
+import StaffProfileLink from '../../../components/StaffProfileLink';
+import { ArrowLeft, UserPlus, Users, ContactRound, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api, perform, useCollection, refreshScreens } from '../../../services/originalScreens';
+import { api, perform, useCollection, refreshScreens, getSession } from '../../../services/originalScreens';
 import styles from './configuracoes.module.css';
 const emptyTeam = { nome_equipe: '', especialidade_equipe: '', status_equipe: 'disponivel' };
 const emptyMember = { id_equipe: '', id_usuario: '', funcao_na_equipe: '' };
@@ -24,12 +27,20 @@ export default function Configuracoes() {
   }
   const input = (label, key, value, setValue, props = {}) => <label>{label}<input {...props} value={value[key] || ''} onChange={e => setValue({ ...value, [key]: e.target.value })} /></label>;
   return <div className={styles.appContainer}>
-    <header className={styles.header}><div><h1>Configurações</h1><p>Contas e equipes de Tupã</p></div><Link to="/homeg" className={styles.btnSecondary}>Voltar ao painel</Link></header>
+    <ManagementSidebar />
+    <div className={styles.mainWrapper}>
+    <header className={styles.header}>
+      <div><h1>Configurações</h1><p>Gerencie as contas e equipes do sistema</p></div>
+      <div className={styles.headerRight}>
+        <StaffProfileLink name={getSession()?.usuario.nome_usuario} role="Gestão" />
+        <Link to="/homeg" className={styles.btnVoltar}><ArrowLeft size={16} aria-hidden="true" /> Voltar</Link>
+      </div>
+    </header>
     <main className={styles.mainContent}>
-      <nav className={styles.tabs} aria-label="Configurações"><button aria-pressed={tab === 'contas'} onClick={() => { setTab('contas'); setMessage(''); }}>Contas</button><button aria-pressed={tab === 'equipes'} onClick={() => { setTab('equipes'); setMessage(''); }}>Equipes e integrantes</button><Link to="/perfilg">Meu perfil e senha</Link></nav>
-      {message && <p className={styles.success} role="status">{message}</p>}
+      <nav className={styles.tabs} aria-label="Configurações"><button aria-pressed={tab === 'contas'} onClick={() => { setTab('contas'); setMessage(''); }}><ShieldCheck size={18} aria-hidden="true" /> Contas</button><button aria-pressed={tab === 'equipes'} onClick={() => { setTab('equipes'); setMessage(''); }}><Users size={18} aria-hidden="true" /> Equipes e integrantes</button><Link to="/perfilg">Meu perfil e senha</Link></nav>
+      {message && <p className={styles.success} role="status"><CheckCircle2 size={20} aria-hidden="true" />{message}</p>}
       {tab === 'contas' ? <div className={styles.contentGrid}>
-        <section className={styles.cardSection}><h2>Cadastrar servidor</h2><p>Somente a gestão pode criar contas de gestão e equipe. Cada pessoa precisa de um e-mail próprio. Depois, vincule os integrantes à equipe.</p>
+        <section className={styles.cardSection}><div className={styles.cardHeader}><UserPlus size={22} aria-hidden="true" /><h2>Cadastrar servidor</h2></div><p>Somente a gestão pode criar contas de gestão e equipe. Cada pessoa precisa de um e-mail próprio. Depois, vincule os integrantes à equipe.</p>
           <form className={styles.modalForm} onSubmit={e => save(e, '/usuarios', user, () => setUser(emptyUser))}>
             {input('Nome completo *', 'nome_usuario', user, setUser, { required: true, autoComplete: 'name' })}
             {input('E-mail *', 'email_usuario', user, setUser, { required: true, type: 'email', autoComplete: 'email' })}
@@ -39,9 +50,9 @@ export default function Configuracoes() {
             <button className={styles.btnPrimaryModal} disabled={busy}>{busy ? 'Aguarde...' : 'Criar conta'}</button>
           </form>
         </section>
-        <section className={styles.cardSection}><h2>Contas cadastradas ({staff.length})</h2><ul className={styles.recordList}>{staff.map(u => <li key={u.id_usuario}><strong>{u.nome_usuario}</strong><span>{u.email_usuario}</span><small>{u.tipo_usuario === 'gestao' ? 'Gestão' : 'Equipe'}</small></li>)}</ul>{!staff.length && <p>Nenhuma conta carregada.</p>}</section>
+        <section className={styles.cardSection}><div className={styles.cardHeader}><ContactRound size={22} aria-hidden="true" /><h2>Contas cadastradas ({staff.length})</h2></div><ul className={styles.recordList}>{staff.map(u => <li key={u.id_usuario}><strong>{u.nome_usuario}</strong><span>{u.email_usuario}</span><small>{u.tipo_usuario === 'gestao' ? 'Gestão' : 'Equipe'}</small></li>)}</ul>{!staff.length && <p>Nenhuma conta carregada.</p>}</section>
       </div> : <div className={styles.contentGrid}>
-        <section className={styles.cardSection}><h2>{team.id_equipe ? 'Editar equipe' : 'Criar equipe'}</h2>
+        <section className={styles.cardSection}><div className={styles.cardHeader}><Users size={22} aria-hidden="true" /><h2>{team.id_equipe ? 'Editar equipe' : 'Criar equipe'}</h2></div>
           <form className={styles.modalForm} onSubmit={e => save(e, `/equipes${team.id_equipe ? '/' + team.id_equipe : ''}`, team, () => setTeam(emptyTeam), Boolean(team.id_equipe))}>
             {input('Nome da equipe *', 'nome_equipe', team, setTeam, { required: true })}{input('Especialidade', 'especialidade_equipe', team, setTeam)}
             <label>Status<select value={team.status_equipe} onChange={e => setTeam({ ...team, status_equipe: e.target.value })}>{Object.entries(statuses).map(([v, label]) => <option key={v} value={v}>{label}</option>)}</select></label>
@@ -49,7 +60,7 @@ export default function Configuracoes() {
           </form>
           <ul className={styles.recordList}>{equipes.map(t => <li key={t.id_equipe}><strong>{t.nome_equipe}</strong><span>{statuses[t.status_equipe]} · {membros.filter(m => m.id_equipe === t.id_equipe).length} integrante(s)</span><div className={styles.actions}><button className={styles.btnSecondary} disabled={busy} onClick={() => setTeam(t)}>Editar</button><button className={styles.btnDanger} disabled={busy} onClick={() => remove(`/equipes/${t.id_equipe}`, `a equipe ${t.nome_equipe}`, () => { if (team.id_equipe === t.id_equipe) setTeam(emptyTeam); })}>Excluir</button></div></li>)}</ul>
         </section>
-        <section className={styles.cardSection}><h2>{member.id_membro ? 'Editar integrante' : 'Adicionar integrante'}</h2>
+        <section className={styles.cardSection}><div className={styles.cardHeader}><UserPlus size={22} aria-hidden="true" /><h2>{member.id_membro ? 'Editar integrante' : 'Adicionar integrante'}</h2></div>
           <form className={styles.modalForm} onSubmit={e => save(e, `/membros-equipe${member.id_membro ? '/' + member.id_membro : ''}`, member, () => setMember(emptyMember), Boolean(member.id_membro))}>
             <label>Equipe *<select required value={member.id_equipe} onChange={e => setMember({ ...member, id_equipe: e.target.value })}><option value="">Selecione a equipe</option>{equipes.map(t => <option key={t.id_equipe} value={t.id_equipe}>{t.nome_equipe}</option>)}</select></label>
             <label>Pessoa *<select required value={member.id_usuario} onChange={e => setMember({ ...member, id_usuario: e.target.value })}><option value="">Selecione uma conta</option>{staff.map(u => <option key={u.id_usuario} value={u.id_usuario}>{u.nome_usuario} — {u.email_usuario}</option>)}</select></label>
@@ -60,5 +71,7 @@ export default function Configuracoes() {
         </section>
       </div>}
     </main>
+    <footer className={styles.footer}>© 2026 Prefeitura Municipal • Secretaria do Meio Ambiente • Painel da Gestão.</footer>
+    </div>
   </div>;
 }
