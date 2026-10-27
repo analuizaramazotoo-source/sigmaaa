@@ -1,4 +1,4 @@
-const baseURL = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '/api' : 'http://localhost:3333')).replace(/\/$/, '');
+const baseURL = (import.meta.env.VITE_API_URL?.trim() || '/api').replace(/\/$/, '');
 export const getSession = () => {
   try { return JSON.parse(sessionStorage.getItem('sigma_session') || 'null'); }
   catch { sessionStorage.removeItem('sigma_session'); return null; }
