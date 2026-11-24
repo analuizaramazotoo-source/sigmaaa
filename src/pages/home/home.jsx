@@ -22,9 +22,6 @@ function Home() {
         </div>
 
         <div className={styles.headerInfo}>
-          <span className={styles.horario}>
-            Atendimento: Seg a Sex - 07h30 às 17h00
-          </span>
           <a
             href="https://www.tupa.sp.gov.br/"
             target="_blank"

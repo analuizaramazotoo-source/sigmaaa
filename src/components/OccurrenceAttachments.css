@@ -1,0 +1,8 @@
+.sigma-occurrence-attachments { margin-top: 16px; color: #065f46; }
+.sigma-occurrence-attachments p { font-size: 14px; margin: 10px 0; }
+.sigma-occurrence-attachments ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sigma-occurrence-attachments button { border: 1px solid #a7f3d0; border-radius: 8px; padding: 8px 12px; background: #f0fdf4; color: #065f46; cursor: pointer; overflow-wrap: anywhere; }
+.sigma-occurrence-attachments button:disabled { cursor: wait; opacity: .65; }
+.sigma-occurrence-file-overlay { position: fixed; inset: 0; z-index: 5000; background: #0009; display: grid; place-items: center; padding: 20px; }
+.sigma-occurrence-file-dialog { background: white; border-radius: 12px; padding: 16px; max-width: min(900px, 100%); max-height: 90dvh; overflow: auto; overflow-wrap: anywhere; }
+.sigma-occurrence-file-dialog img { display: block; max-width: 100%; max-height: 70dvh; object-fit: contain; }

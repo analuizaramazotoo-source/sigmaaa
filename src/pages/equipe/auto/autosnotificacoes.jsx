@@ -72,7 +72,7 @@ export default function AutosNotificacoes() {
         local_infracao: enderecoAtual, artigo_lei: artigoLei, descricao_infracao: descricaoInfracao,
         valor_multa: Number(String(valorMulta).replace(',', '.') || 0)
       }}); setAutoSalvo(record); await uploadFiles(record.id_ocorrencia, arquivos, file => setArquivos(current => current.filter(item => item !== file))); setAutoSalvo(null); setArquivos([]); refreshScreens(); setMensagemSucesso(true);
-      setAutuadoNome(''); setAutuadoDocumento(''); setLocalInfracao(''); setDescricaoInfracao(''); setValorMulta(''); setOcorrenciaVinculada('');
+      setAutuadoNome(''); setAutuadoDocumento(''); setLocalInfracao(null); setDescricaoInfracao(''); setValorMulta(''); setOcorrenciaVinculada(''); setArtigoLei(''); setTipoDocumento('notificacao');
       setTimeout(() => setMensagemSucesso(false), 3000);
     }); setEnviando(false);
   };

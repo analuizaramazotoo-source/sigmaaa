@@ -1,4 +1,5 @@
 import ResponsiveSidebar from '../../../components/ResponsiveSidebar';
+import OccurrenceAttachments from '../../../components/OccurrenceAttachments';
 import { api, perform, useCollection, occurrenceView, canonicalStatus, refreshScreens } from '../../../services/originalScreens';
 import { useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -29,7 +30,8 @@ export default function FilaVistorias() {
 
   const [vistorias, , consulta] = useCollection('/ocorrencias', occurrenceView);
   const [atualizando, setAtualizando] = useState(false);
-  const [itemSelecionado, setItemSelecionado] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const itemSelecionado = vistorias.find(item => item.id === selectedId) || null;
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
 
@@ -37,7 +39,7 @@ export default function FilaVistorias() {
   const handleAtualizarStatus = async (id, novoStatus) => {
     if (atualizando) return;
     setAtualizando(true);
-    await perform(async () => { const value = await api(`/ocorrencias/${id}`, { method: 'PATCH', body: { status_ocorrencia: canonicalStatus(novoStatus) }}); setItemSelecionado(current => occurrenceView({ ...current, ...value })); refreshScreens(); });
+    await perform(async () => { await api(`/ocorrencias/${id}`, { method: 'PATCH', body: { status_ocorrencia: canonicalStatus(novoStatus) }}); refreshScreens(); });
     setAtualizando(false);
   };
 
@@ -196,7 +198,7 @@ export default function FilaVistorias() {
                     <div 
                       key={item.id} 
                       className={`${styles.cardVistoria} ${itemSelecionado?.id === item.id ? styles.cardSelected : ''}`}
-                      onClick={() => setItemSelecionado(item)}
+                      onClick={() => setSelectedId(item.id)}
                     >
                       <div className={styles.cardHeaderTop}>
                         <span className={`${styles.badgeStatus} ${styles['status_' + item.corStatus]}`}>
@@ -255,10 +257,12 @@ export default function FilaVistorias() {
                         Dirija-se ao local para apuração dos fatos. Verifique a necessidade de emissão de auto de infração ou notificação preventiva.
                       </p>
                     </div>
+                    <OccurrenceAttachments key={itemSelecionado.id} occurrenceId={itemSelecionado.id} />
                   </div>
 
                   <div className={styles.detailActions}>
                     {['aberta', 'em_analise'].includes(itemSelecionado.status_ocorrencia) && <p>Inicie a vistoria para habilitar a conclusão.</p>}
+                    {itemSelecionado.status_ocorrencia === 'em_andamento' && <p>A gestão já encaminhou esta vistoria e ela está em campo. Após o atendimento, registre o relatório e marque a conclusão.</p>}
                     <button 
                       className={styles.btnAcaoAmarelo}
                       disabled={atualizando || !['aberta', 'em_analise'].includes(itemSelecionado.status_ocorrencia)}

@@ -28,7 +28,7 @@ import {
 
 export default function HomeE() {
   const navigate = useNavigate();
-  const [vistorias] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), icon: /queimada/i.test(o.nome_categoria || '') ? Flame : Trash2, statusType: o.status_ocorrencia === 'resolvida' ? 'success' : o.status_ocorrencia === 'em_andamento' ? 'info' : 'warning' }));
+  const [vistorias, , consulta] = useCollection('/ocorrencias', o => ({ ...occurrenceView(o), icon: /queimada/i.test(o.nome_categoria || '') ? Flame : Trash2, statusType: o.status_ocorrencia === 'resolvida' ? 'success' : o.status_ocorrencia === 'em_andamento' ? 'info' : 'warning' }));
 
   const [modalLogout, setModalLogout] = useState(false);
   const [selectedVistoria, setSelectedVistoria] = useState(null);
@@ -215,6 +215,7 @@ export default function HomeE() {
               </div>
 
               <div className={styles.requestsList}>
+                {!vistorias.length && <p role="status">{consulta.loading ? 'Carregando vistorias...' : consulta.error ? 'Não foi possível carregar as vistorias. Atualize a página para tentar novamente.' : <>Nenhuma vistoria encaminhada à sua equipe. Confira seu vínculo em <Link to="/perfile">Perfil da Equipe</Link>. A gestão precisa encaminhar os chamados ao grupo.</>}</p>}
                 {vistorias.map((item) => {
                   const ItemIcon = item.icon;
                   return (
